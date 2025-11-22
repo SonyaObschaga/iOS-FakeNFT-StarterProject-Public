@@ -17,7 +17,9 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let presenter = CatalogPresenter()
+        let presenter = CatalogPresenter(
+                collectionsService: servicesAssembly.collectionsService
+            )
         presenter.view = catalogController
         catalogController.presenter = presenter
             
@@ -25,5 +27,6 @@ final class TabBarController: UITabBarController {
         viewControllers = [catalogController]
 
         view.backgroundColor = .systemBackground
+        tabBar.backgroundColor = .systemBackground
     }
 }

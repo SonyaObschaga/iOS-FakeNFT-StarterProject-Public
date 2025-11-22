@@ -15,6 +15,13 @@ final class CatalogViewController: UIViewController {
       }
     
     private let tableView = UITableView()
+    
+    internal lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     var presenter: CatalogPresenterProtocol!
 
     override func viewDidLoad() {
@@ -27,6 +34,9 @@ final class CatalogViewController: UIViewController {
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(activityIndicator)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
@@ -37,7 +47,11 @@ final class CatalogViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            // Constraints для индикатора загрузки (по центру таблицы)
+            activityIndicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
         ])
 
         tableView.dataSource = self
@@ -61,9 +75,48 @@ final class CatalogViewController: UIViewController {
        }
     
     @objc private func sortButtonTapped() {
-           // Здесь вызвать метод presenter для сортировки
-           // presenter.sortCollections()
-       }
+        // 1. Создаём Alert Controller с Action Sheet стилем
+        let alertController = UIAlertController(
+            title: "Сортировка",
+            message: nil,  // или nil для без сообщения
+            preferredStyle: .actionSheet
+        )
+        
+        // 2. Добавляем варианты сортировки
+        let sortByNameAction = UIAlertAction(
+            title: "По названию",
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.sortCollections(by: .byName)
+        }
+        
+        let sortByCountAction = UIAlertAction(
+            title: "По количеству NFT",
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.sortCollections(by: .byNFTCount)
+        }
+        
+        // 3. Добавляем кнопку отмены
+        let cancelAction = UIAlertAction(
+            title: "Закрыть",
+            style: .cancel
+        )
+        
+        // 4. Добавляем actions в alert controller
+        alertController.addAction(sortByNameAction)
+        alertController.addAction(sortByCountAction)
+        alertController.addAction(cancelAction)
+        
+        // 5. Для iPad нужно указать источник (popover)
+        if let popover = alertController.popoverPresentationController {
+            popover.sourceView = sortButton
+            popover.sourceRect = sortButton.bounds
+        }
+        
+        // 6. Показываем меню
+        present(alertController, animated: true)
+    }
     
     func reloadTable() {
         tableView.reloadData()
@@ -102,6 +155,13 @@ extension CatalogViewController: UITableViewDelegate {
     //     return section == 0 ? 0 : 8  // Отступ только между секциями
     // }
 }
+
+// MARK: - LoadingView
+extension CatalogViewController: LoadingView {
+    // Методы showLoading() и hideLoading() уже реализованы в протоколе LoadingView
+    // Они автоматически работают с activityIndicator
+}
+
 
 //final class CatalogViewController: UIViewController {
 //
