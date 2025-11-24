@@ -36,6 +36,7 @@ final class StatisticViewController: UIViewController {
         setupUI()
     }
     
+    // MARK: - SetupUI
     private func setupUI() {
         setupTableView()
     }
@@ -47,7 +48,9 @@ final class StatisticViewController: UIViewController {
         tableView.isScrollEnabled = true
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
-        
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .clear
+            
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
@@ -55,13 +58,16 @@ final class StatisticViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
         ])
     }
 }
 
 extension StatisticViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
         return users.count
     }
     
@@ -70,10 +76,10 @@ extension StatisticViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
+        let user = users[indexPath.section]
+        cell.configure(with: user)
         return cell
     }
-    
-    
 }
 
 extension StatisticViewController: UITableViewDelegate {

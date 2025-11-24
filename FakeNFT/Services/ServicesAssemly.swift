@@ -1,3 +1,5 @@
+import UIKit
+
 final class ServicesAssembly {
 
     private let networkClient: NetworkClient
