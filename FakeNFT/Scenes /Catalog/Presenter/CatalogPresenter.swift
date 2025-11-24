@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 protocol CatalogPresenterProtocol {
     func viewDidLoad()
@@ -16,23 +15,11 @@ protocol CatalogPresenterProtocol {
     func sortCollections(by option: SortOption)
 }
 
-enum SortOption: String {
-    case byName = "byName"
-    case byNFTCount = "byNFTCount"
-    
-    // Значение по умолчанию
-    static let `default`: SortOption = .byNFTCount
-}
-
-// Добавить константу для ключа UserDefaults
-private enum UserDefaultsKeys {
-    static let catalogSortOption = "CatalogSortOption"
-}
-
 final class CatalogPresenter: CatalogPresenterProtocol {
 
     private var collections: [NFTCollection] = []
-    weak var view: CatalogViewController?
+    
+    weak var view: CatalogViewProtocol?
     
     private let collectionsService: CollectionsService
     
@@ -60,14 +47,17 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
     
     private var currentSortOption: SortOption {
-            get {
-                let savedValue = UserDefaults.standard.string(forKey: UserDefaultsKeys.catalogSortOption) ?? ""
-                return SortOption(rawValue: savedValue) ?? .default
-            }
-            set {
-                UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaultsKeys.catalogSortOption)
-            }
+        get {
+            let savedValue = UserDefaults.standard.string(forKey: UserDefaultsKeys.catalogSortOption) ?? ""
+            return SortOption(rawValue: savedValue) ?? .default  // По умолчанию - без сортировки
         }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaultsKeys.catalogSortOption)
+        }
+    }
+    
+    // Сохраняем оригинальный порядок данных из JSON
+    private var originalCollections: [NFTCollection] = []
     
     private func loadCollections() {
         DispatchQueue.main.async {
@@ -77,6 +67,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         collectionsService.loadCollections { [weak self] result in
             switch result {
             case .success(let collections):
+                // Сохраняем оригинальный порядок
+                self?.originalCollections = collections
                 self?.collections = collections
                 // Применяем сохранённую сортировку после загрузки данных
                 self?.applySavedSortOption()
@@ -101,8 +93,12 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         // Сохраняем выбранную сортировку (setter автоматически сохранит в UserDefaults)
         currentSortOption = option
         
-        // Применяем сортировку
+        // Применяем сортировку или возвращаем оригинальный порядок
         switch option {
+        case .default:
+            // Без сортировки - возвращаем оригинальный порядок из JSON
+            collections = originalCollections
+            
         case .byName:
             // Сортировка по названию (A-Z)
             collections.sort { $0.title < $1.title }

@@ -9,8 +9,8 @@ import Foundation
 
 struct CollectionResponse: Decodable {
        let id: String
-       let name: String        // -> title
-       let cover: URL          // -> coverURL
-       let nfts: [String]      // -> count для nftsCount
+       let name: String        
+       let cover: URL
+       let nfts: [String]
        
    }
