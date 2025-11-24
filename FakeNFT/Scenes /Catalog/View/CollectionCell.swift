@@ -64,7 +64,6 @@ final class CollectionCell: UITableViewCell {
 
 
     func configure(with collection: NFTCollection, topSpacing: CGFloat = 0) {
-        // Обновляем верхний отступ (для расстояния между ячейками)
         topConstraint?.constant = topSpacing
         
         titleLabel.text = collection.title
@@ -81,11 +80,9 @@ final class CollectionCell: UITableViewCell {
     private func setupImageLayer() {
         guard let image = loadedImage, coverImageView.bounds.width > 0 else { return }
         
-        // Устанавливаем содержимое layer
         coverImageView.layer.contents = image.cgImage
         coverImageView.layer.contentsGravity = .resizeAspectFill
-        
-        // Простой расчет: масштаб по ширине и обрезка снизу (показываем верхнюю часть)
+
         let scale = coverImageView.bounds.width / image.size.width
         let scaledHeight = image.size.height * scale
         

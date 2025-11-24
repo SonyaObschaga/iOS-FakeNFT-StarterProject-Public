@@ -5,8 +5,8 @@
 //  Created by Илья on 24.11.2025.
 //
 
-enum SortOption: String {
-    case `default` = "default" 
+internal enum SortOption: String {
+    case `default` = "default"
     case byName = "byName"
     case byNFTCount = "byNFTCount"
 }

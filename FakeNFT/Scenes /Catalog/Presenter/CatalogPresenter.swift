@@ -28,7 +28,6 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
     
     func viewDidLoad() {
-        // Здесь получаем данные (сеть / локально)
         loadCollections()
     }
     
@@ -42,21 +41,19 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     func didSelectCollection(at index: Int) {
         let selected = collections[index]
-        // Переходим на экран коллекции NFT
         print("Selected collection: \(selected.id)")
     }
     
     private var currentSortOption: SortOption {
         get {
             let savedValue = UserDefaults.standard.string(forKey: UserDefaultsKeys.catalogSortOption) ?? ""
-            return SortOption(rawValue: savedValue) ?? .default  // По умолчанию - без сортировки
+            return SortOption(rawValue: savedValue) ?? .default
         }
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaultsKeys.catalogSortOption)
         }
     }
     
-    // Сохраняем оригинальный порядок данных из JSON
     private var originalCollections: [NFTCollection] = []
     
     private func loadCollections() {
@@ -67,10 +64,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         collectionsService.loadCollections { [weak self] result in
             switch result {
             case .success(let collections):
-                // Сохраняем оригинальный порядок
                 self?.originalCollections = collections
                 self?.collections = collections
-                // Применяем сохранённую сортировку после загрузки данных
                 self?.applySavedSortOption()
                 DispatchQueue.main.async {
                     self?.view?.hideLoading()
@@ -90,25 +85,18 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         }
     
     func sortCollections(by option: SortOption) {
-        // Сохраняем выбранную сортировку (setter автоматически сохранит в UserDefaults)
         currentSortOption = option
-        
-        // Применяем сортировку или возвращаем оригинальный порядок
         switch option {
         case .default:
-            // Без сортировки - возвращаем оригинальный порядок из JSON
             collections = originalCollections
             
         case .byName:
-            // Сортировка по названию (A-Z)
             collections.sort { $0.title < $1.title }
             
         case .byNFTCount:
-            // Сортировка по количеству NFT (от большего к меньшему)
             collections.sort { $0.nftsCount > $1.nftsCount }
         }
         
-        // Обновляем таблицу после сортировки
         view?.reloadTable()
     }
 }
