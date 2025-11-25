@@ -4,7 +4,6 @@
 //
 //  Created by Илья on 22.11.2025.
 //
-
 import UIKit
 import Kingfisher
 
