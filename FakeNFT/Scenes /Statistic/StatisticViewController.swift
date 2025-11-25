@@ -1,8 +1,18 @@
 import UIKit
 
+// MARK: - User
 struct User {
     let name: String
     let score: Int
+    let position: Int
+}
+
+// MARK: - Constants
+enum StatisticConstants {
+    static let topInset: CGFloat = 20
+    static let leadingInset: CGFloat = 16
+    static let trailingInset: CGFloat = -16
+    static let bottomInset: CGFloat = -20
 }
 
 // MARK: - StatisticViewController
@@ -11,9 +21,18 @@ final class StatisticViewController: UIViewController {
     // MARK: - Properties
     let servicesAssembly: ServicesAssembly
     var users: [User] = [
-        User(name: "Иван", score: 100),
-        User(name: "Мария", score: 85),
-        User(name: "Петр", score: 92)
+        User(name: "Иван", score: 100, position: 1),
+        User(name: "Мария", score: 85, position: 3),
+        User(name: "Петр", score: 92, position: 2),
+        User(name: "Иван", score: 100, position: 1),
+        User(name: "Мария", score: 85, position: 3),
+        User(name: "Петр", score: 92, position: 2),
+        User(name: "Иван", score: 100, position: 1),
+        User(name: "Мария", score: 85, position: 3),
+        User(name: "Петр", score: 92, position: 2),
+        User(name: "Иван", score: 100, position: 1),
+        User(name: "Мария", score: 85, position: 3),
+        User(name: "Петр", score: 92, position: 2)
     ]
     
     // MARK: - UI Elements
@@ -38,16 +57,14 @@ final class StatisticViewController: UIViewController {
     
     // MARK: - SetupUI
     private func setupUI() {
+        view.backgroundColor = .systemBackground
         setupTableView()
     }
     
     private func setupTableView() {
-        tableView.register(StatisticTableViewCell.self, forCellReuseIdentifier: "StatisticCell")
+        tableView.register(StatisticTableViewCell.self, forCellReuseIdentifier: StatisticTableViewCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.isScrollEnabled = true
-        tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 16
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         
@@ -55,10 +72,10 @@ final class StatisticViewController: UIViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: StatisticConstants.topInset),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: StatisticConstants.leadingInset),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: StatisticConstants.trailingInset),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: StatisticConstants.bottomInset)
         ])
     }
 }
@@ -69,7 +86,7 @@ extension StatisticViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "StatisticCell") as? StatisticTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StatisticTableViewCell.reuseIdentifier) as? StatisticTableViewCell else {
             return UITableViewCell()
         }
         

@@ -1,24 +1,24 @@
 import UIKit
 
 // MARK: - StatisticTableViewCell
-class StatisticTableViewCell: UITableViewCell {
+final class StatisticTableViewCell: UITableViewCell {
+    
+    // MARK: - Static property
+    static var reuseIdentifier: String { "StatisticCell" }
     
     // MARK: - UI Elements
-    private let numberLabel: UILabel = {
+    private let positionLabel: UILabel = {
         let label = UILabel()
-        label.text = "1"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.textAlignment = .center
         label.textColor = .ypBlackLight
-        label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Alex"
-        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlackLight
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -27,20 +27,19 @@ class StatisticTableViewCell: UITableViewCell {
     
     private let scoreLabel: UILabel = {
         let label = UILabel()
-        label.text = "112"
         label.textAlignment = .right
-        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlackLight
         return label
     }()
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 28
+        imageView.layer.cornerRadius = CellConstants.profileImageCornerRadius
         imageView.tintColor = .ypBlackLight
         imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         return imageView
     }()
     
@@ -48,7 +47,7 @@ class StatisticTableViewCell: UITableViewCell {
         let stack = UIStackView(arrangedSubviews: [profileImage, nameLabel])
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = 8
+        stack.spacing = CellConstants.stackViewSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -57,7 +56,7 @@ class StatisticTableViewCell: UITableViewCell {
         let stack = UIStackView(arrangedSubviews: [stackView, scoreLabel])
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = 16
+        stack.spacing = CellConstants.mainStackSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -65,7 +64,7 @@ class StatisticTableViewCell: UITableViewCell {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .ypLightGrayLight
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = CellConstants.containerCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -84,8 +83,8 @@ class StatisticTableViewCell: UITableViewCell {
     private func setupUI() {
         selectionStyle = .none
         setupLayout()
-        numberLabel.setContentHuggingPriority(.required, for: .horizontal)
-        numberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        positionLabel.setContentHuggingPriority(.required, for: .horizontal)
+        positionLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         mainStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         mainStackView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
@@ -93,32 +92,33 @@ class StatisticTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         contentView.addSubview(containerView)
-        contentView.addSubview(numberLabel)
+        contentView.addSubview(positionLabel)
         contentView.addSubview(mainStackView)
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CellConstants.containerTopBottomInset),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CellConstants.containerTopBottomInset),
             
             mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            mainStackView.heightAnchor.constraint(equalToConstant: 80),
+            mainStackView.heightAnchor.constraint(equalToConstant: CellConstants.mainStackHeight),
             
-            numberLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            numberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            numberLabel.trailingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: -16),
-            numberLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            positionLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            positionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            positionLabel.trailingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: CellConstants.positionLabelTrailingInset),
+            positionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            profileImage.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
-            scoreLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            profileImage.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: CellConstants.profileImageLeadingInset),
+            scoreLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: CellConstants.scoreLabelTrailingInset),
         ])
     }
     
     func configure(with user: User) {
         nameLabel.text = user.name
         scoreLabel.text = "\(user.score)"
+        positionLabel.text = "\(user.position)"
     }
 }
