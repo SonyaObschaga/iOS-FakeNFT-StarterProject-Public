@@ -19,6 +19,7 @@ protocol StatisticViewProtocol: AnyObject {
 protocol StatisticPresenterProtocol {
     func viewDidLoad()
     func didSelectUser(at index: Int)
+    func didTapSortButton()
     
     var numberOfUsers: Int { get }
     func user(at index: Int) -> User

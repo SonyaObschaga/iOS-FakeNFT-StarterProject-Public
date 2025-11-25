@@ -25,6 +25,10 @@ final class StatisticPresenter: StatisticPresenterProtocol {
         print("Selected user: \(user.name)")
     }
     
+    func didTapSortButton() {
+        
+    }
+    
     var numberOfUsers: Int {
         return users.count
     }
