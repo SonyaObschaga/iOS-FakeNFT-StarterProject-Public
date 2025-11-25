@@ -1,7 +1,6 @@
 import UIKit
 
 extension UIColor {
-    
     static let ypBlackLight = UIColor(hexString: "1A1B22")
     static let ypWhiteLight = UIColor(hexString: "FFFFFF")
     static let ypLightGrayLight = UIColor(hexString: "F7F7F8")

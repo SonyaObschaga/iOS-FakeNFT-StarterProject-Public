@@ -16,3 +16,11 @@ enum CellConstants {
     static let profileImageLeadingInset: CGFloat = 16
     static let scoreLabelTrailingInset: CGFloat = -16
 }
+
+// MARK: - StatisticConstants
+enum StatisticConstants {
+    static let topInset: CGFloat = 20
+    static let leadingInset: CGFloat = 16
+    static let trailingInset: CGFloat = -16
+    static let bottomInset: CGFloat = -20
+}
