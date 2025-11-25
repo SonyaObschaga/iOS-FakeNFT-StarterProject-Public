@@ -6,8 +6,9 @@ class StatisticTableViewCell: UITableViewCell {
     // MARK: - UI Elements
     private let numberLabel: UILabel = {
         let label = UILabel()
-        label.text = "100"
+        label.text = "1"
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.textAlignment = .center
         label.textColor = .ypBlackLight
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -57,10 +58,16 @@ class StatisticTableViewCell: UITableViewCell {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = 16
-        stack.backgroundColor = .ypLightGrayLight
-        stack.layer.cornerRadius = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypLightGrayLight
+        view.layer.cornerRadius = 12
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Initialization
@@ -85,21 +92,28 @@ class StatisticTableViewCell: UITableViewCell {
     }
     
     private func setupLayout() {
+        contentView.addSubview(containerView)
         contentView.addSubview(numberLabel)
         contentView.addSubview(mainStackView)
         
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            
+            mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            mainStackView.heightAnchor.constraint(equalToConstant: 80),
             
             numberLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             numberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            numberLabel.trailingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: -8),
+            numberLabel.trailingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: -16),
             numberLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             profileImage.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
-            scoreLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            scoreLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
         ])
     }
     

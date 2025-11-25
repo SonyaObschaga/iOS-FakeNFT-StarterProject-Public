@@ -50,7 +50,7 @@ final class StatisticViewController: UIViewController {
         tableView.layer.cornerRadius = 16
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-            
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
@@ -65,9 +65,6 @@ final class StatisticViewController: UIViewController {
 
 extension StatisticViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    func numberOfSections(in tableView: UITableView) -> Int {
         return users.count
     }
     
@@ -76,15 +73,15 @@ extension StatisticViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let user = users[indexPath.section]
+        let user = users[indexPath.row]
         cell.configure(with: user)
         return cell
     }
 }
 
 extension StatisticViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
