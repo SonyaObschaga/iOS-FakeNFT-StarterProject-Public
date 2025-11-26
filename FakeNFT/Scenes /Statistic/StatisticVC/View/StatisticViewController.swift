@@ -151,7 +151,7 @@ extension StatisticViewController: UITableViewDataSource {
         }
         
         let user = presenter.user(at: indexPath.row)
-        cell.configure(with: user)
+        cell.configure(with: user, position: indexPath.row + 1)
         return cell
     }
 }

@@ -4,7 +4,6 @@
 struct User {
     let name: String
     let score: Int
-    let position: Int
 }
 
 // MARK: Sort Options

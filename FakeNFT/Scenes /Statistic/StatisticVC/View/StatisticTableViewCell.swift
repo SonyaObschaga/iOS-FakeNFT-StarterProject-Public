@@ -116,9 +116,9 @@ final class StatisticTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with user: User) {
+    func configure(with user: User, position: Int) {
         nameLabel.text = user.name
         scoreLabel.text = "\(user.score)"
-        positionLabel.text = "\(user.position)"
+        positionLabel.text = "\(position)"
     }
 }
