@@ -29,15 +29,29 @@ final class StatisticPresenter: StatisticPresenterProtocol {
         router.showUserCard(user)
     }
     
-    func didTapSortButton() {
-    }
-    
     var numberOfUsers: Int {
         return users.count
     }
     
     func user(at index: Int) -> User {
         return users[index]
+    }
+    
+    func didTapSortButton() {
+        view?.showSortOptions()
+    }
+    
+    func didSelectSortOption(_ option: SortOption) {
+        guard !option.isCancel else { return }
+        
+        switch option {
+        case .name:
+            sortByName()
+        case .rating:
+            sortByRating()
+        case .cancel:
+            break
+        }
     }
     
     // MARK: - Private Methods
@@ -60,8 +74,14 @@ final class StatisticPresenter: StatisticPresenterProtocol {
             }
         }
     }
+
+    private func sortByName() {
+        users.sort { $0.name < $1.name }
+        view?.displayUsers(users)
+    }
     
-    func retryLoading() {
-        loadUsers()
+    private func sortByRating() {
+        users.sort { $0.score > $1.score }
+        view?.displayUsers(users)
     }
 }

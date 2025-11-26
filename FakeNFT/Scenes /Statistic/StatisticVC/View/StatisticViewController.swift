@@ -3,7 +3,7 @@ import UIKit
 // MARK: - StatisticViewController
 final class StatisticViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Property
     private let presenter: StatisticPresenterProtocol
     
     // MARK: - UI Elements
@@ -46,7 +46,6 @@ final class StatisticViewController: UIViewController {
     }
     
     // MARK: - Action
-    
     @objc private func didTapSortButton() {
         presenter.didTapSortButton()
     }
@@ -112,6 +111,28 @@ extension StatisticViewController: StatisticViewProtocol {
     }
     
     func hideLoading() {
+    }
+    
+    func showSortOptions() {
+        let alertController = UIAlertController(
+            title: "Сортировка",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        for option in SortOption.allCases {
+            let action = UIAlertAction(
+                title: option.rawValue,
+                style: option.isCancel ? .cancel : .default
+            ) { [weak self] _ in
+                if !option.isCancel {
+                    self?.presenter.didSelectSortOption(option)
+                }
+            }
+            
+            alertController.addAction(action)
+        }
+        present(alertController, animated: true)
     }
 }
 
