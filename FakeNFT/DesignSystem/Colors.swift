@@ -19,9 +19,9 @@ extension UIColor {
     static let textPrimary = UIColor(resource: .blackAdaptive)
   
     // Adaptive Colors
-    private static let blackAdaptive = UIColor(resource: .blackAdaptive)
-    private static let whiteAdaptive = UIColor(resource: .whiteAdaptive)
-    private static let lightGrayAdaptive = UIColor(resource: .lightGrayAdaptive)
+    static let blackAdaptive = UIColor(resource: .blackAdaptive)
+    static let whiteAdaptive = UIColor(resource: .whiteAdaptive)
+    static let lightGrayAdaptive = UIColor(resource: .lightGrayAdaptive)
     
     // Semantic Colors
     static let semanticGreen = UIColor(resource: .greenUniversal)
