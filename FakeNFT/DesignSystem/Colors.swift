@@ -17,10 +17,8 @@ extension UIColor {
     
     // Text Colors
     static let textPrimary = UIColor(resource: .blackAdaptive)
-    static let textSecondary = UIColor.gray
-    static let textOnPrimary = UIColor.white
-    static let textOnSecondary = UIColor.black
-
+  
+    // Adaptive Colors
     private static let blackAdaptive = UIColor(resource: .blackAdaptive)
     private static let whiteAdaptive = UIColor(resource: .whiteAdaptive)
     private static let lightGrayAdaptive = UIColor(resource: .lightGrayAdaptive)
