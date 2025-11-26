@@ -1,4 +1,3 @@
-import UIKit
 
 // MARK: - Model
 struct User {
@@ -7,7 +6,7 @@ struct User {
     let position: Int
 }
 
-//MARK: - View Protocol
+// MARK: - View Protocol
 protocol StatisticViewProtocol: AnyObject {
     func displayUsers(_ users: [User])
     func showLoading()
@@ -15,7 +14,7 @@ protocol StatisticViewProtocol: AnyObject {
     func showError(message: String, retryHandler: (() -> Void)?)
 }
 
-//MARK: - Presenter Protocol
+// MARK: - Presenter Protocol
 protocol StatisticPresenterProtocol {
     func viewDidLoad()
     func didSelectUser(at index: Int)
@@ -25,7 +24,12 @@ protocol StatisticPresenterProtocol {
     func user(at index: Int) -> User
 }
 
-//MARK: - Service Protocol
+// MARK: - Service Protocol
 protocol UserServiceProtocol {
     func fetchUsers(completion: @escaping (Result<[User], Error>) -> Void)
+}
+
+// MARK: - Router Protocol
+protocol StatisticRouterProtocol {
+    func showUserCard(_ user: User)
 }

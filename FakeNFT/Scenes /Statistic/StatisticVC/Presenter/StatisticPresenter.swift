@@ -3,15 +3,19 @@ import UIKit
 // MARK: - StatisticPresenter
 final class StatisticPresenter: StatisticPresenterProtocol {
     
-    // MARK: - Properties
+    // MARK: - Property
     weak var view: StatisticViewProtocol?
+    
+    // MARK: - Private Properties
     private let userService: UserServiceProtocol
     private var users: [User] = []
+    private let router: StatisticRouterProtocol
     
     // MARK: - Initialization
-    init(view: StatisticViewProtocol? = nil, userService: UserServiceProtocol) {
+    init(view: StatisticViewProtocol? = nil, userService: UserServiceProtocol, router: StatisticRouterProtocol) {
         self.view = view
         self.userService = userService
+        self.router = router
     }
     
     // MARK: - Public Interface
@@ -22,11 +26,10 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     func didSelectUser(at index: Int) {
         guard index < users.count else { return }
         let user = users[index]
-        print("Selected user: \(user.name)")
+        router.showUserCard(user)
     }
     
     func didTapSortButton() {
-        
     }
     
     var numberOfUsers: Int {
