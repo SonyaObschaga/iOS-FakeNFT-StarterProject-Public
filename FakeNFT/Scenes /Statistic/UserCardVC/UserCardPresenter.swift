@@ -25,4 +25,8 @@ final class UserCardPresenter: UserCardPresenterProtocol {
     func backwardButtonTapped() {
         router?.dismiss()
     }
+    
+    func webViewButtonTapped() {
+        print("Tapped web view button")
+    }
 }

@@ -7,15 +7,6 @@ final class UserCardViewController: UIViewController {
     var presenter: UserCardPresenterProtocol!
     
     // MARK: - UI Elements
-    private lazy var backwardButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .ypBlackLight
-        button.setImage(UIImage(named: "backward"), for: .normal)
-        button.addTarget(self, action: #selector(backwardButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle.fill")
@@ -24,7 +15,6 @@ final class UserCardViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        
         return imageView
     }()
     
@@ -61,6 +51,18 @@ final class UserCardViewController: UIViewController {
         return stack
     }()
     
+    private lazy var webViewButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .ypBlackLight
+        button.setTitle("Перейти на сайт пользователя", for: .normal)
+        button.titleLabel?.font = .caption1
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(webViewButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,21 +75,37 @@ final class UserCardViewController: UIViewController {
         presenter.backwardButtonTapped()
     }
     
-    // MARK: - SetupUI
-    private func setupUI() {
-        view.backgroundColor = .systemBackground
-        setupBackwardButton()
-        setupVerticalStackView()
+    @objc private func webViewButtonTapped() {
+        presenter.webViewButtonTapped()
     }
     
-    private func setupBackwardButton() {
-        view.addSubview(backwardButton)
+    // MARK: - SetupUI
+    private func setupNavigationBar() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "backward"),
+            style: .plain,
+            target: self,
+            action: #selector(backwardButtonTapped)
+        )
+        
+        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        setupVerticalStackView()
+        setupWebViewButton()
+        setupNavigationBar()
+    }
+    
+    private func setupWebViewButton() {
+        view.addSubview(webViewButton)
         
         NSLayoutConstraint.activate([
-            backwardButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 11),
-            backwardButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 9),
-            backwardButton.widthAnchor.constraint(equalToConstant: 24),
-            backwardButton.heightAnchor.constraint(equalToConstant: 24)
+            webViewButton.topAnchor.constraint(equalTo: verticalStackView.bottomAnchor, constant: 28),
+            webViewButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            webViewButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            webViewButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
@@ -95,7 +113,7 @@ final class UserCardViewController: UIViewController {
         view.addSubview(verticalStackView)
         
         NSLayoutConstraint.activate([
-            verticalStackView.topAnchor.constraint(equalTo: backwardButton.bottomAnchor, constant: 29),
+            verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             

@@ -7,6 +7,7 @@ protocol UserCardViewProtocol: AnyObject {
 protocol UserCardPresenterProtocol {
     func viewDidLoad()
     func backwardButtonTapped()
+    func webViewButtonTapped()
 }
 
 // MARK: - UserCardRouterProtocol
