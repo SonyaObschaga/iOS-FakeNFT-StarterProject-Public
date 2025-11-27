@@ -7,7 +7,7 @@
 import UIKit
 import Kingfisher
 
-final class CollectionCell: UITableViewCell {
+final class TableCell: UITableViewCell {
 
     static let reuseIdentifier = "CollectionCell"
 
@@ -68,7 +68,7 @@ final class CollectionCell: UITableViewCell {
         titleLabel.text = collection.title
         nftsCountLabel.text = "(\(collection.nftsCount))"
         coverImageView.kf.setImage(with: collection.coverURL) { [weak self] result in
-            guard let self = self, case .success(let value) = result else { return }
+            guard let self, case .success(let value) = result else { return }
             DispatchQueue.main.async {
                 self.loadedImage = value.image
                 self.setupImageLayer()
@@ -82,7 +82,7 @@ final class CollectionCell: UITableViewCell {
         coverImageView.layer.contents = image.cgImage
         coverImageView.layer.contentsGravity = .resizeAspectFill
 
-        let scale = coverImageView.bounds.width / image.size.width
+        let scale = image.size.width != 0 ? coverImageView.bounds.width / image.size.width : 1
         let scaledHeight = image.size.height * scale
         
         if scaledHeight > coverImageView.bounds.height {

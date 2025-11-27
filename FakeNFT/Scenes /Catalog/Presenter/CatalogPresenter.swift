@@ -15,7 +15,7 @@ protocol CatalogPresenterProtocol {
     func sortCollections(by option: SortOption)
 }
 
-final class CatalogPresenter: CatalogPresenterProtocol {
+final class CatalogPresenter {
 
     private var collections: [NFTCollection] = []
     
@@ -99,4 +99,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         
         view?.reloadTable()
     }
+}
+
+extension CatalogPresenter: CatalogPresenterProtocol {
+    
 }
