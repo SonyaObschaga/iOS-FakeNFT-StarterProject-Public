@@ -8,6 +8,7 @@ protocol UserCardPresenterProtocol {
     func viewDidLoad()
     func backwardButtonTapped()
     func webViewButtonTapped()
+    func collectionButtonTapped()
 }
 
 // MARK: - UserCardRouterProtocol

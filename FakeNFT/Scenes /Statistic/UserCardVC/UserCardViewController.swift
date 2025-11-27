@@ -63,6 +63,57 @@ final class UserCardViewController: UIViewController {
         return button
     }()
     
+    private lazy var collectionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .ypBlackLight
+        button.backgroundColor = .systemBackground
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.isUserInteractionEnabled = false
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Коллекция NFT (112)"
+        titleLabel.font = .bodyBold
+        titleLabel.textColor = .ypBlackLight
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let iconImageView = UIImageView()
+        iconImageView.image = UIImage(named: "backward")?.withRenderingMode(.alwaysTemplate)
+        iconImageView.tintColor = .ypBlackLight
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(iconImageView)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
+            iconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
+            
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: iconImageView.leadingAnchor, constant: -8)
+        ])
+        
+        button.addSubview(containerView)
+        
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: button.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: button.bottomAnchor)
+        ])
+        
+        button.addTarget(self, action: #selector(collectionButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+        
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +130,10 @@ final class UserCardViewController: UIViewController {
         presenter.webViewButtonTapped()
     }
     
+    @objc private func collectionButtonTapped() {
+        presenter.collectionButtonTapped()
+    }
+    
     // MARK: - SetupUI
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -87,7 +142,6 @@ final class UserCardViewController: UIViewController {
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        
         navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
     }
     
@@ -96,6 +150,7 @@ final class UserCardViewController: UIViewController {
         setupVerticalStackView()
         setupWebViewButton()
         setupNavigationBar()
+        setupCollectionButton()
     }
     
     private func setupWebViewButton() {
@@ -106,6 +161,17 @@ final class UserCardViewController: UIViewController {
             webViewButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             webViewButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             webViewButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+    
+    private func setupCollectionButton() {
+        view.addSubview(collectionButton)
+        
+        NSLayoutConstraint.activate([
+            collectionButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            collectionButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     
@@ -128,8 +194,7 @@ final class UserCardViewController: UIViewController {
 
 extension UserCardViewController: UserCardViewProtocol {
     func displayUser(_ user: User) {
-//        nameLabel.text = user.name
-        nameLabel.text = "Test Name" // ← Временный текст для теста
-        descriptionLabel.text = "Test Description" // поменять
+        nameLabel.text = "Test Name"
+        descriptionLabel.text = "Test Description"
     }
 }

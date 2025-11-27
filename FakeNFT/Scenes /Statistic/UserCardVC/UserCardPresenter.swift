@@ -29,4 +29,8 @@ final class UserCardPresenter: UserCardPresenterProtocol {
     func webViewButtonTapped() {
         print("Tapped web view button")
     }
+    
+    func collectionButtonTapped() {
+        print("Tapped collection button")
+    }
 }
