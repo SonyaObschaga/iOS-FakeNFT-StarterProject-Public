@@ -13,11 +13,10 @@ final class UserCardConfigurator {
     
     // MARK: - Configure
     func configure(with user: User) -> UIViewController {
-        let viewController = UserCardViewController()
         let presenter = UserCardPresenter(user: user, userService: userService)
+        let viewController = UserCardViewController(presenter: presenter)
         let router = UserCardRouter()
         
-        viewController.presenter = presenter
         presenter.view = viewController
         presenter.router = router
         router.viewController = viewController

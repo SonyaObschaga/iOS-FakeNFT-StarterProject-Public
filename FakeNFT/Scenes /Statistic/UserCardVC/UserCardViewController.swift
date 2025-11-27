@@ -4,7 +4,7 @@ import UIKit
 final class UserCardViewController: UIViewController {
     
     // MARK: - Properties
-    var presenter: UserCardPresenterProtocol!
+    private var presenter: UserCardPresenterProtocol
     
     // MARK: - UI Elements
     private lazy var avatarImageView: UIImageView = {
@@ -114,6 +114,16 @@ final class UserCardViewController: UIViewController {
         return button
     }()
         
+    // MARK: - Initialization
+    init(presenter: UserCardPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
