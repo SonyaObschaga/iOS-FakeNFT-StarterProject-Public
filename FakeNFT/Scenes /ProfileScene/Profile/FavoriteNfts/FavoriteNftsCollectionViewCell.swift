@@ -59,18 +59,16 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - Main function
-    //func configureCell(name: String) {
     func configureCell(likedNFT: NFTModel) {
         backgroundColor = .ypWhiteDay
         
         nameLabel.text = likedNFT.name
-        costLabel.text = "\(likedNFT.price)"
-        ratingImageView.image = UIImage(named: "stars\(likedNFT.rating ?? 1)")
+        costLabel.text = "\(likedNFT.price) ETH"
+        ratingImageView.image = UIImage(named: "Rating_\(likedNFT.rating ?? 1)")
         if likedNFT.isLiked {
-            likeButton.setImage(UIImage(named: "Active"), for: .normal)
+            likeButton.setImage(UIImage(named: "Like Button On"), for: .normal)
         } else {
-            likeButton.setImage(UIImage(named: "No active"), for: .normal)
+            likeButton.setImage(UIImage(named: "Like Button Off"), for: .normal)
         }
         
         nftImageView.kf.indicatorType = .activity

@@ -58,7 +58,7 @@ final class MyNftTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypBlackDay
-        label.text = "от John Doe"
+        label.text = "John Doe"
         
         return label
     }()
@@ -87,13 +87,13 @@ final class MyNftTableViewCell: UITableViewCell {
         selectionStyle = .none
         
         nameLabel.text = nft.name
-        priceLabel.text = "\(nft.price)"
+        costLabel.text = "\(nft.price) ETH"
         
-        ratingImageView.image = UIImage(named: "stars\(nft.rating ?? 1)")
+        ratingImageView.image = UIImage(named: "Rating_\(nft.rating ?? 1)")
         if nft.isLiked {
-            likeButton.setImage(UIImage(named: "Active"), for: .normal)
+            likeButton.setImage(UIImage(named: "Like Button On"), for: .normal)
         } else {
-            likeButton.setImage(UIImage(named: "No active"), for: .normal)
+            likeButton.setImage(UIImage(named: "Like Button Off"), for: .normal)
         }
         
         nftImageView.kf.indicatorType = .activity
