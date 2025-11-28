@@ -1,21 +1,15 @@
 import UIKit
 
-// MARK: -
+// MARK: - UserCollectionPresenter
 final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     
     // MARK: - Property
     weak var view: UserCollectionViewProtocol?
-
-    // MARK: -Private Property
-    private var router: UserCollectionRouterProtocol?
+    var router: UserCollectionRouterProtocol?
     
-    // MARK: - Initialization
-//    init(router: UserCollectionRouterProtocol) {
-//        self.router = router
-//    }
     // MARK: - Public Interface
     func viewDidLoad() {
-        
+        view?.displayUserCollection()
     }
     
     func backwardButtonTapped() {

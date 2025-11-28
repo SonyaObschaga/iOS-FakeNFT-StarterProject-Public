@@ -1,7 +1,9 @@
 import UIKit
 
+// MARK: - UserCollectionConfigurator
 final class UserCollectionConfigurator {
     
+    // MARK: - Configure
     func configure() -> UIViewController {
         let presenter = UserCollectionPresenter()
         let router = UserCollectionRouter(userCollectionPresenter: presenter)
@@ -9,6 +11,7 @@ final class UserCollectionConfigurator {
         let viewController = UserCollectionViewController(presenter: presenter)
         
         presenter.view = viewController
+        presenter.router = router
         router.viewController = viewController
         
         return viewController

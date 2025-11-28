@@ -24,6 +24,7 @@ final class UserCollectionViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        presenter.viewDidLoad()
     }
     
     // MARK: - Actions
@@ -48,6 +49,7 @@ final class UserCollectionViewController: UIViewController {
     }
 }
 
+// MARK: - UserCollectionViewProtocol
 extension UserCollectionViewController: UserCollectionViewProtocol {
     func displayUserCollection() {
         //

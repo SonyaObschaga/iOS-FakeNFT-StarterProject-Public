@@ -129,6 +129,7 @@ final class UserCardViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        presenter.viewDidLoad()
     }
     
     // MARK: - Actions
