@@ -2,20 +2,20 @@
 <br /> Когорта: 32
 <br /> Группа: 2
 <br /> Эпик: Профиль
-<br /> Ссылка на доску: 
+<br /> Ссылка на доску: https://github.com/users/SonyaObschaga/projects/1/views/11
 
 ## Модуль 1:
 
 #### Верстка
-- Сверстать главный экран профиля (est: 3 hours; fact: x hours).
-- Сверстать экран редактирования профиля (est: 3 hours; fact: x hours).
-- Сверстать экран мои NFT (est: 3 hours; fact: x hours).
-- Сверстать экран избранных NFT (est: 3 hours; fact: x hours).
+- Сверстать главный экран профиля (est: 3 hours; fact: 3 hours).
+- Сверстать экран редактирования профиля (est: 3 hours; fact: 4 hours).
+- Сверстать экран мои NFT (est: 3 hours; fact: 3 hours).
+- Сверстать экран избранных NFT (est: 3 hours; fact: 3 hours).
 
 #### Логика
-- Добавить переход на webView (est: 4 hours; fact: x hours).
+- Добавить переход на webView (est: 4 hours; fact: 3 hours).
 
-`Total:` est: 16 hours; fact: x hours.
+`Total:` est: 16 hours; fact: 16 hours.
 
 
 ## Модуль 2:
