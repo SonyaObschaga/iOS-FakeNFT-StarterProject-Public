@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController {
     
     //MARK: - Layout variables
     private lazy var editButton: UIButton = {
-        let imageButton = UIImage(named: "edit")
+        let imageButton = UIImage(resource: .edit)
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false

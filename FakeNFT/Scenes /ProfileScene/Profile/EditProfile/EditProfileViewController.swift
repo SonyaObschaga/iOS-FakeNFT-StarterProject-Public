@@ -12,7 +12,7 @@ final class EditProfileViewController: UIViewController {
  
     //MARK: - Layout variables
     private lazy var closeButton: UIButton = {
-        let imageButton = UIImage(named: "close")?.withRenderingMode(.alwaysOriginal)
+        let imageButton = UIImage(resource: .close).withRenderingMode(.alwaysOriginal)
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +23,7 @@ final class EditProfileViewController: UIViewController {
         return button
     }()
     private lazy var editPhotoButton: UIButton = {
-        let imageButton = UIImage(named: "Image1")?.alpha(0.6)
+        let imageButton = UIImage(resource: .image1).alpha(0.6)
         
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false

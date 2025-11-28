@@ -16,7 +16,8 @@ final class TabBarController: UITabBarController {
 
     private let profileTabBarItem = UITabBarItem(
         title: "Профиль",
-        image: UIImage(named: "Profile"),
+        //image: UIImage(named: "Profile"),
+        image: UIImage(resource: .profileTabBar),
         tag: 0
     )
 

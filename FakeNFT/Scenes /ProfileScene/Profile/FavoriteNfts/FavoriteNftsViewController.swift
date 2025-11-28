@@ -12,7 +12,7 @@ final class FavoriteNftsViewController: UIViewController {
  
     //MARK: - Layout variables
     private lazy var backButton: UIButton = {
-        let imageButton = UIImage(named: "backward")
+        let imageButton = UIImage(resource: .backChevron)
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
