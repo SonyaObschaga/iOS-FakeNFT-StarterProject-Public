@@ -59,7 +59,6 @@ final class MyNftTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypBlackDay
         label.text = "John Doe"
-        
         return label
     }()
     private lazy var priceLabel: UILabel = {
@@ -88,6 +87,7 @@ final class MyNftTableViewCell: UITableViewCell {
         
         nameLabel.text = nft.name
         costLabel.text = "\(nft.price) ETH"
+        authorLabel.text = nft.author
         
         ratingImageView.image = UIImage(named: "Rating_\(nft.rating ?? 1)")
         if nft.isLiked {
