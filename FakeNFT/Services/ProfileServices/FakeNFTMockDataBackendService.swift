@@ -64,7 +64,7 @@ class FakeNFTMockDataBackendService: FakeNFTBackendServiceProtocol {
                                 _ allNFTDTOs: [NFTDto]) {
             for id in nftsIds {
                 if let nftDto = allNFTDTOs.first(where: { $0.id == id }) {
-                    let nft = NFT()
+                    let nft = NFTModel()
                     nft.createdAt = nftDto.createdAt
                     nft.name = nftDto.name
                     nft.images = nftDto.images

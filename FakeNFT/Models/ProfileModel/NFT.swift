@@ -7,8 +7,8 @@
 
 import Foundation
 
-//class NFT: Codable {
-class NFT: Encodable, Decodable {
+//class NFTModel: Codable {
+class NFTModel: Encodable, Decodable {
     init() {
         createdAt = Date()
     }

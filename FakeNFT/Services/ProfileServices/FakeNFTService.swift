@@ -53,7 +53,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         return getUserProfile(FakeNFTService.DEFAULT_USER_INDEX)
     }()
     
-    private var myNFTs: [NFT] {
+    private var myNFTs: [NFTModel] {
         return self.profile.nfts
     }
     
@@ -61,7 +61,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         return myNFTs.count
     }
 
-    private var likedNFTs: [NFT] {
+    private var likedNFTs: [NFTModel] {
         return self.profile.likedNFTs
     }
 
@@ -86,7 +86,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
 
             for id in unwrappedNfts {
                 do { let nftDto = try backend.getNFT(id) //{
-                    let nft = NFT()
+                    let nft = NFTModel()
                     nft.createdAt = nftDto.createdAt
                     nft.name = nftDto.name
                     nft.images = nftDto.images
@@ -132,12 +132,12 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         notifyProfileModelChanged()
     }
 
-    private func getNFT(_ id: String) -> NFT {
+    private func getNFT(_ id: String) -> NFTModel {
         guard let nftDto = try? fakeNFTBackendService?.getNFT(id) else {
             fatalError("NFT с ID '\(id)' не найден")
         }
 
-        let nft = NFT()
+        let nft = NFTModel()
         nft.createdAt = nftDto.createdAt
         nft.name = nftDto.name
         nft.images = nftDto.images
@@ -150,7 +150,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         return nft
     }
      
-    func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFT] {
+    func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel] {
         switch sortField {
         case .byName:
             return self.profile.nfts.sorted { $0.name < $1.name }

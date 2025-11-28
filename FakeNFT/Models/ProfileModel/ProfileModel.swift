@@ -12,8 +12,8 @@ public class ProfileModel: Encodable, Decodable {
     var avatar: String?
     var description: String?
     var website: String?
-    var nfts: [NFT] = []
-    var likedNFTs: [NFT] {
+    var nfts: [NFTModel] = []
+    var likedNFTs: [NFTModel] {
         return nfts.filter { $0.isLiked }
     }
     var id: String = ""
@@ -22,7 +22,7 @@ public class ProfileModel: Encodable, Decodable {
         self.nfts = []
     }
     
-    func addNFT(_ nft: NFT) {
+    func addNFT(_ nft: NFTModel) {
         self.nfts.append(nft)
     }
 }

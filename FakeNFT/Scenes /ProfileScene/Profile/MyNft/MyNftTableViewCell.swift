@@ -82,7 +82,7 @@ final class MyNftTableViewCell: UITableViewCell {
     }()
     
     //MARK: - Public functions
-    func configureCell(nft: NFT) {
+    func configureCell(nft: NFTModel) {
         backgroundColor = .ypWhiteDay
         selectionStyle = .none
         

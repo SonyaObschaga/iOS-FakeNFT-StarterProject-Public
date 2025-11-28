@@ -61,7 +61,7 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
     
     //MARK: - Main function
     //func configureCell(name: String) {
-    func configureCell(likedNFT: NFT) {
+    func configureCell(likedNFT: NFTModel) {
         backgroundColor = .ypWhiteDay
         
         nameLabel.text = likedNFT.name
