@@ -31,6 +31,6 @@ final class UserCardPresenter: UserCardPresenterProtocol {
     }
     
     func collectionButtonTapped() {
-        print("Tapped collection button")
+        router?.showUserCollection()
     }
 }

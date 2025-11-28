@@ -3,7 +3,7 @@ import UIKit
 // MARK: - UserCardViewController
 final class UserCardViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Property
     private var presenter: UserCardPresenterProtocol
     
     // MARK: - UI Elements
@@ -145,6 +145,14 @@ final class UserCardViewController: UIViewController {
     }
     
     // MARK: - SetupUI
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        setupVerticalStackView()
+        setupWebViewButton()
+        setupNavigationBar()
+        setupCollectionButton()
+    }
+    
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(named: "backward"),
@@ -153,14 +161,6 @@ final class UserCardViewController: UIViewController {
             action: #selector(backwardButtonTapped)
         )
         navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
-    }
-    
-    private func setupUI() {
-        view.backgroundColor = .systemBackground
-        setupVerticalStackView()
-        setupWebViewButton()
-        setupNavigationBar()
-        setupCollectionButton()
     }
     
     private func setupWebViewButton() {
@@ -202,9 +202,10 @@ final class UserCardViewController: UIViewController {
     }
 }
 
+// MARK: - UserCardViewProtocol
 extension UserCardViewController: UserCardViewProtocol {
     func displayUser(_ user: User) {
-        nameLabel.text = "Test Name"
-        descriptionLabel.text = "Test Description"
+        nameLabel.text = user.name
+        descriptionLabel.text = "\(user.score)"
     }
 }

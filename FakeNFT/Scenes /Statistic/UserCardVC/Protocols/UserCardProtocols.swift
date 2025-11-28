@@ -1,9 +1,9 @@
-// MARK: - UserCardViewProtocol
+// MARK: - View Protocol
 protocol UserCardViewProtocol: AnyObject {
     func displayUser(_ user: User)
 }
 
-// MARK: - UserCardPresenterProtocol
+// MARK: - Presenter Protocol
 protocol UserCardPresenterProtocol {
     func viewDidLoad()
     func backwardButtonTapped()
@@ -11,7 +11,8 @@ protocol UserCardPresenterProtocol {
     func collectionButtonTapped()
 }
 
-// MARK: - UserCardRouterProtocol
+// MARK: - Router Protocol
 protocol UserCardRouterProtocol {
     func dismiss()
+    func showUserCollection()
 }
