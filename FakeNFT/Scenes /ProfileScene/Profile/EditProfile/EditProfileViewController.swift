@@ -12,12 +12,12 @@ final class EditProfileViewController: UIViewController {
  
     //MARK: - Layout variables
     private lazy var closeButton: UIButton = {
-        let imageButton = UIImage(resource: .close).withRenderingMode(.alwaysOriginal)
-        
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+
+        let imageButton = UIImage(resource: .backChevron).withRenderingMode(.alwaysOriginal)
         button.setImage(imageButton, for: .normal)
+
         button.addTarget(self, action: #selector(close), for: .touchUpInside)
         
         return button
@@ -150,7 +150,7 @@ private extension EditProfileViewController {
     func configureConstraints() {
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 9),
             
             editPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editPhotoButton.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 22),

@@ -68,10 +68,10 @@ class FakeNFTMockData {
         return """
                 [
                     {
-                    "name": "Студентус Практикумс",
+                    "name": "Joaquin Phoenix",
                     "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/350.jpg",
                     "description": "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100 NFT, и еще больше — на моём сайте.",
-                    "website": "https://practicum.yandex.ru/visual-presentation/",
+                    "website": "Joaquin Phoenix.com",
                     "nfts": [ "ca34d35a-4507-47d9-9312-5ea7053994c0",
                               "1e649115-1d4f-4026-ad56-9551a16763ee",
                               "28829968-8639-4e08-8853-2f30fcf09783",

@@ -24,7 +24,7 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     lazy var avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Image1"))
+        let imageView = UIImageView(image: UIImage(named: "Joaquin"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
@@ -107,7 +107,7 @@ extension ProfileViewController: UITableViewDelegate {
 //MARK: - UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return tableCells.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -209,15 +209,6 @@ extension ProfileViewController {
                         favoriteNftsViewController,
                         animated: true
                     )
-                })
-        )
-        tableCells.append(
-            ProfileCellModel(
-                name: "О разработчике",
-                count: nil,
-                action: { [weak self] in
-                    guard let self = self else { return }
-                    self.openWebView()
                 })
         )
     }
