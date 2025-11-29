@@ -115,7 +115,8 @@ class CartTableViewCell: UITableViewCell {
     func configure(nftName: String, nftImageURL: String, rating: Int, price: Float) {
         nftNameLabel.text = nftName
         nftImageView.image = UIImage(resource: .NFT) //подтянуть изображение через Kingfisher
-        costOfNftLabel.text = "\(price) ETH"
+        let priceString = String(price).replacingOccurrences(of: ".", with: ",")
+        costOfNftLabel.text = "\(priceString) ETH"
         setRatingStars(rating: rating)
     }
     
