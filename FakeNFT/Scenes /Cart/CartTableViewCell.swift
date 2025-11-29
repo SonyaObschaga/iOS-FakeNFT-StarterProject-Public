@@ -98,5 +98,25 @@ class CartTableViewCell: UITableViewCell {
         ])
     }
     
+    func configure(nftName: String, nftImageURL: String, rating: Int, price: Float) {
+        nftNameLabel.text = nftName
+        nftImageView.image = UIImage(resource: .NFT) //подтянуть изображение через Kingfisher
+        costOfNftLabel.text = "\(price) ETH"
+        setRatingStars(rating: rating)
+    }
     
+    func setRatingStars(rating: Int) {
+        let boundedRating = max(1, min(rating, 5))
+        let image: UIImage
+            switch boundedRating {
+            case 0: image = UIImage(resource: .rating0)
+            case 1: image = UIImage(resource: .rating1)
+            case 2: image = UIImage(resource: .rating2)
+            case 3: image = UIImage(resource: .rating3)
+            case 4: image = UIImage(resource: .rating4)
+            case 5: image = UIImage(resource: .rating5)
+            default: image = UIImage(resource: .rating0)
+            }
+        ratingOfNftImageView.image = image
+    }
 }
