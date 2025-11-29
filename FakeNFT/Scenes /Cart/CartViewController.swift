@@ -2,6 +2,17 @@ import UIKit
 
 final class CartViewController: UIViewController {
     
+    // MARK: - MockData
+    
+    private let nftData: [TestNFTModel] = [TestNFTModel(name: "Atheen", rating: 5, price: 1.15),
+                                           TestNFTModel(name: "Bulbasaur", rating: 3, price: 2.22),
+                                           TestNFTModel(name: "Greena", rating: 1, price: 3.09)]
+    
+    
+    // MARK: - Private Properties
+    
+    private let reuseIdentifier = "CartCell"
+    
     // MARK: - UI Elements
     
     private let categoriesTableView: UITableView = {
@@ -9,6 +20,7 @@ final class CartViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.isScrollEnabled = true
+        tableView.backgroundColor = .clear
         tableView.rowHeight = 140
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -16,11 +28,11 @@ final class CartViewController: UIViewController {
     
     private let totalOfCartView: UIView = {
         let view = UIView()
-        view.backgroundColor = .secondary
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
+        view.backgroundColor = .lightGrayAdaptive
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -28,6 +40,7 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.font = .bodyRegular15
         label.textColor = .textPrimary
+        label.text = "0 NFT"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -36,6 +49,7 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.font = .titleMedium
         label.textColor = .semanticGreen
+        label.text = "0 ETH"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -43,7 +57,7 @@ final class CartViewController: UIViewController {
     private let goToPayButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
-        button.backgroundColor = .backgroundSecondary
+        button.backgroundColor = .blackAdaptive
         button.setTitle("К оплате", for: .normal)
         button.titleLabel?.font = .titleMedium
         button.setTitleColor(.whiteAdaptive, for: .normal)
@@ -55,7 +69,10 @@ final class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .backgroundPrimary
         
+        setupViews()
+        setupConstraints()
     }
     
     // MARK: - Setup UI Methods
@@ -66,6 +83,9 @@ final class CartViewController: UIViewController {
         totalOfCartView.addSubview(totalNft)
         totalOfCartView.addSubview(totalCost)
         totalOfCartView.addSubview(goToPayButton)
+        
+        categoriesTableView.register(CartTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        categoriesTableView.dataSource = self
     }
     
     private func setupConstraints() {
@@ -86,10 +106,26 @@ final class CartViewController: UIViewController {
             totalCost.bottomAnchor.constraint(equalTo: totalOfCartView.bottomAnchor, constant: -16),
             totalCost.leadingAnchor.constraint(equalTo: totalOfCartView.leadingAnchor, constant: 16),
             
-            goToPayButton.centerYAnchor.constraint(equalTo: totalOfCartView.centerYAnchor),
-            goToPayButton.trailingAnchor.constraint(equalTo: totalOfCartView.trailingAnchor, constant: -16)
+            goToPayButton.topAnchor.constraint(equalTo: totalOfCartView.topAnchor, constant: 16),
+            goToPayButton.bottomAnchor.constraint(equalTo: totalOfCartView.bottomAnchor, constant: -16),
+            goToPayButton.trailingAnchor.constraint(equalTo: totalOfCartView.trailingAnchor, constant: -16),
+            goToPayButton.widthAnchor.constraint(equalToConstant: 240)
         ])
     }
     
     
+}
+
+extension CartViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return nftData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
+        
+        let nft = nftData[indexPath.row]
+        cell.configure(nftName: nft.name, nftImageURL: "", rating: nft.rating, price: nft.price)
+        return cell
+    }
 }
