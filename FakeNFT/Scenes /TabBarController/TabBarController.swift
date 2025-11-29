@@ -5,7 +5,7 @@ final class TabBarController: UITabBarController {
     var servicesAssembly: ServicesAssembly!
 
     private let cartTabBarItem = UITabBarItem(
-        title: NSLocalizedString("Tab.catalog", comment: ""),
+        title: NSLocalizedString("Tab.Cart", comment: ""),
         image: UIImage(resource: .cartTabBar),
         tag: 0
     )
