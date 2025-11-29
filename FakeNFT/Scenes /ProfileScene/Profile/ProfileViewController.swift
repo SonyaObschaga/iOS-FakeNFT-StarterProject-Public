@@ -211,6 +211,15 @@ extension ProfileViewController {
                     )
                 })
         )
+        tableCells.append(
+            ProfileCellModel(
+                name: "О разработчике",
+                count: nil,
+                action: { [weak self] in
+                    guard let self = self else { return }
+                    self.openWebView()
+                })
+        )
     }
     
     @objc
