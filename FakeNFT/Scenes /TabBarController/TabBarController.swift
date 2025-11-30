@@ -16,7 +16,6 @@ final class TabBarController: UITabBarController {
 
     private let profileTabBarItem = UITabBarItem(
         title: "Профиль",
-        //image: UIImage(named: "Profile"),
         image: UIImage(resource: .profileTabBar),
         tag: 0
     )
@@ -31,6 +30,8 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         let profileController = ProfileViewController()
+        let profilePresenter = ProfilePresenter()
+        profileController.configure(profilePresenter)
         profileController.tabBarItem = profileTabBarItem
         let profileNavigationController = UINavigationController(rootViewController: profileController)
         

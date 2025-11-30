@@ -8,9 +8,24 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    
-    let profile = FakeNFTService.shared.profile
-    
+
+    //let profile = FakeNFTService.shared.profile
+    internal var tableCells: [ProfileCellModel] = []
+
+    private var presenter: ProfilePresenterProtocol!
+    func configure (_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+        
+    //MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //view.backgroundColor = .ypBlackDay
+        setupView()
+        presenter.viewDidLoad()
+    }
+
     //MARK: - Layout variables
     private lazy var editButton: UIButton = {
         let imageButton = UIImage(resource: .edit)
@@ -23,8 +38,9 @@ final class ProfileViewController: UIViewController {
         
         return button
     }()
+    
     lazy var avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Joaquin"))
+        let imageView = UIImageView(image: UIImage(named: "person"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
@@ -37,7 +53,8 @@ final class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .ypBlackDay
-        label.text = profile.name
+        
+        //label.text = profile.name
         
         return label
     }()
@@ -47,9 +64,10 @@ final class ProfileViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.font = .systemFont(ofSize: 13, weight: .regular)
         textView.textColor = .ypBlackDay
-        textView.text = profile.description
         textView.isEditable = false
         
+        //textView.text = profile.description
+
         return textView
     }()
 //    private
@@ -57,13 +75,14 @@ final class ProfileViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.setTitle(profile.website, for: .normal)
         button.setTitleColor(.ypBlueUniversal, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(openWebView), for: .touchUpInside)
-        
+
+        //button.setTitle(profile.website, for: .normal)
+
         return button
     }()
 //    private
@@ -85,15 +104,7 @@ final class ProfileViewController: UIViewController {
         
         return tableView
     }()
-    
-    private var tableCells: [ProfileCellModel] = []
-    
-    //MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupView()
-    }
+
 }
 
 //MARK: - UITableViewDelegate
@@ -182,15 +193,20 @@ extension ProfileViewController {
 //    func fillTableCells()
     func fillTableCells(nftsCount: Int, likesCount: Int) {
         let favoriteNftsViewController = FavoriteNftsViewController()
+        let presenter = NFTPresenter()
+        favoriteNftsViewController.configure(presenter)
         favoriteNftsViewController.hidesBottomBarWhenPushed = true
         
         let myNftViewController = MyNftViewController()
+        let nftPresenter = NFTPresenter()
+        myNftViewController.configure(nftPresenter)
+
         myNftViewController.hidesBottomBarWhenPushed = true
         
         tableCells.append(
             ProfileCellModel(
                 name: "Мои NFT",
-                count: profile.nfts.count,
+                count: 0, //FakeNFTService.shared.profile.nfts.count,
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
@@ -202,7 +218,7 @@ extension ProfileViewController {
         tableCells.append(
             ProfileCellModel(
                 name: "Избранные NFT",
-                count: profile.likedNFTs.count,
+                count: 0, //FakeNFTService.shared.profile.likedNFTs.count,
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
@@ -212,22 +228,20 @@ extension ProfileViewController {
                 })
         )
         tableCells.append(
-            ProfileCellModel(
-                name: "О разработчике",
-                count: nil,
-                action: { [weak self] in
-                    guard let self = self else { return }
-                    self.openWebView()
-                })
-        )
+                    ProfileCellModel(
+                        name: "О разработчике",
+                        count: nil,
+                        action: { [weak self] in
+                            guard let self = self else { return }
+                            self.openWebView()
+                        })
+                )
     }
     
     @objc
-//    func editProfile() {
-//        present(EditProfileViewController(), animated: true)
-//    }
     func editProfile() {
         let vc = EditProfileViewController()
+        vc.configure(presenter)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }
@@ -240,3 +254,4 @@ extension ProfileViewController {
         navigationController?.pushViewController(webViewViewController, animated: true)
     }
 }
+

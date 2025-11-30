@@ -27,7 +27,7 @@
 - Добавить загрузку изображения профиля (est: 2 hours; fact: x hours).
 - Добавить загрузку моих NFT с сервера (est: 5 hours; fact: x hours).
 
-`Total:` est: 16 hours; fact: x min.
+`Total:` est: 16 hours; fact: x hours.
 
 ## Модуль 3:
 

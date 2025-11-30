@@ -8,7 +8,26 @@
 import UIKit
 
 final class MyNftViewController: UIViewController {
-    let profile = FakeNFTService.shared.profile
+
+    internal var _nfts : [NFTModel]? // = FakeNFTService.shared.profile.nfts
+    internal var nfts: [NFTModel] {
+        guard let nftsArray = _nfts else {
+            fatalError("Undefined NFTs array for MyNftViewController")
+        }
+        return nftsArray
+    }
+    
+    private var presenter: NFTPresenterProtocol!
+    func configure (_ presenter: NFTPresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter.viewDidLoad()
+        setupView()
+    }
 
     //MARK: - Layout variables
     private lazy var backButton: UIButton = {
@@ -65,22 +84,12 @@ final class MyNftViewController: UIViewController {
         
         return label
     }()
-    
-    //MARK: - Private variables
-    //private let nfts: [String] = ["Lilo", "Spring", "April"]
-    
-    //MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupView()
-    }
 }
 
 //MARK: - UITableViewDataSource
 extension MyNftViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return profile.nfts.count
+        return nfts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -91,7 +100,7 @@ extension MyNftViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configureCell(nft: profile.nfts[indexPath.row])
+        cell.configureCell(nft: nfts[indexPath.row])
         
         return cell
     }
@@ -110,7 +119,7 @@ private extension MyNftViewController{
     func setupView() {
         view.backgroundColor = .ypWhiteDay
         
-        let showHideElements = profile.nfts.isEmpty
+        let showHideElements = nfts.isEmpty
         emptyNftsLabel.isHidden = !showHideElements
         filtersButton.isHidden = showHideElements
         headerLabel.isHidden = showHideElements

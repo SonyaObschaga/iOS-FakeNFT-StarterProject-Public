@@ -18,10 +18,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
   
-        FakeNFTService.shared.fetchProfile()
-  
         let tabBarController = TabBarController(servicesAssembly: servicesAssembly)
-        
         
         window.rootViewController = tabBarController
         self.window = window

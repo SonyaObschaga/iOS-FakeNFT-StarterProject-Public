@@ -8,8 +8,21 @@
 import UIKit
 
 final class EditProfileViewController: UIViewController {
-    let profile = FakeNFTService.shared.profile
- 
+    //let profile = FakeNFTService.shared.profile
+    private var presenter: ProfilePresenterProtocol!
+    func configure (_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+    
+    //MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //view.backgroundColor = .ypBlackDay
+        setupView()
+        presenter.viewDidLoad()
+    }
+
     //MARK: - Layout variables
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -22,9 +35,9 @@ final class EditProfileViewController: UIViewController {
         
         return button
     }()
-    private lazy var editPhotoButton: UIButton = {
+    lazy var editPhotoButton: UIButton = {
         let imageButton = UIImage(resource: .joaquin).alpha(0.6)
-        
+ 
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -43,7 +56,7 @@ final class EditProfileViewController: UIViewController {
         
         return button
     }()
-    private lazy var nameLabel: UILabel = {
+    fileprivate lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
@@ -52,7 +65,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    private lazy var nameTextField: UITextField = {
+    internal lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -64,7 +77,7 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .ypLightGreyDay
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         
-        textField.text = profile.name
+        //textField.text = profile.name
         
         return textField
     }()
@@ -77,7 +90,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    private lazy var descriptionTextField: UITextView = {
+    internal lazy var descriptionTextField: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -88,7 +101,7 @@ final class EditProfileViewController: UIViewController {
         textView.font = .systemFont(ofSize: 17, weight: .regular)
         textView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
         
-        textView.text = profile.description
+        //textView.text = profile.description
         
         return textView
     }()
@@ -101,7 +114,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    private lazy var urlTextField: UITextField = {
+    internal lazy var urlTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -113,17 +126,11 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .ypLightGreyDay
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         
-        textField.text = profile.website
+        //textField.text = profile.website
         
         return textField
     }()
     
-    //MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupView()
-    }
 }
 
 //MARK: - Private functions

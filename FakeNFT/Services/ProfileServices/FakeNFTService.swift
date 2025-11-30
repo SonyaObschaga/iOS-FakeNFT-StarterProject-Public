@@ -39,6 +39,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         }
         return service
     }
+    var profileFetched: Bool = false
     func fetchProfile() {
         switch FakeNFTService.dataSourceType {
         case .mockData:
@@ -47,6 +48,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
             fatalError("'WebAPI' источник данных ещё не реализован")
         }
         userProfile = defaultUserProfile
+        profileFetched = true
     }
 
     private lazy var defaultUserProfile: ProfileModel = {

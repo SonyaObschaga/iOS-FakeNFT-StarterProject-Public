@@ -9,6 +9,6 @@ import Foundation
 
 struct ProfileCellModel {
     let name: String
-    let count: Int?
+    var count: Int?
     let action: () -> Void
 }

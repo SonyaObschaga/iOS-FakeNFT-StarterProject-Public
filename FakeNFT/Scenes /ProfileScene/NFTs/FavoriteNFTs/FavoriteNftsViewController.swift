@@ -8,8 +8,28 @@
 import UIKit
 
 final class FavoriteNftsViewController: UIViewController {
-    let profile = FakeNFTService.shared.profile
  
+    internal var _likedNFTs : [NFTModel]?
+    internal var likedNFTs: [NFTModel] {
+        guard let nftsArray = _likedNFTs else {
+            fatalError("Undefined NFTs array for FavoriteNftsViewController")
+        }
+        return nftsArray
+    }
+
+    private var presenter: NFTPresenterProtocol!
+    func configure (_ presenter: NFTPresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+    
+    //MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter.viewDidLoad()
+        setupView()
+    }
+
     //MARK: - Layout variables
     private lazy var backButton: UIButton = {
         let imageButton = UIImage(resource: .backChevron)
@@ -57,29 +77,12 @@ final class FavoriteNftsViewController: UIViewController {
         
         return collectionView
     }()
-    
-    /* REMOVE
-     //MARK: - Private variables
-    private let nfts: [String] = [
-        "Lilo", "Spring", "April",
-        "Archie", "Pixi", "Melissa",
-        "Lilo", "Spring", "April",
-        "Archie", "Pixi", "Melissa"
-    ]
-    */
-    
-    //MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupView()
-    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension FavoriteNftsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return profile.likedNFTs.count
+        return likedNFTs.count
     }
     
     func collectionView(
@@ -93,7 +96,7 @@ extension FavoriteNftsViewController: UICollectionViewDataSource {
         ) as? FavoriteNftsCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
         
-        cell.configureCell(likedNFT: profile.likedNFTs[indexPath.row])
+        cell.configureCell(likedNFT: likedNFTs[indexPath.row])
         
         return cell
     }
@@ -123,7 +126,7 @@ private extension FavoriteNftsViewController {
     func setupView() {
         view.backgroundColor = .ypWhiteDay
         
-        let showHideElements = profile.likedNFTs.isEmpty
+        let showHideElements = likedNFTs.isEmpty
         emptyNftsLabel.isHidden = !showHideElements
         nftCollectionView.isHidden = showHideElements
         headerLabel.isHidden = showHideElements
