@@ -48,8 +48,11 @@ final class TableCell: UITableViewCell {
         contentView.addSubview(coverImageView)
         contentView.addSubview(stack)
         
+        // Создаем topConstraint для динамического изменения отступа между ячейками
+        topConstraint = coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        
         NSLayoutConstraint.activate([
-            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topConstraint!,
             coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             coverImageView.heightAnchor.constraint(equalToConstant: 140),
@@ -57,7 +60,7 @@ final class TableCell: UITableViewCell {
             stack.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 4),
             stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -12)
+            stack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -13)
         ])
     }
 

@@ -3,7 +3,6 @@ import UIKit
 final class CatalogViewController: UIViewController {
     
     let servicesAssembly: ServicesAssembly
-    private let sortButton = UIButton()
     private let tableView = UITableView()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
@@ -24,7 +23,7 @@ final class CatalogViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSortButton()
+        setupNavigationBar()
         setupTableView()
         presenter?.viewDidLoad()
     }
@@ -37,12 +36,7 @@ final class CatalogViewController: UIViewController {
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
-            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
-            sortButton.widthAnchor.constraint(equalToConstant: 42),
-            sortButton.heightAnchor.constraint(equalToConstant: 42),
-            
-            tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -59,14 +53,19 @@ final class CatalogViewController: UIViewController {
         tableView.backgroundColor = .clear
     }
     
-    private func setupSortButton() {
-           sortButton.translatesAutoresizingMaskIntoConstraints = false
-        sortButton.setImage(UIImage(resource: .sort), for: .normal)
-           sortButton.tintColor = .label
-           sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
-           
-           view.addSubview(sortButton)
-       }
+    private func setupNavigationBar() {
+        // Создаем кнопку сортировки для navigation bar
+        let sortButton = UIBarButtonItem(
+            image: UIImage(resource: .sort),
+            style: .plain,
+            target: self,
+            action: #selector(sortButtonTapped)
+        )
+        sortButton.tintColor = .label
+        
+        // Добавляем кнопку в правую часть navigation bar
+        navigationItem.rightBarButtonItem = sortButton
+    }
     
     @objc private func sortButtonTapped() {
         let alertController = UIAlertController(
@@ -98,9 +97,9 @@ final class CatalogViewController: UIViewController {
         alertController.addAction(sortByCountAction)
         alertController.addAction(cancelAction)
         
+        // Для iPad: указываем, откуда должно появиться меню
         if let popover = alertController.popoverPresentationController {
-            popover.sourceView = sortButton
-            popover.sourceRect = sortButton.bounds
+            popover.barButtonItem = navigationItem.rightBarButtonItem
         }
         
         present(alertController, animated: true)
@@ -124,7 +123,7 @@ extension CatalogViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         guard let collection = presenter?.collection(at: indexPath.row) else { return UITableViewCell()  }
-        cell.configure(with: collection, topSpacing: indexPath.row == 0 ? 0 : 8)
+        cell.configure(with: collection, topSpacing: indexPath.row == 0 ? 20 : 8)
         return cell
     }
 }
@@ -145,8 +144,21 @@ extension CatalogViewController: LoadingView {
 // MARK: - CatalogViewProtocol
 extension CatalogViewController: CatalogViewProtocol {
     func showCollectionDetails(collectionId: String) {
-        // TODO: Реализовать переход на экран деталей коллекции
-        print("Show collection details for id: \(collectionId)")
+        print("🔵 showCollectionDetails called with id: \(collectionId)")
+        print("🔵 navigationController: \(String(describing: navigationController))")
+        
+        let assembly = CollectionAssembly(servicesAssembly: servicesAssembly)
+        let input = CollectionInput(collectionId: collectionId)
+        let collectionVC = assembly.build(with: input)
+        
+        print("🔵 CollectionViewController created: \(collectionVC)")
+        
+        if let navController = navigationController {
+            print("🔵 Pushing CollectionViewController to navigation stack")
+            navController.pushViewController(collectionVC, animated: true)
+        } else {
+            print("🔴 ERROR: navigationController is nil!")
+        }
     }
 }
 

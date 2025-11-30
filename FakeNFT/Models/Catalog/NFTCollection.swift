@@ -13,3 +13,4 @@ struct NFTCollection {
     let coverURL: URL
     let nftsCount: Int
 }
+

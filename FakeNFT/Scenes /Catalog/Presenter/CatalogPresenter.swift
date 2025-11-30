@@ -42,6 +42,7 @@ final class CatalogPresenter {
     func didSelectCollection(at index: Int) {
         let selected = collections[index]
         print("Selected collection: \(selected.id)")
+        view?.showCollectionDetails(collectionId: selected.id)
     }
     
     private var currentSortOption: SortOption {
@@ -57,23 +58,28 @@ final class CatalogPresenter {
     private var originalCollections: [NFTCollection] = []
     
     private func loadCollections() {
-        DispatchQueue.main.async {
-            self.view?.showLoading()
-        }
+        // Показываем индикатор загрузки (viewDidLoad уже на главном потоке)
+        view?.showLoading()
         
         collectionsService.loadCollections { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let collections):
-                self?.originalCollections = collections
-                self?.collections = collections
-                self?.applySavedSortOption()
+                self.originalCollections = collections
+                self.collections = collections
+                
+                // Применяем сохраненную сортировку (без вызова reloadTable, он будет после)
+                self.applySort(by: self.currentSortOption, shouldReload: false)
+                
+                // Обновляем UI на главном потоке
                 DispatchQueue.main.async {
-                    self?.view?.hideLoading()
-                    self?.view?.reloadTable()
+                    self.view?.hideLoading()
+                    self.view?.reloadTable()
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self?.view?.hideLoading()
+                    self.view?.hideLoading()
                     print("Error loading collections: \(error)")
                 }
             }
@@ -81,23 +87,27 @@ final class CatalogPresenter {
     }
     
     private func applySavedSortOption() {
-            sortCollections(by: currentSortOption)
-        }
+        sortCollections(by: currentSortOption)
+    }
     
-    func sortCollections(by option: SortOption) {
-        currentSortOption = option
+    private func applySort(by option: SortOption, shouldReload: Bool = true) {
         switch option {
         case .default:
             collections = originalCollections
-            
         case .byName:
             collections.sort { $0.title < $1.title }
-            
         case .byNFTCount:
             collections.sort { $0.nftsCount > $1.nftsCount }
         }
         
-        view?.reloadTable()
+        if shouldReload {
+            view?.reloadTable()
+        }
+    }
+    
+    func sortCollections(by option: SortOption) {
+        currentSortOption = option
+        applySort(by: option, shouldReload: true)
     }
 }
 

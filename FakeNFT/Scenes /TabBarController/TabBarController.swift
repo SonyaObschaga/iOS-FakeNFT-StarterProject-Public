@@ -24,7 +24,11 @@ final class TabBarController: UITabBarController {
         catalogController.presenter = presenter
             
         catalogController.tabBarItem = catalogTabBarItem
-        viewControllers = [catalogController]
+        
+        // Обёртываем в UINavigationController для навигации
+        let navigationController = UINavigationController(rootViewController: catalogController)
+        navigationController.tabBarItem = catalogTabBarItem
+        viewControllers = [navigationController]
 
         view.backgroundColor = .systemBackground
         tabBar.backgroundColor = .systemBackground
