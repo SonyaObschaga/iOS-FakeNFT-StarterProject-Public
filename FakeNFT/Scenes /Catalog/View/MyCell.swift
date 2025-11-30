@@ -46,6 +46,16 @@ final class MyCell: UICollectionViewCell {
         return label
     }()
     
+    // избранное
+    private let favoriteImageView: UIImageView = {
+        let fiv = UIImageView()
+        fiv.contentMode = .scaleAspectFill
+        fiv.clipsToBounds = true
+        fiv.layer.cornerRadius = 8
+        fiv.translatesAutoresizingMaskIntoConstraints = false
+        return fiv
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -56,6 +66,7 @@ final class MyCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(favoriteImageView)
         
         NSLayoutConstraint.activate([
             // Картинка сверху
@@ -63,6 +74,12 @@ final class MyCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.heightAnchor.constraint(equalTo: contentView.widthAnchor), // квадрат
+            
+            // избранное
+            favoriteImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            favoriteImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            favoriteImageView.widthAnchor.constraint(equalToConstant: 40),
+            favoriteImageView.heightAnchor.constraint(equalToConstant: 40),
             
             // Текст под картинкой
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 6),
@@ -76,6 +93,8 @@ final class MyCell: UICollectionViewCell {
     func configure(with model: NFTMock) {
         imageView.kf.setImage(with: model.imageURL)
         titleLabel.text = model.title
+        favoriteImageView.image = UIImage(resource: "Like Button On")
+        
     }
 }
 
