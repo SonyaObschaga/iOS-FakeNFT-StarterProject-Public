@@ -18,7 +18,10 @@ final class UserCardRouter: UserCardRouterProtocol {
         viewController?.navigationController?.pushViewController(userCollectionViewController, animated: true)
     }
     
-    func showWebView(url: URL) {
+    func showWebView(urlString: String) {
+        guard let url = URL(string: urlString) else {
+            return
+        }
         let webViewController = WebViewController(url: url)
         viewController?.navigationController?.pushViewController(webViewController, animated: true)
     }

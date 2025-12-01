@@ -37,11 +37,7 @@ final class UserCardPresenter: UserCardPresenterProtocol {
             urlString = "https://" + urlString
         }
         
-        guard let url = URL(string: urlString) else {
-            return
-        }
-        
-        router?.showWebView(url: url)
+        router?.showWebView(urlString: urlString)
     }
     
     func collectionButtonTapped() {

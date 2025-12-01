@@ -19,7 +19,7 @@ enum SortOption: String, CaseIterable {
 
 // MARK: - UserCollectionNftItem
 struct UserCollectionNftItem {
-    let imageURL: URL?
+    let imageURL: String?
     let name: String
     let rating: Int
     let price: String

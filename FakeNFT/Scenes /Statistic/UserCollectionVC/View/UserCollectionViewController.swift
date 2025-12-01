@@ -7,28 +7,28 @@ final class UserCollectionViewController: UIViewController {
     private var presenter: UserCollectionPresenterProtocol
     private var nftItems: [UserCollectionNftItem] = [
         UserCollectionNftItem(
-            imageURL: URL(string: "https://img.freepik.com/premium-photo/close-up-portrait-cat_1048944-18104761.jpg?semt=ais_hybrid&w=740"),
+            imageURL: "https://img.freepik.com/premium-photo/close-up-portrait-cat_1048944-18104761.jpg?semt=ais_hybrid&w=740",
             name: "Archie",
             rating: 4,
             price: "1.5 ETH",
             isLiked: true
         ),
         UserCollectionNftItem(
-            imageURL: URL(string: "https://sun1-95.userapi.com/s/v1/ig2/cmVsTov3W88J_ZHVB-RYRBt5KbxFSLH-vPJ1jQiNxnNJgsmhxKmN0GUCgY89_nCMSL1U0psSZSRdgjVNzixMYiNB.jpg?quality=95&crop=0,0,1599,1599&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280,1440x1440&ava=1&cs=100x100"),
+            imageURL: "https://sun1-95.userapi.com/s/v1/ig2/cmVsTov3W88J_ZHVB-RYRBt5KbxFSLH-vPJ1jQiNxnNJgsmhxKmN0GUCgY89_nCMSL1U0psSZSRdgjVNzixMYiNB.jpg?quality=95&crop=0,0,1599,1599&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280,1440x1440&ava=1&cs=100x100",
             name: "Archie",
             rating: 4,
             price: "1.5 ETH",
             isLiked: true
         ),
         UserCollectionNftItem(
-            imageURL: URL(string: "https://img.freepik.com/premium-photo/close-up-portrait-cat_1048944-18104761.jpg?semt=ais_hybrid&w=740"),
+            imageURL: "https://img.freepik.com/premium-photo/close-up-portrait-cat_1048944-18104761.jpg?semt=ais_hybrid&w=740",
             name: "Archie",
             rating: 4,
             price: "1.5 ETH",
             isLiked: true
         ),
         UserCollectionNftItem(
-            imageURL: URL(string: "https://sun1-95.userapi.com/s/v1/ig2/cmVsTov3W88J_ZHVB-RYRBt5KbxFSLH-vPJ1jQiNxnNJgsmhxKmN0GUCgY89_nCMSL1U0psSZSRdgjVNzixMYiNB.jpg?quality=95&crop=0,0,1599,1599&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280,1440x1440&ava=1&cs=100x100"),
+            imageURL: "https://sun1-95.userapi.com/s/v1/ig2/cmVsTov3W88J_ZHVB-RYRBt5KbxFSLH-vPJ1jQiNxnNJgsmhxKmN0GUCgY89_nCMSL1U0psSZSRdgjVNzixMYiNB.jpg?quality=95&crop=0,0,1599,1599&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280,1440x1440&ava=1&cs=100x100",
             name: "Archie",
             rating: 4,
             price: "1.5 ETH",
