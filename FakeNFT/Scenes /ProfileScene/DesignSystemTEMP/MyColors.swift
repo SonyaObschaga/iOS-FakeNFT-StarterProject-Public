@@ -9,11 +9,13 @@ import UIKit
 
 extension UIColor {
     
-    static var ypBlackDay: UIColor! { UIColor(named: "Black [day]")}
-    static var ypLightGreyDay: UIColor! { UIColor(named: "Light grey [day]")}
-    static var ypWhiteDay: UIColor! { UIColor(named: "White [day]")}
+    // Цвета для дневного режима
+    static var ypBlackDay: UIColor { UIColor(resource: .blackDay) }
+    static var ypLightGreyDay: UIColor { UIColor(resource: .lightGreyDay) }
+    static var ypWhiteDay: UIColor { UIColor(resource: .whiteDay) }
     
-    static var ypBlueUniversal: UIColor! { UIColor(named: "Blue Universal")}
-    static var ypWhiteUniversal: UIColor! { UIColor(named: "White Universal")}
+    // Универсальные цвета
+    static var ypBlueUniversal: UIColor { UIColor(resource: .blueUniversal) }
+    static var ypWhiteUniversal: UIColor { UIColor(resource: .whiteUniversal) }
     
 }

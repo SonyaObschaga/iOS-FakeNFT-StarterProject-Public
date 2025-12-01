@@ -22,7 +22,7 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     private lazy var likeButton: UIButton = {
-        let imageButton = UIImage(named: "No active")
+        let imageButton = UIImage(named: "Like Button Off")
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +34,7 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
         return button
     }()
     private lazy var ratingImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "stars3"))
+        let imageView = UIImageView(image: UIImage(named: "Rating_3"))
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true

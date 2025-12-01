@@ -20,11 +20,9 @@ final class ProfileTableViewCell: UITableViewCell {
         return label
     }()
     private lazy var chevronView: UIImageView = {
-        let image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysOriginal)
-        let imageView = UIImageView()
+        let imageView = UIImageView(image: UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysTemplate))
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image
-        
+        imageView.tintColor = .label
         return imageView
     }()
     
