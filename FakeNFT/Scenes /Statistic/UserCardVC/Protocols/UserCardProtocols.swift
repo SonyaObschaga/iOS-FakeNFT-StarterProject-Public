@@ -1,3 +1,5 @@
+import Foundation
+
 // MARK: - View Protocol
 protocol UserCardViewProtocol: AnyObject {
     func displayUser(_ user: User)
@@ -15,4 +17,5 @@ protocol UserCardPresenterProtocol {
 protocol UserCardRouterProtocol {
     func dismiss()
     func showUserCollection()
+    func showWebView(url: URL)
 }

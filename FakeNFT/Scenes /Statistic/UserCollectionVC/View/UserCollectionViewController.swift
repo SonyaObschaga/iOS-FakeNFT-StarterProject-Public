@@ -3,7 +3,7 @@ import UIKit
 // MARK: - UserCollectionViewController
 final class UserCollectionViewController: UIViewController {
     
-    // MARK: - Property
+    // MARK: - Properties
     private var presenter: UserCollectionPresenterProtocol
     private var nftItems: [UserCollectionNftItem] = [
         UserCollectionNftItem(
@@ -36,7 +36,7 @@ final class UserCollectionViewController: UIViewController {
         )
     ]
     
-    // MARK: - UI Elements
+    // MARK: - UI Element
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -71,7 +71,7 @@ final class UserCollectionViewController: UIViewController {
         presenter.viewDidLoad()
     }
     
-    // MARK: - Actions
+    // MARK: - Action
     @objc private func backwardButtonTapped() {
         presenter.backwardButtonTapped()
     }
@@ -160,19 +160,10 @@ extension UserCollectionViewController: UICollectionViewDelegateFlowLayout {
         let totalSpacing = spacing * (itemsPerRow - 1)
         let itemWidth = floor((availableWidth - totalSpacing) / itemsPerRow)
         
-        return defaultLayout
+        return CGSize(width: itemWidth, height: 192)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 9
     }
-}
-
-// MARK: - UserCollectionNftItem
-struct UserCollectionNftItem {
-    let imageURL: URL?
-    let name: String
-    let rating: Int
-    let price: String
-    let isLiked: Bool
 }

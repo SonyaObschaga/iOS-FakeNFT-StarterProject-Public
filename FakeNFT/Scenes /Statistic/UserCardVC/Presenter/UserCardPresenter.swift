@@ -27,7 +27,21 @@ final class UserCardPresenter: UserCardPresenterProtocol {
     }
     
     func webViewButtonTapped() {
-        print("Tapped web view button")
+        guard let websiteString = user.website,
+              !websiteString.isEmpty else {
+            return
+        }
+        
+        var urlString = websiteString
+        if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
+            urlString = "https://" + urlString
+        }
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        router?.showWebView(url: url)
     }
     
     func collectionButtonTapped() {

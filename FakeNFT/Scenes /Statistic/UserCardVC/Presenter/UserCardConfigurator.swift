@@ -15,8 +15,6 @@ final class UserCardConfigurator {
     func configure(with user: User) -> UIViewController {
         let presenter = UserCardPresenter(user: user, userService: userService)
         let viewController = UserCardViewController(presenter: presenter)
-        
-        let userCollectionPresenter = UserCollectionPresenter()
         let router = UserCardRouter()
         
         presenter.view = viewController
