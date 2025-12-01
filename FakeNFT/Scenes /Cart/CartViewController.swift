@@ -20,7 +20,7 @@ final class CartViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.isScrollEnabled = true
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = .backgroundPrimary
         tableView.rowHeight = 140
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView

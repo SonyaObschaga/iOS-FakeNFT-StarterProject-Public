@@ -55,6 +55,7 @@ class CartTableViewCell: UITableViewCell {
     private let deleteNftButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(resource: .deleteFromCart), for: .normal)
+        button.tintColor = .blackAdaptive
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -63,6 +64,7 @@ class CartTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
+        contentView.backgroundColor = .backgroundPrimary
         
         setupViews()
         setupConstraints()
