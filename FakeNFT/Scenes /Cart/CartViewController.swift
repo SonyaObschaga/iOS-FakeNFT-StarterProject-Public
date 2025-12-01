@@ -73,6 +73,7 @@ final class CartViewController: UIViewController {
         
         setupViews()
         setupConstraints()
+        calculateTotal()
     }
     
     // MARK: - Setup UI Methods
@@ -113,7 +114,14 @@ final class CartViewController: UIViewController {
         ])
     }
     
+    // MARK: - Setup Methods
     
+    func calculateTotal() {
+        totalNft.text = "\(nftData.count) NFT"
+        let totalPrice = nftData.reduce(0) { $0 + $1.price }
+        let priceString = String(totalPrice).replacingOccurrences(of: ".", with: ",")
+        totalCost.text = "\(priceString) ETH"
+    }
 }
 
 extension CartViewController: UITableViewDataSource {
