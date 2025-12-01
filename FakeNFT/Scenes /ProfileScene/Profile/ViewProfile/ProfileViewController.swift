@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import SafariServices
 
 final class ProfileViewController: UIViewController {
 
     //let profile = FakeNFTService.shared.profile
-    internal var tableCells: [ProfileCellModel] = []
+    var tableCells: [ProfileCellModel] = []
 
     private var presenter: ProfilePresenterProtocol!
     func configure (_ presenter: ProfilePresenterProtocol) {
@@ -247,11 +248,15 @@ extension ProfileViewController {
     }
     
     @objc
-    func openWebView() {
-        let webViewViewController = WebViewViewController()
-        webViewViewController.hidesBottomBarWhenPushed = true
+        func openWebView() {
+            if let url = URL(string: "https://practicum.yandex.ru/") {
+                presentSafariViewController(with: url)
+            }
+        }
         
-        navigationController?.pushViewController(webViewViewController, animated: true)
-    }
+        private func presentSafariViewController(with url: URL) {
+             let safariVC = SFSafariViewController(url: url)
+             present(safariVC, animated: true)
+        }
 }
 

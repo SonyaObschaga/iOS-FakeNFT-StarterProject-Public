@@ -12,7 +12,7 @@ public class FakeNFTUserDefaultsKeeperService: FakeNFTUserDefaultsKeeperProtocol
         return ProfileModel()
     }
     
-    internal func loadUserDefaults() -> ProfileModel{
+    func loadUserDefaults() -> ProfileModel{
     do {
             if !checkFileExists(atPath: userDefaultsFullPathURL.absoluteString)
             {
@@ -21,13 +21,16 @@ public class FakeNFTUserDefaultsKeeperService: FakeNFTUserDefaultsKeeperProtocol
             else {
                 let fileContent = try String(contentsOf: userDefaultsFullPathURL, encoding: .utf8)
                 guard let loadedUserProfile = try? JSONDecoder().decode(ProfileModel.self, from: fileContent.data(using: .utf8)!) else {
-                    fatalError("Ошибка при чтении данных профиля из файла '\(userDefaultsFullPathURL.absoluteString)'")
+                    let errorMessage = "Ошибка при чтении данных профиля из файла '\(userDefaultsFullPathURL.absoluteString)'"
+                    assertionFailure(errorMessage)
+                    throw RuntimeError(errorMessage)
                 }
                 return loadedUserProfile
             }
         } catch {
-            fatalError("Ошибка при загрузке профиля: \(error.localizedDescription)")
+            print("Ошибка при загрузке профиля: \(error.localizedDescription)")
         }
+        return ProfileModel() //TODO: may be later
     }
     
     func saveUserDefaults(_ profile: ProfileModel) {
@@ -38,13 +41,15 @@ public class FakeNFTUserDefaultsKeeperService: FakeNFTUserDefaultsKeeperProtocol
             
             // Преобразуем Data в строку
             guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-                fatalError("Ошибка преобразования данных в строку")
+                assertionFailure("Ошибка преобразования данных в строку")
+                return
             }
             
             saveUserDefaults(jsonString)
         } catch {
-            fatalError("Ошибка сохранения профиля: $error.localizedDescription)")
+            assertionFailure("Ошибка сохранения профиля: \(error.localizedDescription)")
         }
+        return
     }
     
     private func saveUserDefaults(_ json: String) {
@@ -57,23 +62,23 @@ public class FakeNFTUserDefaultsKeeperService: FakeNFTUserDefaultsKeeperProtocol
         do {
             try json.write(to: userDefaultsFullPathURL, atomically: true, encoding: .utf8)
         } catch {
-            print("Ошибка сохранения данных: $error.localizedDescription)")
+            print("Ошибка сохранения данных: \(error.localizedDescription)")
         }
     }
     
     
     // Папка для хранения настроек пользователя
-    internal lazy var userDefaultsFolderURL: URL = {
+    lazy var userDefaultsFolderURL: URL = {
         let folderUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         return folderUrl.appendingPathComponent("UserDefaults")
     }()
     
     // Полный путь к файлу настроек пользователя
-    internal lazy var userDefaultsFullPathURL: URL = {
+    lazy var userDefaultsFullPathURL: URL = {
         return userDefaultsFolderURL.appendingPathComponent("UserDefaults.json")
     }()
     
-    internal lazy var userDefaultsFullPath: String = {
+    lazy var userDefaultsFullPath: String = {
         var fullPathURL =  userDefaultsFolderURL.appendingPathComponent("UserDefaults.json")
         var fullpath = fullPathURL.absoluteString
         fullpath = fullpath.replacingOccurrences(of: "%20", with: "").replacingOccurrences(of: "file://", with: "")

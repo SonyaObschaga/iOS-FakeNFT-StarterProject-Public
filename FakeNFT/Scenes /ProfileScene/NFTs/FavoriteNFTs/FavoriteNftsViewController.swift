@@ -9,10 +9,11 @@ import UIKit
 
 final class FavoriteNftsViewController: UIViewController {
  
-    internal var _likedNFTs : [NFTModel]?
-    internal var likedNFTs: [NFTModel] {
+    var _likedNFTs : [NFTModel]?
+    var likedNFTs: [NFTModel] {
         guard let nftsArray = _likedNFTs else {
-            fatalError("Undefined NFTs array for FavoriteNftsViewController")
+            assertionFailure("Undefined NFTs array for FavoriteNftsViewController")
+            return []
         }
         return nftsArray
     }
@@ -110,7 +111,7 @@ extension FavoriteNftsViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2.2, height: 80)
+        return CGSize(width: collectionView.bounds.width / ProfileSceneConstants.favoritesCollectionViewBoundsWidthDivider, height: ProfileSceneConstants.favoritesCollectionViewCellHeight)
     }
 }
 

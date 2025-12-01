@@ -33,7 +33,7 @@ final class NftDetailViewController: UIViewController {
     }()
 
     private lazy var pageControl = LinePageControl()
-    internal lazy var activityIndicator = UIActivityIndicatorView()
+   lazy var activityIndicator = UIActivityIndicatorView()
 
     private var cellModels: [NftDetailCellModel] = []
 

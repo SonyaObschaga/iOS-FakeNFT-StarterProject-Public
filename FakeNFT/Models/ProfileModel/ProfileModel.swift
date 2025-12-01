@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ProfileModel: Encodable, Decodable {
+class ProfileModel: Encodable, Decodable {
     var name: String = ""
     var avatar: String?
     var description: String?

@@ -16,7 +16,10 @@ class FakeNFTMockDataBackendService: FakeNFTBackendServiceProtocol {
         let users = usersDtos
         
         guard users.count >= id else {
-            fatalError("Default user index exceeds loaded users array length")
+            let errorMessage = "Default user index exceeds loaded users array length"
+            assertionFailure(errorMessage)
+            throw RuntimeError(errorMessage)
+            
         }
         return users[id - 1]
     }
@@ -64,7 +67,7 @@ class FakeNFTMockDataBackendService: FakeNFTBackendServiceProtocol {
                                 _ allNFTDTOs: [NFTDto]) {
             for id in nftsIds {
                 if let nftDto = allNFTDTOs.first(where: { $0.id == id }) {
-                    let nft = NFTModel()
+                    var nft = NFTModel()
                     nft.createdAt = nftDto.createdAt
                     nft.name = nftDto.name
                     nft.images = nftDto.images

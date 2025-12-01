@@ -62,7 +62,7 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
     func configureCell(likedNFT: NFTModel) {
         backgroundColor = .ypWhiteDay
         
-        nameLabel.text = likedNFT.name
+        nameLabel.text = likedNFT.nftName
         costLabel.text = "\(likedNFT.price) ETH"
         ratingImageView.image = UIImage(named: "Rating_\(likedNFT.rating ?? 1)")
         if likedNFT.isLiked {

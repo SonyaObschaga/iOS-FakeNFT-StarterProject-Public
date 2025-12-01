@@ -9,10 +9,11 @@ import UIKit
 
 final class MyNftViewController: UIViewController {
 
-    internal var _nfts : [NFTModel]? // = FakeNFTService.shared.profile.nfts
-    internal var nfts: [NFTModel] {
+    var _nfts : [NFTModel]? // = FakeNFTService.shared.profile.nfts
+    var nfts: [NFTModel] {
         guard let nftsArray = _nfts else {
-            fatalError("Undefined NFTs array for MyNftViewController")
+            assertionFailure("Undefined NFTs array for MyNftViewController")
+            return []
         }
         return nftsArray
     }
@@ -192,12 +193,12 @@ private extension MyNftViewController{
     }
     
     @objc
-    func back() {
+    private func back() {
         navigationController?.popToRootViewController(animated: true)
     }
     
     @objc
-    func sort() {
+    private func sort() {
         showSortAlert()
     }
 }

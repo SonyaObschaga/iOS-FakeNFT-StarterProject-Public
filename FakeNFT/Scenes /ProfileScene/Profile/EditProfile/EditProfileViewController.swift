@@ -65,7 +65,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    internal lazy var nameTextField: UITextField = {
+    lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -90,7 +90,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    internal lazy var descriptionTextField: UITextView = {
+    lazy var descriptionTextField: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -114,7 +114,7 @@ final class EditProfileViewController: UIViewController {
         
         return label
     }()
-    internal lazy var urlTextField: UITextField = {
+    lazy var urlTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         

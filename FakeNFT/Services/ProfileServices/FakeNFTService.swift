@@ -21,7 +21,8 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     private(set) var userProfile: ProfileModel?
     var profile: ProfileModel {
         guard let p = self.userProfile else {
-            fatalError("Undefined user profile")
+            assertionFailure("Undefined user profile")
+            return ProfileModel() //TODO: edit
         }
         return p
     }
@@ -35,7 +36,8 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     private var fakeNFTBackendService: FakeNFTBackendServiceProtocol?
     var backend: FakeNFTBackendServiceProtocol {
         guard let service = self.fakeNFTBackendService else {
-            fatalError("Undefined backend service")
+            assertionFailure("Undefined backend service")
+            return FakeNFTMockDataBackendService() //TODO: edit
         }
         return service
     }
@@ -45,7 +47,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         case .mockData:
             fakeNFTBackendService = FakeNFTMockDataBackendService()
         case .webAPI:
-            fatalError("'WebAPI' источник данных ещё не реализован")
+            assertionFailure("'WebAPI' источник данных ещё не реализован")
         }
         userProfile = defaultUserProfile
         profileFetched = true
@@ -83,12 +85,13 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
             profile.id = p.id
             
             guard let unwrappedNfts = p.nfts else {
-                fatalError("Ошибка загрузки NFTS")
+                print("Ошибка загрузки NFTS")
+                return ProfileModel() //TODO: edit
             }
 
             for id in unwrappedNfts {
                 do { let nftDto = try backend.getNFT(id) //{
-                    let nft = NFTModel()
+                    var nft = NFTModel()
                     nft.createdAt = nftDto.createdAt
                     nft.name = nftDto.name
                     nft.images = nftDto.images
@@ -107,7 +110,8 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
             }
             return profile
         } catch {
-             fatalError("Ошибка получения профиля пользователя: \(error.localizedDescription)")
+            assertionFailure("Ошибка получения профиля пользователя: \(error.localizedDescription)")
+            return ProfileModel() //TODO: edit
         }
     }
     
@@ -125,8 +129,9 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        guard let nft = self.profile.nfts.first(where: { $0.id == nftId }) else {
-            fatalError("NFT с ID '\(nftId)' не найден в коллекции пользователя")
+        guard var nft = self.profile.nfts.first(where: { $0.id == nftId }) else {
+            assertionFailure("NFT с ID '\(nftId)' не найден в коллекции пользователя")
+            return //TODO: edit
         }
 
         nft.isLiked = flagValue
@@ -136,10 +141,11 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
 
     private func getNFT(_ id: String) -> NFTModel {
         guard let nftDto = try? fakeNFTBackendService?.getNFT(id) else {
-            fatalError("NFT с ID '\(id)' не найден")
+            assertionFailure("NFT с ID '\(id)' не найден")
+            return NFTModel() //TODO: edit
         }
 
-        let nft = NFTModel()
+        var nft = NFTModel()
         nft.createdAt = nftDto.createdAt
         nft.name = nftDto.name
         nft.images = nftDto.images

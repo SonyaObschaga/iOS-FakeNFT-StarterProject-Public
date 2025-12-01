@@ -12,11 +12,13 @@ class FakeNFTMockData {
         let data = FakeNFTMockData()
         guard let jsonData = data.getUserProfilesJSON().data(using: .utf8),
               let users = try? JSONDecoder().decode([ProfileDto].self, from: jsonData) else {
-            fatalError("Failed to load users mock data")
+            assertionFailure("Failed to load users mock data")
+            return []
         }
         
         guard users.count >= FakeNFTService.DEFAULT_USER_INDEX else {
-            fatalError("Default user index exceeds loaded users array length")
+            assertionFailure("Default user index exceeds loaded users array length")
+            return []
         }
         return users
     }()

@@ -85,9 +85,9 @@ final class MyNftTableViewCell: UITableViewCell {
         backgroundColor = .ypWhiteDay
         selectionStyle = .none
         
-        nameLabel.text = nft.name
+        nameLabel.text = nft.nftName
         costLabel.text = "\(nft.price) ETH"
-        authorLabel.text = nft.author
+        authorLabel.text = "От \(nft.nftAuthor)"
         
         ratingImageView.image = UIImage(named: "Rating_\(nft.rating ?? 1)")
         if nft.isLiked {
