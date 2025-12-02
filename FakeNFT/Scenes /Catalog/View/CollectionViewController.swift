@@ -15,7 +15,7 @@ final class CollectionViewController: UIViewController {
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let authorLabel = UILabel()
-    private var data = mockNFTs
+
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -154,7 +154,7 @@ final class CollectionViewController: UIViewController {
     private func setupDescription() {
         scrollView.addSubview(descriptionLabel)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        descriptionLabel.numberOfLines = 3
         descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
 
         NSLayoutConstraint.activate([
@@ -245,14 +245,28 @@ extension CollectionViewController: LoadingView { }
 extension CollectionViewController: UICollectionViewDataSource {
     // MARK: - DataSource
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            data.count
+            return presenter?.numberOfNFTs() ?? 0
         }
 
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! MyCell
-            cell.configure(with: data[indexPath.item])
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! MyCell
+        
+        guard let nftItem = presenter?.nft(at: indexPath.item) else {
             return cell
         }
+        
+    
+        cell.onFavoriteTap = { [weak self] in
+                self?.presenter?.didTapFavorite(at: indexPath.item)
+            }
+        
+        cell.onCartTap = { [weak self] in
+                self?.presenter?.didTapCart(at: indexPath.item)
+            }
+        
+        cell.configure(with: nftItem)
+        return cell
+    }
 }
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,

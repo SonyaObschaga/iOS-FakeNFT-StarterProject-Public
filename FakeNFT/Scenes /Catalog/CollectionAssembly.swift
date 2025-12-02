@@ -15,7 +15,13 @@ final class CollectionAssembly {
     }
     
     func build(with input: CollectionInput) -> UIViewController {
-        let presenter = CollectionPresenter(input: input)
+        let presenter = CollectionPresenter(
+            input: input,
+            collectionsService: servicesAssembly.collectionsService,
+            nftService: servicesAssembly.nftService,
+            profileService: servicesAssembly.profileService,
+            orderService: servicesAssembly.orderService  
+        )
         let viewController = CollectionViewController(servicesAssembly: servicesAssembly)
         presenter.view = viewController
         viewController.presenter = presenter
