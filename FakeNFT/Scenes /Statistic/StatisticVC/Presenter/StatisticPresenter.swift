@@ -66,7 +66,6 @@ final class StatisticPresenter: StatisticPresenterProtocol {
                 case .success(let users):
                     self?.users = users
                     self?.view?.displayUsers(users)
-                    self?.view?.hideLoading()
                 case .failure(let error):
                     self?.view?.showError(
                         message: error.localizedDescription,

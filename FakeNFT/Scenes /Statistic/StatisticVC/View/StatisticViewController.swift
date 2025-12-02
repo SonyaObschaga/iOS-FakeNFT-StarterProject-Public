@@ -20,7 +20,7 @@ final class StatisticViewController: UIViewController {
     
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "sortMenu"), for: .normal)
+        button.setImage(UIImage(named: StatisticConstants.sortMenuImageName), for: .normal)
         button.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         button.tintColor = .ypBlackLight
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -61,10 +61,10 @@ final class StatisticViewController: UIViewController {
         view.addSubview(sortButton)
         
         NSLayoutConstraint.activate([
-            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
-            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
-            sortButton.widthAnchor.constraint(equalToConstant: 42),
-            sortButton.heightAnchor.constraint(equalToConstant: 42)
+            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: StatisticConstants.sortButtonTopInset),
+            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: StatisticConstants.sortButtonTrailingInset),
+            sortButton.widthAnchor.constraint(equalToConstant: StatisticConstants.sortButtonSize),
+            sortButton.heightAnchor.constraint(equalToConstant: StatisticConstants.sortButtonSize)
         ])
     }
     
@@ -72,13 +72,12 @@ final class StatisticViewController: UIViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: StatisticConstants.sortButtonTableViewSpacing),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: StatisticConstants.leadingInset),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: StatisticConstants.trailingInset),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: StatisticConstants.bottomInset)
         ])
     }
-    
     
     // MARK: - Private Methods
     private func showErrorAlert(message: String, retryHandler: (() -> Void)?) {
@@ -108,15 +107,10 @@ extension StatisticViewController: StatisticViewProtocol {
     func showError(message: String, retryHandler: (() -> Void)?) {
         showErrorAlert(message: message, retryHandler: retryHandler)
     }
-    func showLoading() {
-    }
-    
-    func hideLoading() {
-    }
     
     func showSortOptions() {
         let alertController = UIAlertController(
-            title: "Сортировка",
+            title: StatisticConstants.sortAlertTitle,
             message: nil,
             preferredStyle: .actionSheet
         )

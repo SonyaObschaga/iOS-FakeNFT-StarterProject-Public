@@ -4,7 +4,7 @@ import UIKit
 final class StatisticTableViewCell: UITableViewCell {
     
     // MARK: - Static property
-    static var reuseIdentifier: String { "StatisticCell" }
+    static var reuseIdentifier: String { CellConstants.reuseIdentifier }
     
     // MARK: - UI Elements
     private let positionLabel: UILabel = {
@@ -36,7 +36,7 @@ final class StatisticTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = CellConstants.profileImageCornerRadius
         imageView.tintColor = .ypBlackLight
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        imageView.image = UIImage(systemName: CellConstants.profileImageSystemName)
         imageView.heightAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         return imageView

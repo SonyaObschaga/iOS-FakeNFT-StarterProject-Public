@@ -1,8 +1,6 @@
 // MARK: - View Protocol
 protocol StatisticViewProtocol: AnyObject {
     func displayUsers(_ users: [User])
-    func showLoading()
-    func hideLoading()
     func showError(message: String, retryHandler: (() -> Void)?)
     func showSortOptions()
 }
