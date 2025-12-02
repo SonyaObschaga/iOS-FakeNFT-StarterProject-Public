@@ -12,7 +12,11 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     private let router: StatisticRouterProtocol
     
     // MARK: - Initialization
-    init(view: StatisticViewProtocol? = nil, userService: UserServiceProtocol, router: StatisticRouterProtocol) {
+    init(
+        view: StatisticViewProtocol? = nil,
+        userService: UserServiceProtocol,
+        router: StatisticRouterProtocol
+    ) {
         self.view = view
         self.userService = userService
         self.router = router
@@ -30,11 +34,11 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     }
     
     var numberOfUsers: Int {
-        return users.count
+        users.count
     }
     
     func user(at index: Int) -> User {
-        return users[index]
+        users[index]
     }
     
     func didTapSortButton() {

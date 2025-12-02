@@ -12,7 +12,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -21,6 +20,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         button.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         button.tintColor = .white
         button.backgroundColor = .clear
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -29,7 +29,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         stackView.axis = .horizontal
         stackView.spacing = 2
         stackView.distribution = .fillEqually
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
@@ -37,6 +36,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         let label = UILabel()
         label.font = .bodyBold
         label.textColor = .ypBlackLight
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -44,6 +44,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         let label = UILabel()
         label.font = .caption3
         label.textColor = .ypBlackLight
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -51,7 +52,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "cart"), for: .normal)
         button.tintColor = .ypBlackLight
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -64,7 +64,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private lazy var cartButtonStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [namePriceStackView, cartButton])
         stackView.axis = .horizontal
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
@@ -76,17 +75,13 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        assertionFailure("init(coder:) has not been implemented")
+        return nil
     }
     
     // MARK: - SetupUI
     private func setupUI() {
-        contentView.addSubview(nftImageView)
-        contentView.addSubview(likeButton)
-        contentView.addSubview(ratingStackView)
-        contentView.addSubview(cartButton)
-        contentView.addSubview(namePriceStackView)
-        contentView.addSubview(cartButtonStackView)
+        addSubviews()
         
         NSLayoutConstraint.activate([
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -112,6 +107,13 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             cartButtonStackView.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    
+    private func addSubviews() {
+        [nftImageView, likeButton, ratingStackView, cartButtonStackView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
     }
     
     private func setupStars() {

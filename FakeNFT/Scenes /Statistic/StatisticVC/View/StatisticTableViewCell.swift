@@ -12,7 +12,6 @@ final class StatisticTableViewCell: UITableViewCell {
         label.font = .caption1
         label.textAlignment = .center
         label.textColor = .ypBlackLight
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -48,7 +47,6 @@ final class StatisticTableViewCell: UITableViewCell {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = CellConstants.stackViewSpacing
-        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -57,7 +55,6 @@ final class StatisticTableViewCell: UITableViewCell {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = CellConstants.mainStackSpacing
-        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -65,7 +62,6 @@ final class StatisticTableViewCell: UITableViewCell {
         let view = UIView()
         view.backgroundColor = .ypLightGrayLight
         view.layer.cornerRadius = CellConstants.containerCornerRadius
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -76,7 +72,8 @@ final class StatisticTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        assertionFailure("init(coder:) has not been implemented")
+        return nil
     }
     
     // MARK: - SetupUI
@@ -91,9 +88,7 @@ final class StatisticTableViewCell: UITableViewCell {
     }
     
     private func setupLayout() {
-        contentView.addSubview(containerView)
-        contentView.addSubview(positionLabel)
-        contentView.addSubview(mainStackView)
+        addSubviews()
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CellConstants.containerTopBottomInset),
@@ -116,6 +111,14 @@ final class StatisticTableViewCell: UITableViewCell {
         ])
     }
     
+    private func addSubviews() {
+        [containerView, positionLabel, mainStackView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+    }
+    
+    // MARK: - Configuration
     func configure(with user: User, position: Int) {
         nameLabel.text = user.name
         scoreLabel.text = "\(user.score)"
