@@ -1,8 +1,14 @@
 import UIKit
 
+protocol CartCellDelegate: AnyObject {
+    func didTapDelete(in cell: CartTableViewCell, with image: UIImage)
+}
+
 class CartTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = "CartCell"
+    
+    weak var delegate: CartCellDelegate?
     
     private let cellView: UIView = {
         let container = UIView()
@@ -68,6 +74,8 @@ class CartTableViewCell: UITableViewCell {
         
         setupViews()
         setupConstraints()
+        
+        deleteNftButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -122,7 +130,7 @@ class CartTableViewCell: UITableViewCell {
         setRatingStars(rating: rating)
     }
     
-    func setRatingStars(rating: Int) {
+    private func setRatingStars(rating: Int) {
         let boundedRating = max(1, min(rating, 5))
         let image: UIImage
             switch boundedRating {
@@ -135,5 +143,11 @@ class CartTableViewCell: UITableViewCell {
             default: image = UIImage(resource: .rating0)
             }
         ratingOfNftImageView.image = image
+    }
+    
+    
+    @objc private func deleteTapped() {
+        guard let nftImage = nftImageView.image else { return }
+        delegate?.didTapDelete(in: self, with: nftImage)
     }
 }

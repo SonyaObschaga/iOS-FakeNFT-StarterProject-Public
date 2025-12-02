@@ -4,7 +4,7 @@ final class CartViewController: UIViewController {
     
     // MARK: - MockData
     
-    private let nftData: [TestNFTModel] = [TestNFTModel(name: "Atheen", rating: 5, price: 1.15),
+    private var nftData: [TestNFTModel] = [TestNFTModel(name: "Atheen", rating: 5, price: 1.15),
                                            TestNFTModel(name: "Bulbasaur", rating: 3, price: 2.22),
                                            TestNFTModel(name: "Greena", rating: 1, price: 3.09)]
     
@@ -15,7 +15,7 @@ final class CartViewController: UIViewController {
     
     // MARK: - UI Elements
     
-    private let categoriesTableView: UITableView = {
+    private let cartTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -79,22 +79,22 @@ final class CartViewController: UIViewController {
     // MARK: - Setup UI Methods
     
     private func setupViews() {
-        view.addSubview(categoriesTableView)
+        view.addSubview(cartTableView)
         view.addSubview(totalOfCartView)
         totalOfCartView.addSubview(totalNft)
         totalOfCartView.addSubview(totalCost)
         totalOfCartView.addSubview(goToPayButton)
         
-        categoriesTableView.register(CartTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        categoriesTableView.dataSource = self
+        cartTableView.register(CartTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        cartTableView.dataSource = self
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            categoriesTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            categoriesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            categoriesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            categoriesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cartTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            cartTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            cartTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            cartTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             totalOfCartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             totalOfCartView.heightAnchor.constraint(equalToConstant: 76),
@@ -132,8 +132,30 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
         
+        cell.delegate = self
+        
         let nft = nftData[indexPath.row]
         cell.configure(nftName: nft.name, nftImageURL: "", rating: nft.rating, price: nft.price)
         return cell
+    }
+}
+
+extension CartViewController: CartCellDelegate {
+    func didTapDelete(in cell: CartTableViewCell, with image: UIImage) {
+          guard let indexPath = cartTableView.indexPath(for: cell) else { return }
+
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, indexPath: indexPath)
+        deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
+        deleteConfirmationViewController.delegate = self
+
+          present(deleteConfirmationViewController, animated: true)
+      }
+}
+
+extension CartViewController: DeleteConfirmationDelegate {
+    func didConfirmDelete(at indexPath: IndexPath) {
+        nftData.remove(at: indexPath.row)
+        cartTableView.reloadData()
+        calculateTotal()
     }
 }
