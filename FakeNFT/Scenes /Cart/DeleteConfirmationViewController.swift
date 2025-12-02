@@ -108,13 +108,13 @@ final class DeleteConfirmationViewController: UIViewController {
 
             imageView.widthAnchor.constraint(equalToConstant: 108),
             imageView.heightAnchor.constraint(equalToConstant: 108),
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 244),
+            imageView.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -54),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 12),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            buttonsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            buttonsStackView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: 14),
             buttonsStackView.widthAnchor.constraint(equalToConstant: 262),
             buttonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttonsStackView.heightAnchor.constraint(equalToConstant: 44)
