@@ -11,7 +11,6 @@ struct UpdateOrderDto: Dto {
     let nfts: [String]
     
     func asDictionary() -> [String: String] {
-        // Формируем строку с ID через запятую
         let nftsString = nfts.joined(separator: ",")
         return ["nfts": nftsString]
     }

@@ -14,5 +14,5 @@ struct ProfileResponse: Decodable {
     let description: String?
     let website: String?
     let nfts: [String]
-    let likes: [String]  // Массив ID избранных NFT
+    let likes: [String] 
 }

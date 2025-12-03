@@ -28,7 +28,7 @@ final class CollectionViewController: UIViewController {
         collectionView.isScrollEnabled = false
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(MyCell.self, forCellWithReuseIdentifier: "MyCell")
+        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "CollectionCell")
         return collectionView
     }()
    
@@ -54,15 +54,14 @@ final class CollectionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        // Убрать текст "Назад", оставить только стрелку "<"
         navigationItem.hidesBackButton = true
-        let backButton = UIBarButtonItem(title: "<", style: .plain, target: self, action: #selector(backButtonTapped))
+        let backButton = UIBarButtonItem(image: UIImage(resource: .backChevron), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = .label
         navigationItem.leftBarButtonItem = backButton
         
         scrollView.contentInsetAdjustmentBehavior = .never
         setupTableView()
-        
-        // Настраиваем отступ снизу для таббара
+    
         setupScrollViewContentInset()
         
         presenter?.viewDidLoad()
@@ -70,15 +69,13 @@ final class CollectionViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        // Обновляем отступ при изменении layout
         setupScrollViewContentInset()
     }
     
     private func setupScrollViewContentInset() {
-        // Используем safeAreaInsets для автоматического учета таббара и других безопасных областей
+
         let bottomInset = view.safeAreaInsets.bottom
         
-        // Устанавливаем contentInset для scrollView, чтобы контент не перекрывался таббаром
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
         scrollView.scrollIndicatorInsets = scrollView.contentInset
     }
@@ -113,7 +110,6 @@ final class CollectionViewController: UIViewController {
         topImage.contentMode = .scaleAspectFill
         topImage.clipsToBounds = true
         topImage.layer.cornerRadius = 12
-      //  topImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // верхние углы
         
         NSLayoutConstraint.activate([
             topImage.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -133,7 +129,6 @@ final class CollectionViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-           // titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -28)
             titleLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
     }
@@ -147,7 +142,6 @@ final class CollectionViewController: UIViewController {
             authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             authorLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             authorLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-            //titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
             authorLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
     }
@@ -169,20 +163,18 @@ final class CollectionViewController: UIViewController {
     private func setupCollectionView() {
         scrollView.addSubview(collectionView)
         
-        // Настройка layout для отступов между ячейками
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layout.minimumInteritemSpacing = 8
             layout.minimumLineSpacing = 8
         }
         
-        // Рассчитываем высоту на основе количества ячеек (10 ячеек в 3 колонки = 4 ряда)
         let screenWidth = UIScreen.main.bounds.width
         let sideInsets: CGFloat = 32
         let spacingBetweenCells: CGFloat = 8 * 2
         let totalSpacing = sideInsets + spacingBetweenCells
         let cellWidth = (screenWidth - totalSpacing) / 3
-        let numberOfRows = ceil(CGFloat(10) / 3.0) // 10 ячеек / 3 колонки = 4 ряда
+        let numberOfRows = ceil(CGFloat(10) / 3.0)
         let rowSpacing: CGFloat = 9
         let initialHeight = (numberOfRows * cellWidth) + ((numberOfRows - 1) * rowSpacing)
         
@@ -194,7 +186,6 @@ final class CollectionViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
             collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32),
             collectionViewHeightConstraint!,
-            // Привязываем bottom к contentLayoutGuide для правильной работы scrollView
             collectionView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
@@ -218,14 +209,11 @@ extension CollectionViewController: CollectionViewProtocol {
         titleLabel.text = title
         descriptionLabel.text = description
         authorLabel.text = author
-        
-        // Загрузка изображения из URL с помощью Kingfisher
         topImage.kf.setImage(with: coverURL)
     }
     
     func reloadNFTs() {
         collectionView.reloadData()
-        // Пересчитываем высоту collectionView после загрузки данных
         DispatchQueue.main.async { [weak self] in
             self?.updateCollectionViewHeight()
         }
@@ -234,9 +222,8 @@ extension CollectionViewController: CollectionViewProtocol {
     private func updateCollectionViewHeight() {
         collectionView.layoutIfNeeded()
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
-        print("🔵 CollectionView contentSize height: \(height)")
-        print("🔵 CollectionView bounds: \(collectionView.bounds)")
-        collectionViewHeightConstraint?.constant = height > 0 ? height : 500 // Увеличил для теста
+  
+        collectionViewHeightConstraint?.constant = height > 0 ? height : 500
         view.layoutIfNeeded()
     }
 }
@@ -249,7 +236,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! MyCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
         
         guard let nftItem = presenter?.nft(at: indexPath.item) else {
             return cell
@@ -272,15 +259,14 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                             layout collectionViewLayout: UICollectionViewLayout,
                             sizeForItemAt indexPath: IndexPath) -> CGSize {
-            // Используем ширину view минус отступы по бокам (16 + 16 = 32)
             let screenWidth = view.bounds.width > 0 ? view.bounds.width : UIScreen.main.bounds.width
-            let sideInsets: CGFloat = 32 // 16 с каждой стороны
-            let spacingBetweenCells: CGFloat = 8 * 2 // между 3 ячейками 2 промежутка по 8
-            let totalSpacing = sideInsets + spacingBetweenCells // 32 + 16 = 48
+            let sideInsets: CGFloat = 32
+            let spacingBetweenCells: CGFloat = 8 * 2
+            let totalSpacing = sideInsets + spacingBetweenCells
             
             let width = (screenWidth - totalSpacing) / 3
             print("🔵 sizeForItemAt indexPath: \(indexPath), size: \(CGSize(width: width, height: width))")
 
-            return CGSize(width: width, height: 192) // квадрат
+            return CGSize(width: width, height: 192) 
         }
 }

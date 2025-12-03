@@ -25,7 +25,6 @@ final class TabBarController: UITabBarController {
             
         catalogController.tabBarItem = catalogTabBarItem
         
-        // Обёртываем в UINavigationController для навигации
         let navigationController = UINavigationController(rootViewController: catalogController)
         navigationController.tabBarItem = catalogTabBarItem
         viewControllers = [navigationController]

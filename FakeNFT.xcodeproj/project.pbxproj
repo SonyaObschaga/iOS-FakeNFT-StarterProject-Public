@@ -59,7 +59,7 @@
 		C05B45142EDB010F008BE8CB /* CollectionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B45132EDB010D008BE8CB /* CollectionInput.swift */; };
 		C05B45162EDB0160008BE8CB /* CollectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B45152EDB0154008BE8CB /* CollectionPresenter.swift */; };
 		C05B45182EDB0214008BE8CB /* CollectionAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B45172EDB020A008BE8CB /* CollectionAssembly.swift */; };
-		C05B451A2EDB5BA8008BE8CB /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B45192EDB5B99008BE8CB /* MyCell.swift */; };
+		C05B451A2EDB5BA8008BE8CB /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B45192EDB5B99008BE8CB /* CollectionCell.swift */; };
 		C05B451C2EDC8BAB008BE8CB /* CollectionByIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B451B2EDC8BA8008BE8CB /* CollectionByIdRequest.swift */; };
 		C05B451E2EDC8D73008BE8CB /* NFTResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B451D2EDC8D71008BE8CB /* NFTResponse.swift */; };
 		C05B45202EDC8DEB008BE8CB /* CollectionDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B451F2EDC8DE9008BE8CB /* CollectionDetailResponse.swift */; };
@@ -150,7 +150,7 @@
 		C05B45132EDB010D008BE8CB /* CollectionInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionInput.swift; sourceTree = "<group>"; };
 		C05B45152EDB0154008BE8CB /* CollectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPresenter.swift; sourceTree = "<group>"; };
 		C05B45172EDB020A008BE8CB /* CollectionAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionAssembly.swift; sourceTree = "<group>"; };
-		C05B45192EDB5B99008BE8CB /* MyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
+		C05B45192EDB5B99008BE8CB /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 		C05B451B2EDC8BA8008BE8CB /* CollectionByIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionByIdRequest.swift; sourceTree = "<group>"; };
 		C05B451D2EDC8D71008BE8CB /* NFTResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTResponse.swift; sourceTree = "<group>"; };
 		C05B451F2EDC8DE9008BE8CB /* CollectionDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailResponse.swift; sourceTree = "<group>"; };
@@ -417,7 +417,7 @@
 		C05B44F32ED175DA008BE8CB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				C05B45192EDB5B99008BE8CB /* MyCell.swift */,
+				C05B45192EDB5B99008BE8CB /* CollectionCell.swift */,
 				C05B450B2EDAF7B7008BE8CB /* CollectionViewController.swift */,
 				C05B44F82ED176D8008BE8CB /* TableCell.swift */,
 				0CFCB7482A7808900009A829 /* CatalogViewController.swift */,
@@ -682,7 +682,7 @@
 				C05B45122EDAFFAE008BE8CB /* CollectionViewProtocol.swift in Sources */,
 				C05B45322EDF3DB0008BE8CB /* UpdateOrderRequest.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
-				C05B451A2EDB5BA8008BE8CB /* MyCell.swift in Sources */,
+				C05B451A2EDB5BA8008BE8CB /* CollectionCell.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
 			);

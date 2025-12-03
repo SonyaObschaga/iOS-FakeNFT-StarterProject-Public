@@ -13,6 +13,5 @@ struct CollectionDetailResponse: Decodable {
     let cover: URL
     let description: String?
     let author: String?
-   // let createdAt: String?  // Опционально, если не используется
-    let nfts: [String]  // Массив ID NFT, а не объекты!
+    let nfts: [String]
 }

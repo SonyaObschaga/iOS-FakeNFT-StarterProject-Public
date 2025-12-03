@@ -144,20 +144,15 @@ extension CatalogViewController: LoadingView {
 // MARK: - CatalogViewProtocol
 extension CatalogViewController: CatalogViewProtocol {
     func showCollectionDetails(collectionId: String) {
-        print("🔵 showCollectionDetails called with id: \(collectionId)")
-        print("🔵 navigationController: \(String(describing: navigationController))")
         
         let assembly = CollectionAssembly(servicesAssembly: servicesAssembly)
         let input = CollectionInput(collectionId: collectionId)
         let collectionVC = assembly.build(with: input)
         
-        print("🔵 CollectionViewController created: \(collectionVC)")
         
         if let navController = navigationController {
-            print("🔵 Pushing CollectionViewController to navigation stack")
             navController.pushViewController(collectionVC, animated: true)
         } else {
-            print("🔴 ERROR: navigationController is nil!")
         }
     }
 }

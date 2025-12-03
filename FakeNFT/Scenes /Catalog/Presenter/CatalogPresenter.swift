@@ -58,7 +58,6 @@ final class CatalogPresenter {
     private var originalCollections: [NFTCollection] = []
     
     private func loadCollections() {
-        // Показываем индикатор загрузки (viewDidLoad уже на главном потоке)
         view?.showLoading()
         
         collectionsService.loadCollections { [weak self] result in
@@ -68,11 +67,8 @@ final class CatalogPresenter {
             case .success(let collections):
                 self.originalCollections = collections
                 self.collections = collections
-                
-                // Применяем сохраненную сортировку (без вызова reloadTable, он будет после)
                 self.applySort(by: self.currentSortOption, shouldReload: false)
                 
-                // Обновляем UI на главном потоке
                 DispatchQueue.main.async {
                     self.view?.hideLoading()
                     self.view?.reloadTable()

@@ -56,11 +56,10 @@ final class CollectionPresenter: CollectionPresenterProtocol {
             switch result {
             case .success(let profile):
                 self.favoriteNFTIds = Set(profile.likes)
-                self.currentLikesArray = profile.likes  // Сохраняем массив
+                self.currentLikesArray = profile.likes
                 self.loadCollection()
                 
             case .failure(let error):
-                print("Error loading profile: \(error)")
                 self.loadCollection()
             }
         }
@@ -85,7 +84,6 @@ final class CollectionPresenter: CollectionPresenterProtocol {
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.view?.hideLoading()
-                    print("Error loading collection: \(error)")
                 }
             }
         }
@@ -99,7 +97,6 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 case .success(let order):
                     self.cartNFTIds = Set(order.nfts)
                     self.currentCartArray = order.nfts
-                    print("✅ Order loaded: \(order.nfts.count) items in cart")
                     
                 case .failure(let error):
                     print("Error loading order: \(error)")
@@ -133,7 +130,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                     let nftItem = NFTItem(
                         id: nft.id,
                         title: nft.name,
-                        imageURL: nft.images.first ?? URL(string: "https://example.com")!,
+                        imageURL: nft.images.first,
                         rating: Double(nft.rating),
                         price: nft.price,
                         isFavorite: isFavorite,
@@ -167,48 +164,31 @@ final class CollectionPresenter: CollectionPresenterProtocol {
             
             let nftId = nftItems[index].id
             
-            // Проверяем, есть ли NFT в избранном
             if favoriteNFTIds.contains(nftId) {
-                // Удаляем из избранного
                 favoriteNFTIds.remove(nftId)
                 currentLikesArray.removeAll { $0 == nftId }
-                print("❌ Removed from favorites: \(nftId)")
             } else {
-                // Добавляем в избранное
                 favoriteNFTIds.insert(nftId)
                 currentLikesArray.append(nftId)
-                print("❤️ Added to favorites: \(nftId)")
             }
             
-            // Обновляем локально UI сразу для отзывчивости
             nftItems[index].isFavorite = favoriteNFTIds.contains(nftId)
-            
-            // Отправляем PUT запрос на сервер
             updateProfileLikes()
         }
     
-    func didTapCart(at index: Int) {  // Новый метод
+    func didTapCart(at index: Int) {
             guard index < nftItems.count else { return }
             
             let nftId = nftItems[index].id
-            
-            // Проверяем, есть ли NFT в корзине
+    
             if cartNFTIds.contains(nftId) {
-                // Удаляем из корзины
                 cartNFTIds.remove(nftId)
                 currentCartArray.removeAll { $0 == nftId }
-                print("❌ Removed from cart: \(nftId)")
             } else {
-                // Добавляем в корзину
                 cartNFTIds.insert(nftId)
                 currentCartArray.append(nftId)
-                print("🛒 Added to cart: \(nftId)")
             }
-            
-            // Обновляем локально UI сразу
             nftItems[index].isInCart = cartNFTIds.contains(nftId)
-            
-            // Отправляем PUT запрос
             updateOrder()
         }
     
@@ -218,25 +198,20 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 
                 switch result {
                 case .success(let order):
-                    // Обновляем локальные данные
                     self.cartNFTIds = Set(order.nfts)
                     self.currentCartArray = order.nfts
-                    
-                    // Обновляем все NFT items
                     for i in 0..<self.nftItems.count {
                         self.nftItems[i].isInCart = self.cartNFTIds.contains(self.nftItems[i].id)
                     }
-                    
-                    // Обновляем UI
                     DispatchQueue.main.async {
                         self.view?.reloadNFTs()
                     }
-                    
-                    print("✅ Order updated successfully")
+        
+                    print("Order updated successfully")
                     
                 case .failure(let error):
-                    print("❌ Error updating order: \(error)")
-                    // Откатываем изменения при ошибке
+                    print("Error updating order: \(error)")
+
                     self.loadOrder()
                 }
             }
@@ -248,26 +223,22 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 
                 switch result {
                 case .success(let profile):
-                    // Обновляем локальные данные
                     self.favoriteNFTIds = Set(profile.likes)
                     self.currentLikesArray = profile.likes
                     
-                    // Обновляем все NFT items
                     for i in 0..<self.nftItems.count {
                         self.nftItems[i].isFavorite = self.favoriteNFTIds.contains(self.nftItems[i].id)
                     }
                     
-                    // Обновляем UI
                     DispatchQueue.main.async {
                         self.view?.reloadNFTs()
                     }
                     
-                    print("✅ Profile updated successfully")
+                    print("Profile updated successfully")
                     
                 case .failure(let error):
-                    print("❌ Error updating profile: \(error)")
+                    print("Error updating profile: \(error)")
                     
-                    // Откатываем изменения при ошибке
                     self.loadProfile()
                 }
             }
