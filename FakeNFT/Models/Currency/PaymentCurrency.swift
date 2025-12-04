@@ -1,4 +1,4 @@
-struct CurrencyModel: Decodable {
+struct PaymentCurrency: Decodable {
     let title: String
     let name: String
     let imageURLString: String
