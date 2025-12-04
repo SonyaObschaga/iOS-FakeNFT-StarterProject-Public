@@ -31,7 +31,7 @@ final class CartViewController: UIViewController {
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
-        view.backgroundColor = .lightGrayAdaptive
+        view.backgroundColor = .backgroundPrimary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
