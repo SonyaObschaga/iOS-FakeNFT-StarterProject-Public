@@ -80,7 +80,6 @@ final class DeleteConfirmationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        modalPresentationStyle = .overFullScreen
         view.backgroundColor = .clear
 
         imageView.image = nftImage
