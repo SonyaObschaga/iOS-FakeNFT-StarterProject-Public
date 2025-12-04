@@ -14,7 +14,8 @@ final class EditProfileViewController: UIViewController {
         self.presenter = presenter
         presenter.view = self
     }
-    
+    private var newUrl: String = ""
+ 
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +150,22 @@ final class EditProfileViewController: UIViewController {
         return textField
     }()
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
+    }()
+    
 }
 
 //MARK: - Private functions
@@ -229,6 +246,7 @@ private extension EditProfileViewController {
         alert.addTextField { textField in
             textField.placeholder = "http://example.com/avatar.png"
             textField.keyboardType = .URL
+            textField.text = "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
         }
 
         let cancel = UIAlertAction(title: "Отмена", style: .default)
@@ -258,7 +276,9 @@ private extension EditProfileViewController {
 //            }
 //        }
 //    }
+    
     func updateAvatarImage(from url: URL) {
+        newUrl = url.absoluteString
         DispatchQueue.global().async { [weak self] in
             guard let self = self,
                   let data = try? Data(contentsOf: url),
@@ -280,6 +300,8 @@ private extension EditProfileViewController {
                 self.editPhotoButton.clipsToBounds = true
             }
         }
+        
+ 
     }
 
     func removeAvatar() {
@@ -296,7 +318,22 @@ private extension EditProfileViewController {
     @objc
     func saveChanges() {
         //TODO: Update user profile data
-        print("Profile info updated")
+        
+        var profile = ProfileDto()
+        if let name = nameTextField.text {
+            profile.name = name
+        }
+        profile.description = descriptionTextField.text
+        if let website = urlTextField.text {
+            profile.website = website
+        }
+        if !newUrl.isEmpty {
+            profile.avatar_url = newUrl
+        }
+        
+        presenter.updateProfile(profile: profile)
+        
+        print("Profile info update started")
 //        presenter.saveProfileChanges(
 //            name: nameTextField.text,
 //            description: descriptionTextField.text,
@@ -356,4 +393,6 @@ private extension EditProfileViewController {
     func tapGesture() {
         descriptionTextField.resignFirstResponder()
     }
+
+
 }

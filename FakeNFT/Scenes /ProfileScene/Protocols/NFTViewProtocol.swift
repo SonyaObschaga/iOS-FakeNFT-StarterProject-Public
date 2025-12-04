@@ -7,6 +7,9 @@
 
 import Foundation
 
-protocol NFTViewProtocol: AnyObject {
+protocol NFTViewProtocol: AnyObject, LoadingView {
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel])
+ 
+    func errorDetected(error: Error)
+
 }

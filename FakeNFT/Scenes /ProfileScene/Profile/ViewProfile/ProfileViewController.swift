@@ -8,8 +8,10 @@
 import UIKit
 import SafariServices
 
-final class ProfileViewController: UIViewController {
-
+final class ProfileViewController: UIViewController, LoadingView {
+ 
+    var originalBackgroundColor: UIColor = .black
+    
     //let profile = FakeNFTService.shared.profile
     var tableCells: [ProfileCellModel] = []
 
@@ -24,6 +26,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         //view.backgroundColor = .ypBlackDay
         setupView()
+        //hideControls()
         presenter.viewDidLoad()
     }
 
@@ -104,6 +107,22 @@ final class ProfileViewController: UIViewController {
         tableView.rowHeight = 54
         
         return tableView
+    }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
     }()
 
 }
@@ -191,18 +210,37 @@ extension ProfileViewController {
         ])
     }
     
-//    func fillTableCells()
-    func fillTableCells(nftsCount: Int, likesCount: Int) {
-        let favoriteNftsViewController = FavoriteNftsViewController()
-        let presenter = NFTPresenter()
-        favoriteNftsViewController.configure(presenter)
-        favoriteNftsViewController.hidesBottomBarWhenPushed = true
-        
+    private func myNftViewController() -> MyNftViewController {
         let myNftViewController = MyNftViewController()
-        let nftPresenter = NFTPresenter()
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, false)
         myNftViewController.configure(nftPresenter)
-
         myNftViewController.hidesBottomBarWhenPushed = true
+ 
+        return myNftViewController
+    }
+    private func likedNftViewController() -> FavoriteNftsViewController {
+        let myNftViewController = FavoriteNftsViewController()
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, true)
+        myNftViewController.configure(nftPresenter)
+        myNftViewController.hidesBottomBarWhenPushed = true
+ 
+        return myNftViewController
+    }
+
+    func fillTableCells(nftsCount: Int, likesCount: Int) {
+        //let nftPresenter = NFTPresenter(
+        //         servicesAssembly: self.presenter.servicesAssembly)
+        //let presenter = NFTPresenter(
+        //          servicesAssembly: self.presenter.servicesAssembly)
+        
+        //let myNftViewController = MyNftViewController()
+        //myNftViewController.configure(nftPresenter)
+
+        //let favoriteNftsViewController = FavoriteNftsViewController()
+        //favoriteNftsViewController.configure(presenter)
+        //favoriteNftsViewController.hidesBottomBarWhenPushed = true
+ 
+        //myNftViewController.hidesBottomBarWhenPushed = true
         
         tableCells.append(
             ProfileCellModel(
@@ -211,7 +249,7 @@ extension ProfileViewController {
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
-                        myNftViewController,
+                        myNftViewController(),
                         animated: true
                     )
                 })
@@ -223,7 +261,7 @@ extension ProfileViewController {
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
-                        favoriteNftsViewController,
+                        likedNftViewController(),
                         animated: true
                     )
                 })
@@ -258,5 +296,4 @@ extension ProfileViewController {
              let safariVC = SFSafariViewController(url: url)
              present(safariVC, animated: true)
         }
-}
-
+ }

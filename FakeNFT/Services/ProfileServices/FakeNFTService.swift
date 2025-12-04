@@ -10,16 +10,17 @@ import Foundation
 class FakeNFTService: FakeNFTModelServiceProtocol,
                       FakeNFTModelTestsHelperMethodsProtocol {
     
-    //public static let shared: FakeNFTModelServiceProtocol = FakeNFTService()
     public static let shared: FakeNFTService = FakeNFTService()
     private init() {}
     
     public static var DEFAULT_USER_INDEX = 1
     public static var dataSourceType: AppDataSourceType = .mockData
     private(set) var userDefaults: FakeNFTUserDefaultsKeeperService = FakeNFTUserDefaultsKeeperService()
-
+    
+    var operationInProgress: Bool = false  // from FakeNFTModelServiceProtocol => not used here
+    
     private(set) var userProfile: ProfileModel?
-    var profile: ProfileModel {
+    var profileModel: ProfileModel {
         guard let p = self.userProfile else {
             assertionFailure("Undefined user profile")
             return ProfileModel() //TODO: edit
@@ -30,9 +31,9 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     var ProfileModelChanged: ((ProfileModel) -> Void)?
     // Оповещение наблюдателей о смене профиля
     private func notifyProfileModelChanged() {
-        ProfileModelChanged?(self.profile)
+        ProfileModelChanged?(self.profileModel)
     }
- 
+    
     private var fakeNFTBackendService: FakeNFTBackendServiceProtocol?
     var backend: FakeNFTBackendServiceProtocol {
         guard let service = self.fakeNFTBackendService else {
@@ -52,27 +53,27 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         userProfile = defaultUserProfile
         profileFetched = true
     }
-
+    
     private lazy var defaultUserProfile: ProfileModel = {
         return getUserProfile(FakeNFTService.DEFAULT_USER_INDEX)
     }()
     
     private var myNFTs: [NFTModel] {
-        return self.profile.nfts
+        return self.profileModel.nfts
     }
     
     var myNFTsCount: Int {
         return myNFTs.count
     }
-
+    
     private var likedNFTs: [NFTModel] {
-        return self.profile.likedNFTs
+        return self.profileModel.likedNFTs
     }
-
+    
     var likedNFTsCount: Int {
         return likedNFTs.count
     }
-
+    
     private func getUserProfile (_ index: Int) -> ProfileModel {
         do {
             let p = try backend.getUserProfile(index)
@@ -88,7 +89,7 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
                 print("Ошибка загрузки NFTS")
                 return ProfileModel() //TODO: edit
             }
-
+            
             for id in unwrappedNfts {
                 do { let nftDto = try backend.getNFT(id) //{
                     var nft = NFTModel()
@@ -116,35 +117,35 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     }
     
     func addNFTToMyNFTsCollection(_ nftId: String) {
-        guard self.profile.nfts.first(where: { $0.id == nftId }) == nil else {
+        guard self.profileModel.nfts.first(where: { $0.id == nftId }) == nil else {
             // stop adding duplicate NFT
             return
         }
-
+        
         let nft = getNFT(nftId)
-     
-        self.profile.addNFT(nft)
+        
+        self.profileModel.addNFT(nft)
         saveUserProfile()
         notifyProfileModelChanged()
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        guard var nft = self.profile.nfts.first(where: { $0.id == nftId }) else {
+        guard var nft = self.profileModel.nfts.first(where: { $0.id == nftId }) else {
             assertionFailure("NFT с ID '\(nftId)' не найден в коллекции пользователя")
             return //TODO: edit
         }
-
+        
         nft.isLiked = flagValue
         saveUserProfile()
         notifyProfileModelChanged()
     }
-
+    
     private func getNFT(_ id: String) -> NFTModel {
         guard let nftDto = try? fakeNFTBackendService?.getNFT(id) else {
             assertionFailure("NFT с ID '\(id)' не найден")
             return NFTModel() //TODO: edit
         }
-
+        
         var nft = NFTModel()
         nft.createdAt = nftDto.createdAt
         nft.name = nftDto.name
@@ -157,15 +158,15 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         nft.isLiked = false
         return nft
     }
-     
+    
     func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel] {
         switch sortField {
         case .byName:
-            return self.profile.nfts.sorted { $0.name < $1.name }
+            return self.profileModel.nfts.sorted { $0.name < $1.name }
         case .byPrice:
-            return self.profile.nfts.sorted { ($0.price) < ($1.price) }
+            return self.profileModel.nfts.sorted { ($0.price) < ($1.price) }
         case .byRating:
-            return self.profile.nfts.sorted {
+            return self.profileModel.nfts.sorted {
                 if let r0 = $0.rating, let r1 = $1.rating {
                     return r0 < r1 || (r0 == r1 && ($0.name < $1.name))
                 }
@@ -175,12 +176,12 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
     }
     
     func saveUserProfile() {
-        var p = ProfileDto.dto()
-        p.name = profile.name
-        p.avatar_url = profile.avatar
-        p.description = profile.description
-        p.website = profile.website ?? ""
-        p.id = profile.id
+        var p = ProfileDto().dto()
+        p.name = profileModel.name
+        p.avatar_url = profileModel.avatar
+        p.description = profileModel.description
+        p.website = profileModel.website ?? ""
+        p.id = profileModel.id
         
         for nft in self.myNFTs {
             p.nfts?.append(nft.id)
@@ -190,25 +191,24 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
             p.likes?.append(likeNft.id)
         }
         backend.saveUserProfile(p)
-
-        userDefaults.saveUserDefaults(self.profile)
-    }
         
+        userDefaults.saveUserDefaults(self.profileModel)
+    }
+    
     func resetUserDefaults() {
         userProfile = backend.resetUserDefaults()
-        userDefaults.saveUserDefaults(profile)
+        userDefaults.saveUserDefaults(profileModel)
         notifyProfileModelChanged()
     }
-
+    
     func loadSavedUserDefaults() {
         userProfile = userDefaults.loadUserDefaults()
         notifyProfileModelChanged()
     }
     
     func clearMyNFTsCollection() {
-        self.profile.clearNFTs()
+        self.profileModel.clearNFTs()
         saveUserProfile()
         notifyProfileModelChanged()
     }
-  }
-
+}

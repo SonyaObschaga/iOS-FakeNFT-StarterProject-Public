@@ -12,7 +12,7 @@ final class MyNftViewController: UIViewController {
     var _nfts : [NFTModel]? // = FakeNFTService.shared.profile.nfts
     var nfts: [NFTModel] {
         guard let nftsArray = _nfts else {
-            assertionFailure("Undefined NFTs array for MyNftViewController")
+            //assertionFailure("Undefined NFTs array for MyNftViewController")
             return []
         }
         return nftsArray
@@ -84,6 +84,22 @@ final class MyNftViewController: UIViewController {
         label.text = "У Вас ещё нет NFT"
         
         return label
+    }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
     }()
 }
 

@@ -12,7 +12,7 @@ final class FavoriteNftsViewController: UIViewController {
     var _likedNFTs : [NFTModel]?
     var likedNFTs: [NFTModel] {
         guard let nftsArray = _likedNFTs else {
-            assertionFailure("Undefined NFTs array for FavoriteNftsViewController")
+            //assertionFailure("Undefined NFTs array for FavoriteNftsViewController")
             return []
         }
         return nftsArray
@@ -77,6 +77,23 @@ final class FavoriteNftsViewController: UIViewController {
         )
         
         return collectionView
+    }()
+    
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
     }()
 }
 

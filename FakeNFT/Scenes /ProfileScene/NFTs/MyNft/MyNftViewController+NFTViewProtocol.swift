@@ -11,5 +11,13 @@ extension MyNftViewController: NFTViewProtocol {
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel]) {
         self._nfts = nfts
     }
+    
+    
+       func errorDetected(error: any Error)
+       {
+           // todo: report error
+           print("Error detected: \(error.localizedDescription)")
+       }
+
 
 }
