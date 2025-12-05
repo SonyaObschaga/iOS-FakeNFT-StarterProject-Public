@@ -21,6 +21,7 @@ final class TableCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -48,11 +49,18 @@ final class TableCell: UITableViewCell {
         contentView.addSubview(coverImageView)
         contentView.addSubview(stack)
         
-        // Создаем topConstraint для динамического изменения отступа между ячейками
+    }
+    
+    func setupConstraints() {
         topConstraint = coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor)
         
+        guard let topConstraint = topConstraint else {
+                assertionFailure("topConstraint must be initialized")
+                return
+            }
+        
         NSLayoutConstraint.activate([
-            topConstraint!,
+            topConstraint,
             coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             coverImageView.heightAnchor.constraint(equalToConstant: 140),
@@ -66,7 +74,8 @@ final class TableCell: UITableViewCell {
 
 
     func configure(with collection: NFTCollection, topSpacing: CGFloat = 0) {
-        topConstraint?.constant = topSpacing
+        guard let topConstraint = topConstraint else { return }
+        topConstraint.constant = topSpacing
         
         titleLabel.text = collection.title
         nftsCountLabel.text = "(\(collection.nftsCount))"

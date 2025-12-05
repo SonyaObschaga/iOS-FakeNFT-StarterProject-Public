@@ -83,6 +83,7 @@ final class CollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -106,8 +107,9 @@ final class CollectionCell: UICollectionViewCell {
         cartImageView.isUserInteractionEnabled = true
                 let cartTapGesture = UITapGestureRecognizer(target: self, action: #selector(cartTapped))
                 cartImageView.addGestureRecognizer(cartTapGesture)
-        
-        
+    }
+    
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

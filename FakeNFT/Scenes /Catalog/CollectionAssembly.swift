@@ -22,7 +22,7 @@ final class CollectionAssembly {
             profileService: servicesAssembly.profileService,
             orderService: servicesAssembly.orderService  
         )
-        let viewController = CollectionViewController(servicesAssembly: servicesAssembly)
+        let viewController = CollectionViewController()
         presenter.view = viewController
         viewController.presenter = presenter
         return viewController
