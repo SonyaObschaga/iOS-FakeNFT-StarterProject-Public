@@ -197,7 +197,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
             currentCartArray.append(nftId)
         }
         nftItems[index].isInCart = cartNFTIds.contains(nftId)
-        updateOrder(for: index) 
+        updateOrder(for: index)
     }
 
     private func updateOrder(for index: Int) {
@@ -242,7 +242,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 )
 
                 DispatchQueue.main.async { [weak self] in
-                    self?.view?.reloadNFTs()
+                    self?.view?.reloadNFT(at: index)
                 }
 
             case .failure(let error):

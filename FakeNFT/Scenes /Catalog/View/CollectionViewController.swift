@@ -300,11 +300,11 @@ extension CollectionViewController: CollectionViewProtocol {
             self?.updateCollectionViewHeight()
         }
     }
-    
+
     func reloadNFT(at index: Int) {
-            let indexPath = IndexPath(item: index, section: 0)
-            collectionView.reloadItems(at: [indexPath])
-        }
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView.reloadItems(at: [indexPath])
+    }
 
     private func updateCollectionViewHeight() {
         collectionView.layoutIfNeeded()
