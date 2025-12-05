@@ -79,4 +79,9 @@ final class PaymentCollectionViewCell: UICollectionViewCell {
         currencyFullNameLabel.text = currency.title
         currencyShortNameLabel.text = currency.name
     }
+    
+    func setSelectedState(_ selected: Bool) {
+        cardView.layer.borderColor = selected ? UIColor.blackAdaptive.cgColor : UIColor.clear.cgColor
+        cardView.layer.borderWidth = selected ? 1 : 0
+    }
 }
