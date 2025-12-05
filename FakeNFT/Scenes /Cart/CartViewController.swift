@@ -74,6 +74,7 @@ final class CartViewController: UIViewController {
         setupViews()
         setupConstraints()
         calculateTotal()
+        setupTargets()
     }
     
     // MARK: - Setup UI Methods
@@ -114,6 +115,10 @@ final class CartViewController: UIViewController {
         ])
     }
     
+    private func setupTargets() {
+        goToPayButton.addTarget(self, action: #selector(goToPayment), for: .touchUpInside)
+    }
+    
     // MARK: - Setup Methods
     
     func calculateTotal() {
@@ -121,6 +126,16 @@ final class CartViewController: UIViewController {
         let totalPrice = nftData.reduce(0) { $0 + $1.price }
         let priceString = String(totalPrice).replacingOccurrences(of: ".", with: ",")
         totalCost.text = "\(priceString) ETH"
+    }
+    
+    // MARK: - Actions
+    
+    @objc
+    private func goToPayment() {
+        let paymentViewController = PaymentViewController()
+        paymentViewController.modalPresentationStyle = .overFullScreen
+
+        present(paymentViewController, animated: true)
     }
 }
 
@@ -148,7 +163,7 @@ extension CartViewController: CartCellDelegate {
         deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
         deleteConfirmationViewController.delegate = self
 
-          present(deleteConfirmationViewController, animated: true)
+        present(deleteConfirmationViewController, animated: true)
       }
 }
 

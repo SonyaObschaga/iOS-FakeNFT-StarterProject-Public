@@ -15,6 +15,9 @@ final class PaymentCollectionViewCell: UICollectionViewCell {
     
     private lazy var currencyImage: UIImageView = {
         let image = UIImageView()
+        image.backgroundColor = .baseBlack
+        image.layer.cornerRadius = 6
+        image.clipsToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -57,17 +60,19 @@ final class PaymentCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3.5),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 3.5),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 3.5),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 3.5),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -3.5),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3.5),
             
             currencyImage.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
             currencyImage.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
+            currencyImage.widthAnchor.constraint(equalToConstant: 36),
+            currencyImage.heightAnchor.constraint(equalToConstant: 36),
             
             currencyFullNameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 5),
-            currencyFullNameLabel.leadingAnchor.constraint(equalTo: currencyImage.leadingAnchor, constant: 4),
+            currencyFullNameLabel.leadingAnchor.constraint(equalTo: currencyImage.trailingAnchor, constant: 4),
             
             currencyShortNameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 23),
-            currencyShortNameLabel.leadingAnchor.constraint(equalTo: currencyImage.leadingAnchor, constant: 4),
+            currencyShortNameLabel.leadingAnchor.constraint(equalTo: currencyImage.trailingAnchor, constant: 4),
         ])
     }
     
