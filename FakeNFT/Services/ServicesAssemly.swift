@@ -19,8 +19,12 @@ final class ServicesAssembly {
     }
     
     private let profileStorage: ProfileStorage = ProfileStorageImpl()
-    lazy var modelServiceAgent: FakeNFTModelServiceAgent = {
-        FakeNFTModelServiceAgent(servicesAssembly: self)
+    lazy var modelServiceAgent: FakeNFTModelServiceAgentProtocol = {
+        if FakeNFTService.dataSourceType == .webAPI {
+            return FakeNFTModelServiceAgent(servicesAssembly: self)
+        } else {
+            return FakeNFTService()
+        }
     }()
     var profileService: ProfileService { //Protocol {
         ProfileServiceImpl(networkClient: networkClient, storage: profileStorage)

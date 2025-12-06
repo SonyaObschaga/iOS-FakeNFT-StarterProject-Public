@@ -27,6 +27,7 @@ final class FavoriteNftsViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.showLoading()
         presenter.viewDidLoad()
         setupView()
     }
@@ -61,7 +62,7 @@ final class FavoriteNftsViewController: UIViewController {
         
         return label
     }()
-    private lazy var nftCollectionView: UICollectionView = {
+    lazy var nftCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
@@ -139,15 +140,17 @@ extension FavoriteNftsViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - Privtae functions
-private extension FavoriteNftsViewController {
-    func setupView() {
-        view.backgroundColor = .ypWhiteDay
-        
+extension FavoriteNftsViewController {
+    func toggleControlsVisibility() {
         let showHideElements = likedNFTs.isEmpty
         emptyNftsLabel.isHidden = !showHideElements
         nftCollectionView.isHidden = showHideElements
         headerLabel.isHidden = showHideElements
+    }
+    
+    func setupView() {
+        view.backgroundColor = .ypWhiteDay
+        
         
         addSubViews()
         configureConstraints()
@@ -158,6 +161,8 @@ private extension FavoriteNftsViewController {
         view.addSubview(backButton)
         view.addSubview(headerLabel)
         view.addSubview(nftCollectionView)
+        
+        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {

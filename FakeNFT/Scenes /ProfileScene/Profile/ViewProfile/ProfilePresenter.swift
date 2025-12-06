@@ -8,35 +8,43 @@ import Foundation
 
 final class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewProtocol?
-
+    
     let servicesAssembly: ServicesAssembly
-    let agent: FakeNFTModelServiceAgent
-    let notifications: FakeNFTServiceAgentNotificationsProtocol
+    var agent: FakeNFTModelServiceAgentProtocol
+    //let notifications: FakeNFTServiceAgentNotificationsProtocol
     init(servicesAssembly: ServicesAssembly) {
+        profileLoaded = false
         self.servicesAssembly = servicesAssembly
         agent = servicesAssembly.modelServiceAgent
-        notifications = agent as FakeNFTServiceAgentNotificationsProtocol
+        //notifications = agent as FakeNFTServiceAgentNotificationsProtocol
         addObservers()
     }
     
-    //var profileLoadedNotification: Notification.Name { get }
-    //var profileSavedNotification: Notification.Name { get }
-    //var profileNTFsLoadedNotification: Notification.Name { get }
-
     private var profileLoadingOperationObserver: NSObjectProtocol?
-
+    private var profileSavedOperationObserver: NSObjectProtocol?
+    private var profileLoaded: Bool
+    
     private func addObservers() {
         profileLoadingOperationObserver =
         NotificationCenter.default.addObserver(
-            forName: agent.profileLoadedNotification,
+            forName: FakeNFTModelServicesNotifications.profileLoadedNotification, // agent.profileLoadedNotification,
             object: nil,
             queue: .main
         ) { [weak self] notification in
             guard let self = self else { return }
             self.handleProfileLoadedNotification(notification: notification)
         }
+        profileSavedOperationObserver =
+        NotificationCenter.default.addObserver(
+            forName: FakeNFTModelServicesNotifications.profileSavedNotification, // agent.profileSavedNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self else { return }
+            self.handleProfileSavedNotification(notification: notification)
+        }
     }
-
+    
     private func handleProfileLoadedNotification(notification: Notification) {
         self.view?.hideLoading()
         
@@ -46,7 +54,9 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             // Handle the result
             switch result {
             case .success(let profile):
+                profileLoaded = true
                 self.profileDtoLoaded(profile: profile)
+                print("Profile fetched, name = \(profile.name)")
             case .failure(let error):
                 view?.errorDetected(error: error)
             }
@@ -54,7 +64,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             print("Invalid notification data")
         }
     }
-
+    
     private func handleProfileSavedNotification(notification: Notification) {
         self.view?.hideLoading()
         
@@ -73,7 +83,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             print("Invalid notification data")
         }
     }
-
+    
     
     private func profileDtoLoaded(profile:ProfileDto) {
         view?.unhideControls()  // !
@@ -108,11 +118,20 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         
         view?.profileUpdated(profile: profile)
     }
-  
     
     func viewDidLoad() {
-        view?.hideControls()
-        view?.showLoading()
+        //view?.showLoading()
+        //view?.hideControls()
+        
+        print("Fetching user profile...")
         agent.fetchProfile()
+    }
+    
+    func viewWillAppear()
+    {
+        if (profileLoaded) {
+            let profile = agent.profile
+            view?.updateProfile(name: profile.name, descripton: profile.description, website: profile.website)
+        }
     }
 }

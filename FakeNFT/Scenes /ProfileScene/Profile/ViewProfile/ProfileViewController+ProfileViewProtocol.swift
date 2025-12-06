@@ -10,32 +10,32 @@ import UIKit
 
 extension ProfileViewController: ProfileViewProtocol {
     func updateProfile(name: String?, descripton: String?, website: String?) {
-         nameLabel.text = name
-         bioTextView.text = descripton
-         urlButton.setTitle(website, for: .normal)
-     }
-     
-     func updateNftsCount(nftsCount:Int, likedNftsCount:Int) {
-         // acquiring a background thread from the threads pool
-         DispatchQueue.global().async { [weak self ] in
-             guard let self = self else { return }
-
-             self.tableCells[0].count = nftsCount
-             self.tableCells[1].count = likedNftsCount
-         
-             // scheduling a task to be executed on the main thread asynchronously
-             DispatchQueue.main.async {
-                 let indexPathsToReload = [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)]
-                 self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)
-             }
-         }
-     }
-     
-     func updateAvatar(url: URL?) {
-         // TODO: retrieve image by URL
-          avatarImageView.image = UIImage(named: "Joaquin")
-     }
- 
+        nameLabel.text = name
+        bioTextView.text = descripton
+        urlButton.setTitle(website, for: .normal)
+    }
+    
+    func updateNftsCount(nftsCount:Int, likedNftsCount:Int) {
+        // acquiring a background thread from the threads pool
+        DispatchQueue.global().async { [weak self ] in
+            guard let self = self else { return }
+            
+            self.tableCells[0].count = nftsCount
+            self.tableCells[1].count = likedNftsCount
+            
+            // scheduling a task to be executed on the main thread asynchronously
+            DispatchQueue.main.async {
+                let indexPathsToReload = [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)]
+                self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+            }
+        }
+    }
+    
+    func updateAvatar(url: URL?) {
+        // TODO: retrieve image by URL
+        avatarImageView.image = UIImage(named: "Joaquin")
+    }
+    
     
     func profileUpdated(profile: ProfileDto)
     {
@@ -46,7 +46,6 @@ extension ProfileViewController: ProfileViewProtocol {
             self.urlButton.setTitle(profile.website, for: .normal)
         }
     }
-
     
     func errorDetected(error: any Error)
     {
@@ -55,20 +54,18 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func hideControls() {
-        // ? how to keep activity indicator not hidden
-        if let bc = view.backgroundColor {
-            originalBackgroundColor = bc
+        for sw in view.subviews {
+            sw.alpha = 0
         }
-        view.backgroundColor = .black
-        view.alpha = 0
-        
         activityIndicator.alpha = 1
-   }
+    }
     
     func unhideControls() {
-        view.backgroundColor = originalBackgroundColor
         view.alpha = 1
+        
+        for sw in view.subviews {
+            sw.alpha = 1
+        }
     }
-
-  
- }
+    
+}

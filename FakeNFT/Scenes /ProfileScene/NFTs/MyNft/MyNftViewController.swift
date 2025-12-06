@@ -9,10 +9,9 @@ import UIKit
 
 final class MyNftViewController: UIViewController {
 
-    var _nfts : [NFTModel]? // = FakeNFTService.shared.profile.nfts
+    var _nfts : [NFTModel]?
     var nfts: [NFTModel] {
         guard let nftsArray = _nfts else {
-            //assertionFailure("Undefined NFTs array for MyNftViewController")
             return []
         }
         return nftsArray
@@ -26,10 +25,11 @@ final class MyNftViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showLoading()
         presenter.viewDidLoad()
         setupView()
     }
-
+    
     //MARK: - Layout variables
     private lazy var backButton: UIButton = {
         let imageButton = UIImage(resource: .backChevron)
@@ -62,8 +62,13 @@ final class MyNftViewController: UIViewController {
         
         return button
     }()
+    
+    // tableView1 added because of error
+    // reference to member 'reloadData' cannot be resolved without a contextual type
+    var tableView1:UITableView = UITableView()
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.register(MyNftTableViewCell.self, forCellReuseIdentifier: "myNftTableViewCell")
@@ -73,10 +78,10 @@ final class MyNftViewController: UIViewController {
         tableView.delegate = self
         tableView.allowsMultipleSelection = false
         tableView.rowHeight = 140
-        
+        tableView1 = tableView
         return tableView
     }()
-    private lazy var emptyNftsLabel: UILabel = {
+    lazy var emptyNftsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
@@ -132,15 +137,17 @@ extension MyNftViewController: UITableViewDelegate {
 }
 
 //MARK: - Private functions
-private extension MyNftViewController{
-    func setupView() {
-        view.backgroundColor = .ypWhiteDay
-        
+extension MyNftViewController{
+    func toggleControlsVisibility() {
         let showHideElements = nfts.isEmpty
         emptyNftsLabel.isHidden = !showHideElements
         filtersButton.isHidden = showHideElements
         headerLabel.isHidden = showHideElements
         tableView.isHidden = showHideElements
+    }
+    
+    func setupView() {
+        view.backgroundColor = .ypWhiteDay
         
         addSubViews()
         configureConstraints()
@@ -152,6 +159,8 @@ private extension MyNftViewController{
         view.addSubview(filtersButton)
         view.addSubview(headerLabel)
         view.addSubview(tableView)
+        
+        view.addSubview(activityIndicator)  // !
     }
     
     func configureConstraints() {
@@ -187,22 +196,25 @@ private extension MyNftViewController{
         )
         alert.addAction(UIAlertAction(title: "По цене",
                                       style: .default) { _ in
-
+            self.presenter.sortNFTs(by: .byPrice)
         })
         alert.addAction(UIAlertAction(
             title: "По рейтингу",
             style: .default
         ) { _ in
+            self.presenter.sortNFTs(by: .byRating)
         })
         alert.addAction(UIAlertAction(
             title: "По названию",
             style: .default
         ) { _ in
-        })
+            self.presenter.sortNFTs(by: .byName)
+         })
         alert.addAction(UIAlertAction(
             title: "Закрыть",
             style: .cancel
         ) { _ in
+            
         })
         
         self.present(alert, animated: true, completion: nil)

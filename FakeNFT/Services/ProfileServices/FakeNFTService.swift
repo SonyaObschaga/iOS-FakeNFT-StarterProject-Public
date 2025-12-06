@@ -7,25 +7,106 @@
 
 import Foundation
 
-class FakeNFTService: FakeNFTModelServiceProtocol,
-                      FakeNFTModelTestsHelperMethodsProtocol {
+class FakeNFTService: FakeNFTModelServiceAgentProtocol
+                      //FakeNFTModelServiceProtocol,
+                      //FakeNFTModelTestsHelperMethodsProtocol
+{
+    private var _profile: ProfileDto = ProfileDto.EmptyProfile
+    var profile: ProfileDto {
+        get {
+            //guard let p = self.profileModel else {
+            //    assertionFailure("Undefined user profile")
+            //    return ProfileDto.EmptyProfile
+            //}
+            let p = self.profileModel
+            var p2 = _profile
+            p2.name = p.name
+            p2.description = p.description
+            if let w = p.website {
+                p2.website = w
+            }
+            p2.avatar_url = p.avatar
+            p2.nfts = []
+            for i in p.nfts {
+                p2.nfts?.append(i.id)
+            }
+            p2.likes = []
+            for i in p.likedNFTs {
+                p2.likes?.append(i.id)
+            }
+            
+            return p2
+        }
+        set {
+            _profile = newValue
+        }
+    }
+ 
+    var MyNfts: [NFTModel] {
+        get {
+            //guard let p = self.userProfile else {
+            //    assertionFailure("Undefined user profile")
+            //    return []
+            //}
+            return profileModel.nfts // p.nfts
+        }
+        set {
+            //_profile = newValue
+        }
+    }
+ 
+    
+    func fetchProfileMyNFTs() {
+        let result2: Result<[NFTModel], Error>
+        result2 = .success(self.MyNfts )
+
+        NotificationCenter.default.post(
+            name: FakeNFTModelServicesNotifications.profileNTFsLoadedNotification, // self.profileNTFsLoadedNotification,
+            object: self,
+            userInfo: ["Result": result2]
+        )
+        
+ 
+    }
+    
+    func fetchProfileLikedNFTs() {
+        // profileLikedNTFsLoadedNotification
+        let result3: Result<[NFTModel], Error>
+        result3 = .success(self.likedNFTs )
+
+        NotificationCenter.default.post(
+            name: FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification, // self.profileNTFsLoadedNotification,
+            object: self,
+            userInfo: ["Result": result3]
+        )
+   }
+    
     
     public static let shared: FakeNFTService = FakeNFTService()
-    private init() {}
+    init() {
+    }
     
     public static var DEFAULT_USER_INDEX = 1
-    public static var dataSourceType: AppDataSourceType = .mockData
+    public static var dataSourceType: AppDataSourceType = .webAPI
+    //public static var dataSourceType: AppDataSourceType = .mockData
+ 
     private(set) var userDefaults: FakeNFTUserDefaultsKeeperService = FakeNFTUserDefaultsKeeperService()
     
     var operationInProgress: Bool = false  // from FakeNFTModelServiceProtocol => not used here
     
-    private(set) var userProfile: ProfileModel?
+    //private(set)
+    private var _userProfile: ProfileModel = ProfileModel() // ?
     var profileModel: ProfileModel {
-        guard let p = self.userProfile else {
-            assertionFailure("Undefined user profile")
-            return ProfileModel() //TODO: edit
+        get {
+            //guard let p = self._userProfile else {
+            //    assertionFailure("Undefined user profile")
+            //    return ProfileModel() //TODO: edit
+            //}
+            return _userProfile
         }
-        return p
+        set {
+            _userProfile = newValue
+        }
     }
     
     var ProfileModelChanged: ((ProfileModel) -> Void)?
@@ -50,7 +131,18 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         case .webAPI:
             assertionFailure("'WebAPI' источник данных ещё не реализован")
         }
-        userProfile = defaultUserProfile
+        self.profileModel = defaultUserProfile
+        
+        let result: Result<ProfileDto, Error>
+        let profile2 = self.profile
+        result = .success(profile2)
+
+        NotificationCenter.default.post(
+            name: FakeNFTModelServicesNotifications.profileLoadedNotification,
+            object: self,
+            userInfo: ["Result": result]
+        )
+        
         profileFetched = true
     }
     
@@ -192,17 +284,26 @@ class FakeNFTService: FakeNFTModelServiceProtocol,
         }
         backend.saveUserProfile(p)
         
+        let result: Result<ProfileDto, Error>
+        result = .success(p )
+
+        NotificationCenter.default.post(
+            name: FakeNFTModelServicesNotifications.profileSavedNotification, // self.profileSavedNotification,
+            object: self,
+            userInfo: ["Result":result]
+        )
+        
         userDefaults.saveUserDefaults(self.profileModel)
     }
     
     func resetUserDefaults() {
-        userProfile = backend.resetUserDefaults()
+        profileModel = backend.resetUserDefaults()
         userDefaults.saveUserDefaults(profileModel)
         notifyProfileModelChanged()
     }
     
     func loadSavedUserDefaults() {
-        userProfile = userDefaults.loadUserDefaults()
+        profileModel = userDefaults.loadUserDefaults()
         notifyProfileModelChanged()
     }
     

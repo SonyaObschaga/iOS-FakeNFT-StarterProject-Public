@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ProfileViewProtocol: AnyObject, LoadingView {
+protocol ProfileViewProtocol: AnyObject { //, LoadingView {
     func updateProfile(name: String? , descripton: String?, website: String?)
     func updateNftsCount(nftsCount:Int, likedNftsCount:Int)
     func updateAvatar(url: URL?)
@@ -17,5 +17,8 @@ protocol ProfileViewProtocol: AnyObject, LoadingView {
 
     func hideControls()
     func unhideControls()
+    
+    func showLoading()
+    func hideLoading()
 
 }

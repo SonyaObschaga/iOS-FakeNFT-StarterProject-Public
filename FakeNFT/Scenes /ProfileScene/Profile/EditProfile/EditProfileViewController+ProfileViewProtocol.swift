@@ -42,5 +42,13 @@ extension EditProfileViewController: ProfileViewProtocol {
     func unhideControls() {
         // not used here
     }
+    
+    func showLoading() {
+        activityIndicator.startAnimating()
+    }
+
+    func hideLoading() {
+        activityIndicator.stopAnimating()
+    }
 
 }

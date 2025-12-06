@@ -9,15 +9,19 @@ import Foundation
 
 extension MyNftViewController: NFTViewProtocol {
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel]) {
-        self._nfts = nfts
+        DispatchQueue.main.async {
+            self.hideLoading()
+            self._nfts = nfts
+            self.toggleControlsVisibility()
+            self.tableView1.reloadData()
+        }
     }
-    
-    
-       func errorDetected(error: any Error)
-       {
-           // todo: report error
-           print("Error detected: \(error.localizedDescription)")
-       }
+        
+   func errorDetected(error: any Error)
+   {
+       // todo: report error
+       print("Error detected: \(error.localizedDescription)")
+   }
 
 
 }

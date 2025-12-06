@@ -8,6 +8,12 @@
 import UIKit
 
 final class MyNftTableViewCell: UITableViewCell {
+    
+    private var presenter: NFTPresenterProtocol!
+    func configure (_ presenter: NFTPresenterProtocol) {
+        self.presenter = presenter
+    }
+    
     //MARK: - Layout variables
     private lazy var uiView: UIView = {
         let view = UIView()
@@ -164,6 +170,6 @@ private extension MyNftTableViewCell {
     
     @objc
     func changeLike() {
-    
+        
     }
 }

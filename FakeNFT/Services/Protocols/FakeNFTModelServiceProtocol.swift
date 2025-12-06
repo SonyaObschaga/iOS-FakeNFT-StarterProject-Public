@@ -12,6 +12,9 @@ protocol FakeNFTModelServiceProtocol {
     var operationInProgress: Bool {get}
     
     func fetchProfile()
+    func fetchProfileMyNFTs()
+    func fetchProfileLikedNFTs()
+    
     var myNFTsCount: Int { get}
     var likedNFTsCount: Int { get}
 

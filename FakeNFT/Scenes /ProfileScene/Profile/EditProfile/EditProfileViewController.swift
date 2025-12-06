@@ -190,6 +190,7 @@ private extension EditProfileViewController {
         view.addSubview(descriptionTextField)
         view.addSubview(urlLabel)
         view.addSubview(urlTextField)
+        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {

@@ -8,8 +8,9 @@
 import UIKit
 import SafariServices
 
-final class ProfileViewController: UIViewController, LoadingView {
- 
+//final class ProfileViewController: UIViewController, LoadingView {  // activity indicator doesn't work
+final class ProfileViewController: UIViewController {
+
     var originalBackgroundColor: UIColor = .black
     
     //let profile = FakeNFTService.shared.profile
@@ -24,12 +25,26 @@ final class ProfileViewController: UIViewController, LoadingView {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = .ypBlackDay
         setupView()
-        //hideControls()
+        hideControls()
+        self.showLoading()
         presenter.viewDidLoad()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.viewWillAppear()
+    }
+
+    func showLoading() {
+        activityIndicator.startAnimating()
+    }
+
+    func hideLoading() {
+        activityIndicator.stopAnimating()
+    }
+    
+    
     //MARK: - Layout variables
     private lazy var editButton: UIButton = {
         let imageButton = UIImage(resource: .edit)
@@ -124,7 +139,7 @@ final class ProfileViewController: UIViewController, LoadingView {
         
         return indicator
     }()
-
+    
 }
 
 //MARK: - UITableViewDelegate
@@ -165,7 +180,7 @@ extension ProfileViewController {
         view.backgroundColor = .ypWhiteDay
         navigationController?.navigationBar.isHidden = true
         
-//        fillTableCells()
+        //        fillTableCells()
         fillTableCells(nftsCount: 0, likesCount: 0)
         addSubViews()
         configureConstraints()
@@ -178,6 +193,8 @@ extension ProfileViewController {
         view.addSubview(bioTextView)
         view.addSubview(urlButton)
         view.addSubview(tableView)
+        
+        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {
@@ -215,7 +232,7 @@ extension ProfileViewController {
         let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, false)
         myNftViewController.configure(nftPresenter)
         myNftViewController.hidesBottomBarWhenPushed = true
- 
+        
         return myNftViewController
     }
     private func likedNftViewController() -> FavoriteNftsViewController {
@@ -223,24 +240,11 @@ extension ProfileViewController {
         let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, true)
         myNftViewController.configure(nftPresenter)
         myNftViewController.hidesBottomBarWhenPushed = true
- 
+        
         return myNftViewController
     }
-
+    
     func fillTableCells(nftsCount: Int, likesCount: Int) {
-        //let nftPresenter = NFTPresenter(
-        //         servicesAssembly: self.presenter.servicesAssembly)
-        //let presenter = NFTPresenter(
-        //          servicesAssembly: self.presenter.servicesAssembly)
-        
-        //let myNftViewController = MyNftViewController()
-        //myNftViewController.configure(nftPresenter)
-
-        //let favoriteNftsViewController = FavoriteNftsViewController()
-        //favoriteNftsViewController.configure(presenter)
-        //favoriteNftsViewController.hidesBottomBarWhenPushed = true
- 
-        //myNftViewController.hidesBottomBarWhenPushed = true
         
         tableCells.append(
             ProfileCellModel(
@@ -267,33 +271,36 @@ extension ProfileViewController {
                 })
         )
         tableCells.append(
-                    ProfileCellModel(
-                        name: "О разработчике",
-                        count: nil,
-                        action: { [weak self] in
-                            guard let self = self else { return }
-                            self.openWebView()
-                        })
-                )
+            ProfileCellModel(
+                name: "О разработчике",
+                count: nil,
+                action: { [weak self] in
+                    guard let self = self else { return }
+                    self.openWebView()
+                })
+        )
     }
     
     @objc
     func editProfile() {
         let vc = EditProfileViewController()
-        vc.configure(presenter)
+        
+        let profilePresenter =
+        ProfilePresenter(servicesAssembly:presenter.servicesAssembly)
+        vc.configure(profilePresenter)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }
     
     @objc
-        func openWebView() {
-            if let url = URL(string: "https://practicum.yandex.ru/") {
-                presentSafariViewController(with: url)
-            }
+    func openWebView() {
+        if let url = URL(string: "https://practicum.yandex.ru/") {
+            presentSafariViewController(with: url)
         }
-        
-        private func presentSafariViewController(with url: URL) {
-             let safariVC = SFSafariViewController(url: url)
-             present(safariVC, animated: true)
-        }
- }
+    }
+    
+    private func presentSafariViewController(with url: URL) {
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
+    }
+}
