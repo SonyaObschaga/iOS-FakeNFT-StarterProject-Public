@@ -40,8 +40,7 @@ final class LinePageControl: UIView {
     }
 
     required init?(coder: NSCoder) {
-        assertionFailure("init(coder:) has not been implemented")
-        return nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Functions
