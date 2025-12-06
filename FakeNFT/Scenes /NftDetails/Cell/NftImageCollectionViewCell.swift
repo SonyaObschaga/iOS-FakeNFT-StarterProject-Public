@@ -3,7 +3,6 @@ import UIKit
 final class NftImageCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     // MARK: - Properties
-
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.delegate = self
@@ -33,7 +32,8 @@ final class NftImageCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        assertionFailure("init(coder:) has not been implemented")
+        return nil
     }
 
     // MARK: - Functions
