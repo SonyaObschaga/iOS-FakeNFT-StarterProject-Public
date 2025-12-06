@@ -93,6 +93,8 @@ private extension FavoriteNftsCollectionViewCell {
         contentView.addSubview(ratingImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(costLabel)
+        
+        
     }
     
     func configureConstraints() {

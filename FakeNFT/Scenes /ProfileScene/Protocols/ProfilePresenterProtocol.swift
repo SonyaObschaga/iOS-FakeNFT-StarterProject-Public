@@ -6,6 +6,9 @@
 //
 
 protocol ProfilePresenterProtocol: AnyObject {
+    var servicesAssembly: ServicesAssembly {get}
     var view: ProfileViewProtocol? { get set }
     func viewDidLoad()
+    func viewWillAppear()
+    func updateProfile(profile: ProfileDto)
 }

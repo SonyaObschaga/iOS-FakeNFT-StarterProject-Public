@@ -8,6 +8,7 @@
 import Foundation
 
 class FakeNFTMockDataBackendService: FakeNFTBackendServiceProtocol {
+    
     func saveUserProfile(_ profile: ProfileDto) {
         print("TODO: MockDataFakeNFTService.saveUserProfile")
     }
