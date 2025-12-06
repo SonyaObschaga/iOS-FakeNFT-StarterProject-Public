@@ -233,10 +233,10 @@ final class CollectionViewController: UIViewController {
         let rowSpacing: CGFloat = 9
         let initialHeight =
             (numberOfRows * cellWidth) + ((numberOfRows - 1) * rowSpacing)
-
-        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(
+        let heightConstraint = collectionView.heightAnchor.constraint(
             equalToConstant: initialHeight
         )
+        collectionViewHeightConstraint = heightConstraint
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(
@@ -255,13 +255,14 @@ final class CollectionViewController: UIViewController {
                 equalTo: scrollView.widthAnchor,
                 constant: -32
             ),
-            collectionViewHeightConstraint!,
+            heightConstraint,
             collectionView.bottomAnchor.constraint(
                 equalTo: scrollView.contentLayoutGuide.bottomAnchor,
                 constant: -16
             ),
         ])
     }
+
     private func setupConstraints() {
         view.addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -290,7 +291,10 @@ extension CollectionViewController: CollectionViewProtocol {
     ) {
         titleLabel.text = title
         descriptionLabel.text = description
-        authorLabel.text = author
+        authorLabel.text = NSLocalizedString(
+        "collectionAuthor",
+        comment: "Автор коллекции"
+    )+": \(author)"
         topImage.kf.setImage(with: coverURL)
     }
 
@@ -330,11 +334,18 @@ extension CollectionViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell =
-            collectionView.dequeueReusableCell(
+        guard
+            let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "CollectionCell",
                 for: indexPath
-            ) as! CollectionCell
+            ) as? CollectionCell
+        else {
+            let fallbackCell = CollectionCell(frame: .zero)
+            assertionFailure(
+                "Failed to dequeue CollectionCell with identifier 'CollectionCell'"
+            )
+            return fallbackCell
+        }
 
         guard let nftItem = presenter?.nft(at: indexPath.item) else {
             return cell
@@ -352,6 +363,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,

@@ -2,7 +2,7 @@ import UIKit
 
 final class TabBarController: UITabBarController {
 
-    var servicesAssembly: ServicesAssembly!
+    var servicesAssembly: ServicesAssembly?
 
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
@@ -13,19 +13,26 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        guard let servicesAssembly = servicesAssembly else {
+            assertionFailure("servicesAssembly must be set before viewDidLoad")
+            return
+        }
+
         let catalogController = CatalogViewController(
             servicesAssembly: servicesAssembly
         )
-        
+
         let presenter = CatalogPresenter(
-                collectionsService: servicesAssembly.collectionsService
-            )
+            collectionsService: servicesAssembly.collectionsService
+        )
         presenter.view = catalogController
         catalogController.presenter = presenter
-            
+
         catalogController.tabBarItem = catalogTabBarItem
-        
-        let navigationController = UINavigationController(rootViewController: catalogController)
+
+        let navigationController = UINavigationController(
+            rootViewController: catalogController
+        )
         navigationController.tabBarItem = catalogTabBarItem
         viewControllers = [navigationController]
 

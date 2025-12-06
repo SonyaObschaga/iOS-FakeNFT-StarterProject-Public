@@ -16,6 +16,11 @@ protocol CollectionPresenterProtocol {
 }
 
 final class CollectionPresenter: CollectionPresenterProtocol {
+    private enum Constants {
+        static let profileId = "1"
+        static let orderId = "1"
+    }
+
     weak var view: CollectionViewProtocol?
     private let input: CollectionInput
     private let collectionsService: CollectionsService
@@ -50,7 +55,8 @@ final class CollectionPresenter: CollectionPresenterProtocol {
     }
 
     private func loadProfile() {
-        profileService.loadProfile(profileId: "1") { [weak self] result in
+        profileService.loadProfile(profileId: Constants.profileId) {
+            [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -97,7 +103,8 @@ final class CollectionPresenter: CollectionPresenterProtocol {
     }
 
     private func loadOrder() {
-        orderService.loadOrder(orderId: "1") { [weak self] result in
+        orderService.loadOrder(orderId: Constants.orderId) {
+            [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -201,7 +208,10 @@ final class CollectionPresenter: CollectionPresenterProtocol {
     }
 
     private func updateOrder(for index: Int) {
-        orderService.updateOrder(orderId: "1", nfts: currentCartArray) {
+        orderService.updateOrder(
+            orderId: Constants.orderId,
+            nfts: currentCartArray
+        ) {
             [weak self] result in
             guard let self = self else { return }
 
@@ -229,7 +239,10 @@ final class CollectionPresenter: CollectionPresenterProtocol {
     }
 
     private func updateProfileLikes(for index: Int) {
-        profileService.updateProfile(profileId: "1", likes: currentLikesArray) {
+        profileService.updateProfile(
+            profileId: Constants.profileId,
+            likes: currentLikesArray
+        ) {
             [weak self] result in
             guard let self = self else { return }
 

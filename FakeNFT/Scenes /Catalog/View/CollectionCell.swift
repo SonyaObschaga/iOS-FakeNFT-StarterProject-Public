@@ -5,11 +5,11 @@
 //  Created by Илья on 29.11.2025.
 //
 
-import UIKit
 import Kingfisher
+import UIKit
 
 final class CollectionCell: UICollectionViewCell {
-    
+
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -18,7 +18,7 @@ final class CollectionCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
@@ -27,7 +27,7 @@ final class CollectionCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10, weight: .medium)
@@ -42,7 +42,7 @@ final class CollectionCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
-    
+
     private let favoriteImageView: UIImageView = {
         let fiv = UIImageView()
         fiv.contentMode = .scaleAspectFill
@@ -51,7 +51,7 @@ final class CollectionCell: UICollectionViewCell {
         fiv.translatesAutoresizingMaskIntoConstraints = false
         return fiv
     }()
-    
+
     private let ratingView: UIImageView = {
         let rv = UIImageView()
         rv.contentMode = .scaleAspectFill
@@ -59,14 +59,13 @@ final class CollectionCell: UICollectionViewCell {
         rv.translatesAutoresizingMaskIntoConstraints = false
         return rv
     }()
-    
-   
+
     private let titlePriceStack: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private let verticalStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -76,103 +75,154 @@ final class CollectionCell: UICollectionViewCell {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
+
     var onFavoriteTap: (() -> Void)?
     var onCartTap: (() -> Void)?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
     }
-    
+
     required init?(coder: NSCoder) { fatalError() }
-    
-    
+
     private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(favoriteImageView)
         contentView.addSubview(ratingView)
         contentView.addSubview(verticalStack)
         contentView.addSubview(cartImageView)
-        
+
         titlePriceStack.addSubview(titleLabel)
         titlePriceStack.addSubview(priceLabel)
         verticalStack.addArrangedSubview(titlePriceStack)
-      
+
         favoriteImageView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(favoriteTapped))
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(favoriteTapped)
+        )
         favoriteImageView.addGestureRecognizer(tapGesture)
-        
+
         cartImageView.isUserInteractionEnabled = true
-                let cartTapGesture = UITapGestureRecognizer(target: self, action: #selector(cartTapped))
-                cartImageView.addGestureRecognizer(cartTapGesture)
+        let cartTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(cartTapped)
+        )
+        cartImageView.addGestureRecognizer(cartTapGesture)
     }
-    
+
     func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalTo: contentView.widthAnchor), // квадрат
-            favoriteImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            favoriteImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            imageView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
+            imageView.heightAnchor.constraint(equalTo: contentView.widthAnchor),  // квадрат
+            favoriteImageView.topAnchor.constraint(
+                equalTo: contentView.topAnchor
+            ),
+            favoriteImageView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
             favoriteImageView.widthAnchor.constraint(equalToConstant: 40),
             favoriteImageView.heightAnchor.constraint(equalToConstant: 40),
-            ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            ratingView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingView.topAnchor.constraint(
+                equalTo: imageView.bottomAnchor,
+                constant: 8
+            ),
+            ratingView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
             ratingView.heightAnchor.constraint(equalToConstant: 12),
-            verticalStack.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 4),
-            verticalStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            verticalStack.trailingAnchor.constraint(lessThanOrEqualTo: cartImageView.leadingAnchor, constant: -8),
-            verticalStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            
+            verticalStack.topAnchor.constraint(
+                equalTo: ratingView.bottomAnchor,
+                constant: 4
+            ),
+            verticalStack.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            verticalStack.trailingAnchor.constraint(
+                lessThanOrEqualTo: cartImageView.leadingAnchor,
+                constant: -8
+            ),
+            verticalStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: contentView.bottomAnchor
+            ),
+
             titlePriceStack.widthAnchor.constraint(equalToConstant: 68),
             titlePriceStack.heightAnchor.constraint(equalToConstant: 40),
-            
-            titleLabel.topAnchor.constraint(equalTo: titlePriceStack.topAnchor, constant: 1),
-            titleLabel.leadingAnchor.constraint(equalTo: titlePriceStack.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titlePriceStack.trailingAnchor),
+
+            titleLabel.topAnchor.constraint(
+                equalTo: titlePriceStack.topAnchor,
+                constant: 1
+            ),
+            titleLabel.leadingAnchor.constraint(
+                equalTo: titlePriceStack.leadingAnchor
+            ),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: titlePriceStack.trailingAnchor
+            ),
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
-            
-            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: titlePriceStack.leadingAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: titlePriceStack.trailingAnchor),
+
+            priceLabel.topAnchor.constraint(
+                equalTo: titleLabel.bottomAnchor,
+                constant: 4
+            ),
+            priceLabel.leadingAnchor.constraint(
+                equalTo: titlePriceStack.leadingAnchor
+            ),
+            priceLabel.trailingAnchor.constraint(
+                equalTo: titlePriceStack.trailingAnchor
+            ),
             priceLabel.heightAnchor.constraint(equalToConstant: 12),
-            priceLabel.bottomAnchor.constraint(equalTo: titlePriceStack.bottomAnchor, constant: -1),
-            
-            cartImageView.topAnchor.constraint(equalTo: verticalStack.topAnchor),
-            cartImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            priceLabel.bottomAnchor.constraint(
+                equalTo: titlePriceStack.bottomAnchor,
+                constant: -1
+            ),
+
+            cartImageView.topAnchor.constraint(
+                equalTo: verticalStack.topAnchor
+            ),
+            cartImageView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
             cartImageView.widthAnchor.constraint(equalToConstant: 40),
-            cartImageView.heightAnchor.constraint(equalToConstant: 40)
+            cartImageView.heightAnchor.constraint(equalToConstant: 40),
         ])
     }
-    
+
     @objc private func favoriteTapped() {
-            onFavoriteTap?()
-        }
-    
+        onFavoriteTap?()
+    }
+
     @objc private func cartTapped() {
-            onCartTap?()
-        }
+        onCartTap?()
+    }
     // MARK: - Configure
     func configure(with model: NFTItem) {
         imageView.kf.setImage(with: model.imageURL)
-        
+
         titleLabel.text = model.title
-        
-        favoriteImageView.image = model.isFavorite
+
+        favoriteImageView.image =
+            model.isFavorite
             ? UIImage(resource: .likeButtonOn)
             : UIImage(resource: .likeButtonOff)
-        
+
         ratingView.image = ratingImage(for: Int(model.rating))
         priceLabel.text = "\(model.price) ETH"
-        
-        cartImageView.image = model.isInCart
+
+        cartImageView.image =
+            model.isInCart
             ? UIImage(resource: .deleteFromCart)
             : UIImage(resource: .addToCart)
     }
-    
+
     private func ratingImage(for rating: Int) -> UIImage? {
         switch rating {
         case 0: return UIImage(resource: .rating0)
@@ -185,4 +235,3 @@ final class CollectionCell: UICollectionViewCell {
         }
     }
 }
-

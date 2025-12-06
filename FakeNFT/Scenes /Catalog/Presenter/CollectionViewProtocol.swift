@@ -8,9 +8,14 @@
 import Foundation
 
 protocol CollectionViewProtocol: AnyObject {
-    func displayCollection(title: String, description: String, author: String, coverURL: URL)
+    func displayCollection(
+        title: String,
+        description: String,
+        author: String,
+        coverURL: URL
+    )
     func reloadNFTs()
-    func reloadNFT(at index: Int) 
+    func reloadNFT(at index: Int)
     func showLoading()
     func hideLoading()
 }
