@@ -291,10 +291,11 @@ extension CollectionViewController: CollectionViewProtocol {
     ) {
         titleLabel.text = title
         descriptionLabel.text = description
-        authorLabel.text = NSLocalizedString(
-        "collectionAuthor",
-        comment: "Автор коллекции"
-    )+": \(author)"
+        authorLabel.text =
+            NSLocalizedString(
+                "collectionAuthor",
+                comment: "Автор коллекции"
+            ) + ": \(author)"
         topImage.kf.setImage(with: coverURL)
     }
 
