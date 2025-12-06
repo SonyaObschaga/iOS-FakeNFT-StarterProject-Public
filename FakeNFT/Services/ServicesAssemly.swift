@@ -1,4 +1,3 @@
-
 final class ServicesAssembly {
 
     private let networkClient: NetworkClient
@@ -17,9 +16,5 @@ final class ServicesAssembly {
             networkClient: networkClient,
             storage: nftStorage
         )
-    }
-    
-    var userService: UserServiceProtocol {
-        return UserService(networkClient: networkClient)
     }
 }

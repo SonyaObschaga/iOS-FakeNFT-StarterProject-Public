@@ -11,8 +11,7 @@ final class TestCatalogViewController: UIViewController {
     }
 
     required init?(coder: NSCoder) {
-        assertionFailure("init(coder:) has not been implemented")
-        return nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
