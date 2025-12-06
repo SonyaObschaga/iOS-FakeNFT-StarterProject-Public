@@ -10,9 +10,9 @@ import Foundation
 struct NFTItem {
     let id: String
     let title: String
-    let imageURL: URL
+    let imageURL: URL?
     let rating: Double
-    let priceETH: Double
+    let price: Double
     var isFavorite: Bool    
     var isInCart: Bool
 }
