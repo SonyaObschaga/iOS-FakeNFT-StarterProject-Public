@@ -8,7 +8,7 @@
 import UIKit
 
 final class ProfileTableViewCell: UITableViewCell {
-    static let cellName = "profileTableViewCell"
+    static let reuseIdentifier = "profileTableViewCell"
     
     //MARK: - Layout variables
     private lazy var nameLabel: UILabel = {

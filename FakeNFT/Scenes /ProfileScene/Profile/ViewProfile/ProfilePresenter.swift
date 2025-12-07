@@ -16,7 +16,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         profileLoaded = false
         self.servicesAssembly = servicesAssembly
         agent = servicesAssembly.modelServiceAgent
-        //notifications = agent as FakeNFTServiceAgentNotificationsProtocol
         addObservers()
     }
     

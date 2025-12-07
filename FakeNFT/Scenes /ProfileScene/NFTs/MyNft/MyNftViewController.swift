@@ -7,15 +7,9 @@
 
 import UIKit
 
-final class MyNftViewController: UIViewController {
+final class MyNftViewController: UIViewController, LoadingView {
 
-    var _nfts : [NFTModel]?
-    var nfts: [NFTModel] {
-        guard let nftsArray = _nfts else {
-            return []
-        }
-        return nftsArray
-    }
+    var nfts : [NFTModel] = []
     
     private var presenter: NFTPresenterProtocol!
     func configure (_ presenter: NFTPresenterProtocol) {
@@ -25,12 +19,12 @@ final class MyNftViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         showLoading()
         presenter.viewDidLoad()
-        setupView()
     }
     
-    //MARK: - Layout variables
+    // MARK: - Layout variables
     private lazy var backButton: UIButton = {
         let imageButton = UIImage(resource: .backChevron)
         
@@ -108,7 +102,7 @@ final class MyNftViewController: UIViewController {
     }()
 }
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension MyNftViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nfts.count
@@ -128,7 +122,7 @@ extension MyNftViewController: UITableViewDataSource {
     }
 }
 
-//MARK: - UITableViewDelegate
+// MARK: - UITableViewDelegate
 extension MyNftViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectCell(cellIndex: indexPath.row)
@@ -136,7 +130,7 @@ extension MyNftViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - Private functions
+// MARK: - Private functions
 extension MyNftViewController{
     func toggleControlsVisibility() {
         let showHideElements = nfts.isEmpty
@@ -159,8 +153,6 @@ extension MyNftViewController{
         view.addSubview(filtersButton)
         view.addSubview(headerLabel)
         view.addSubview(tableView)
-        
-        view.addSubview(activityIndicator)  // !
     }
     
     func configureConstraints() {
@@ -195,29 +187,21 @@ extension MyNftViewController{
             preferredStyle: .actionSheet
         )
         alert.addAction(UIAlertAction(title: "По цене",
-                                      style: .default) { _ in
-            self.presenter.sortNFTs(by: .byPrice)
+                                      style: .default) { [weak self] _ in
+            self?.presenter.sortNFTs(by: .byPrice)
         })
-        alert.addAction(UIAlertAction(
-            title: "По рейтингу",
-            style: .default
-        ) { _ in
-            self.presenter.sortNFTs(by: .byRating)
+        alert.addAction(UIAlertAction(title: "По рейтингу",
+                                      style: .default) { [weak self] _ in
+            self?.presenter.sortNFTs(by: .byRating)
         })
-        alert.addAction(UIAlertAction(
-            title: "По названию",
-            style: .default
-        ) { _ in
-            self.presenter.sortNFTs(by: .byName)
-         })
-        alert.addAction(UIAlertAction(
-            title: "Закрыть",
-            style: .cancel
-        ) { _ in
-            
+        alert.addAction(UIAlertAction(title: "По названию",
+                                      style: .default) { [weak self] _ in
+            self?.presenter.sortNFTs(by: .byName)
         })
+        alert.addAction(UIAlertAction(title: "Закрыть",
+                                      style: .cancel))
         
-        self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true)
     }
     
     @objc

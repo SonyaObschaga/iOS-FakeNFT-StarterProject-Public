@@ -12,7 +12,7 @@ extension FavoriteNftsViewController: NFTViewProtocol {
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel]) {
         DispatchQueue.main.async {
             self.hideLoading()
-            self._likedNFTs = likedNFTs
+            self.likedNFTs = likedNFTs
             self.toggleControlsVisibility()
             self.nftCollectionView.reloadData()
         }
@@ -20,7 +20,6 @@ extension FavoriteNftsViewController: NFTViewProtocol {
     
    func errorDetected(error: any Error)
    {
-       // todo: report error
        print("Error detected: \(error.localizedDescription)")
    }
 

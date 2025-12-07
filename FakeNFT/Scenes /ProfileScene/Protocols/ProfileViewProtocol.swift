@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ProfileViewProtocol: AnyObject { //, LoadingView {
+protocol ProfileViewProtocol: AnyObject {
     func updateProfile(name: String? , descripton: String?, website: String?)
     func updateNftsCount(nftsCount:Int, likedNftsCount:Int)
     func updateAvatar(url: URL?)

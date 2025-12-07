@@ -8,8 +8,7 @@
 import UIKit
 import SafariServices
 
-//final class ProfileViewController: UIViewController, LoadingView {  // activity indicator doesn't work
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, LoadingView {
 
     var originalBackgroundColor: UIColor = .black
     
@@ -34,14 +33,6 @@ final class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter.viewWillAppear()
-    }
-
-    func showLoading() {
-        activityIndicator.startAnimating()
-    }
-
-    func hideLoading() {
-        activityIndicator.stopAnimating()
     }
     
     
@@ -111,7 +102,7 @@ final class ProfileViewController: UIViewController {
         
         tableView.register(
             ProfileTableViewCell.self,
-            forCellReuseIdentifier: ProfileTableViewCell.cellName
+            forCellReuseIdentifier: ProfileTableViewCell.reuseIdentifier
         )
         tableView.alwaysBounceVertical = false
         tableView.separatorStyle = .none
@@ -158,7 +149,7 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: ProfileTableViewCell.cellName,
+            withIdentifier: ProfileTableViewCell.reuseIdentifier,
             for: indexPath
         ) as? ProfileTableViewCell else {
             return UITableViewCell()
@@ -193,8 +184,6 @@ extension ProfileViewController {
         view.addSubview(bioTextView)
         view.addSubview(urlButton)
         view.addSubview(tableView)
-        
-        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {
@@ -229,7 +218,7 @@ extension ProfileViewController {
     
     private func myNftViewController() -> MyNftViewController {
         let myNftViewController = MyNftViewController()
-        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, false)
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, isFavoritesPresenter: false)
         myNftViewController.configure(nftPresenter)
         myNftViewController.hidesBottomBarWhenPushed = true
         
@@ -237,7 +226,7 @@ extension ProfileViewController {
     }
     private func likedNftViewController() -> FavoriteNftsViewController {
         let myNftViewController = FavoriteNftsViewController()
-        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, true)
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, isFavoritesPresenter: true)
         myNftViewController.configure(nftPresenter)
         myNftViewController.hidesBottomBarWhenPushed = true
         

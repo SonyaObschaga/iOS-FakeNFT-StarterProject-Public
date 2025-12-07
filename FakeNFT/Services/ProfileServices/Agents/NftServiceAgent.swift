@@ -19,7 +19,7 @@ final class NftServiceAgent {
         self.service = service
     }
 
-    var nft: Nft = Nft.EmptyNft
+    var nft: Nft = Nft.emptyNft
     
     var loadingProgress: Bool = false
     

@@ -31,7 +31,6 @@ extension EditProfileViewController: ProfileViewProtocol {
     }
  
     func errorDetected(error: any Error) {
-        // todo: report error
         print("Error detected: \(error.localizedDescription)")
     }
     

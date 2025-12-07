@@ -1,63 +1,68 @@
-//
-//  FavoriteNftsCollectionViewCell.swift
-//  FakeNFT
-//
-//  Created by Damir Salakhetdinov on 23/11/25.
-//
-
 import UIKit
 import Kingfisher
 
 final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
-    static let cellName = "favoriteNftsCell"
+    static let reuseIdentifier = "favoriteNftsCell"
     
-    //MARK: - Layout variables
+    // MARK: - Layout variables
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .red
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
-        
         return imageView
     }()
+    
     private lazy var likeButton: UIButton = {
         let imageButton = UIImage(named: "Like Button Off")
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
         button.layer.cornerRadius = 12
         button.setImage(imageButton, for: .normal)
         button.addTarget(self, action: #selector(changeLike), for: .touchUpInside)
-        
         return button
     }()
+    
     private lazy var ratingImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Rating_3"))
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
-        
         return imageView
     }()
+    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlackDay
-        
         return label
     }()
+    
     private lazy var costLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .regular)
         label.textColor = .ypBlackDay
-        //label.text = "1,78 ETH"
-        
         return label
     }()
+    
+    // MARK: - Init
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+        setupConstraints()
+    }
+    
+    // MARK: - Configuration
     
     func configureCell(likedNFT: NFTModel) {
         backgroundColor = .ypWhiteDay
@@ -65,39 +70,50 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
         nameLabel.text = likedNFT.nftName
         costLabel.text = "\(likedNFT.price) ETH"
         ratingImageView.image = UIImage(named: "Rating_\(likedNFT.rating ?? 1)")
-        if likedNFT.isLiked {
-            likeButton.setImage(UIImage(named: "Like Button On"), for: .normal)
-        } else {
-            likeButton.setImage(UIImage(named: "Like Button Off"), for: .normal)
-        }
+        
+        let likeImage = likedNFT.isLiked
+        ? UIImage(named: "Like Button On")
+        : UIImage(named: "Like Button Off")
+        likeButton.setImage(likeImage, for: .normal)
         
         nftImageView.kf.indicatorType = .activity
-        if let url = URL( string: likedNFT.images[0]) {
-            nftImageView.kf.setImage(with: url,
-                                     placeholder: UIImage(named: "placeholder"))
-            {
-                [weak self] _ in self?.setNeedsLayout()
+        
+        if let url = URL(string: likedNFT.images[0]) {
+            nftImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "placeholder")
+            ) { [weak self] _ in
+                self?.setNeedsLayout()
             }
         }
+    }
+    
+    // MARK: - Reuse
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
         
-        addSubViews()
-        configureConstraints()
+        nftImageView.image = nil
+        nameLabel.text = nil
+        costLabel.text = nil
+        
+        nftImageView.kf.cancelDownloadTask()
     }
 }
 
-//MARK: - Private functions
+// MARK: - Private setup functions
+
 private extension FavoriteNftsCollectionViewCell {
-    func addSubViews() {
+    
+    func setupUI() {
         contentView.addSubview(nftImageView)
         contentView.addSubview(likeButton)
         contentView.addSubview(ratingImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(costLabel)
-        
-        
     }
     
-    func configureConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -123,6 +139,6 @@ private extension FavoriteNftsCollectionViewCell {
     
     @objc
     func changeLike() {
-        
+        // TODO: смена лайка
     }
 }

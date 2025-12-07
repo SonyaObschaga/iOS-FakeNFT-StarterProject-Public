@@ -7,16 +7,9 @@
 
 import UIKit
 
-final class FavoriteNftsViewController: UIViewController {
+final class FavoriteNftsViewController: UIViewController, LoadingView {
  
-    var _likedNFTs : [NFTModel]?
-    var likedNFTs: [NFTModel] {
-        guard let nftsArray = _likedNFTs else {
-            //assertionFailure("Undefined NFTs array for FavoriteNftsViewController")
-            return []
-        }
-        return nftsArray
-    }
+    var likedNFTs : [NFTModel] = []
 
     private var presenter: NFTPresenterProtocol!
     func configure (_ presenter: NFTPresenterProtocol) {
@@ -74,7 +67,7 @@ final class FavoriteNftsViewController: UIViewController {
         
         collectionView.register(
             FavoriteNftsCollectionViewCell.self,
-            forCellWithReuseIdentifier: FavoriteNftsCollectionViewCell.cellName
+            forCellWithReuseIdentifier: FavoriteNftsCollectionViewCell.reuseIdentifier
         )
         
         return collectionView
@@ -110,7 +103,7 @@ extension FavoriteNftsViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: FavoriteNftsCollectionViewCell.cellName,
+            withReuseIdentifier: FavoriteNftsCollectionViewCell.reuseIdentifier,
             for: indexPath
         ) as? FavoriteNftsCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
@@ -161,8 +154,6 @@ extension FavoriteNftsViewController {
         view.addSubview(backButton)
         view.addSubview(headerLabel)
         view.addSubview(nftCollectionView)
-        
-        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {
