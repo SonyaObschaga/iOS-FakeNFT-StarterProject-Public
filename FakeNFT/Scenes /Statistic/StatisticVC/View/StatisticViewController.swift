@@ -22,7 +22,7 @@ final class StatisticViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: StatisticConstants.sortMenuImageName), for: .normal)
         button.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
-        button.tintColor = .ypBlackLight
+        button.tintColor = .primary
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

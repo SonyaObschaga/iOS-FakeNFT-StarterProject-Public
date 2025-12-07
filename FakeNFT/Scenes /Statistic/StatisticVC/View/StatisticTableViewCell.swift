@@ -11,14 +11,14 @@ final class StatisticTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .caption1
         label.textAlignment = .center
-        label.textColor = .ypBlackLight
+        label.textColor = .primary
         return label
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
@@ -27,15 +27,15 @@ final class StatisticTableViewCell: UITableViewCell {
     private let scoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         return label
     }()
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = CellConstants.profileImageCornerRadius
-        imageView.tintColor = .ypBlackLight
+        imageView.tintColor = .primary
         imageView.image = UIImage(systemName: CellConstants.profileImageSystemName)
         imageView.heightAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
@@ -60,7 +60,7 @@ final class StatisticTableViewCell: UITableViewCell {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypLightGrayLight
+        view.backgroundColor = .secondary
         view.layer.cornerRadius = CellConstants.containerCornerRadius
         return view
     }()

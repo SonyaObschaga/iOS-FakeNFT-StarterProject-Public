@@ -10,6 +10,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     private let userService: UserServiceProtocol
     private var users: [User] = []
     private let router: StatisticRouterProtocol
+    private var currentSortOption: SortOption = .rating
     
     // MARK: - Initialization
     init(
@@ -24,6 +25,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     
     // MARK: - Public Interface
     func viewDidLoad() {
+        loadSavedSortOption()
         loadUsers()
     }
     
@@ -48,6 +50,9 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     func didSelectSortOption(_ option: SortOption) {
         guard !option.isCancel else { return }
         
+        currentSortOption = option
+        saveSortOption(option)
+        
         switch option {
         case .name:
             sortByName()
@@ -65,7 +70,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
                 switch result {
                 case .success(let users):
                     self?.users = users
-                    self?.view?.displayUsers(users)
+                    self?.applySavedSortOption()
                 case .failure(let error):
                     self?.view?.showError(
                         message: error.localizedDescription,
@@ -75,6 +80,31 @@ final class StatisticPresenter: StatisticPresenterProtocol {
                     )
                 }
             }
+        }
+    }
+    
+    private func loadSavedSortOption() {
+        if let savedOptionRawValue = UserDefaults.standard.string(forKey: UserDefaultsKeys.sortOption),
+           let savedOption = SortOption(rawValue: savedOptionRawValue) {
+            currentSortOption = savedOption
+        } else {
+            // Значение по умолчанию - по рейтингу
+            currentSortOption = .rating
+        }
+    }
+    
+    private func saveSortOption(_ option: SortOption) {
+        UserDefaults.standard.set(option.rawValue, forKey: UserDefaultsKeys.sortOption)
+    }
+    
+    private func applySavedSortOption() {
+        switch currentSortOption {
+        case .name:
+            sortByName()
+        case .rating:
+            sortByRating()
+        case .cancel:
+            view?.displayUsers(users)
         }
     }
 

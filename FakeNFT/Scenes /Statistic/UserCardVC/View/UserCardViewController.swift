@@ -21,8 +21,8 @@ final class UserCardViewController: UIViewController {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Joaquin Phoenix"
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         return label
     }()
     
@@ -30,7 +30,7 @@ final class UserCardViewController: UIViewController {
         let label = UILabel()
         label.text = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT,и еще больше — на моём сайте. Открыт к коллаборациям."
         label.font = .caption2
-        label.textColor = .ypBlackLight
+        label.textColor = .primary
         label.numberOfLines = 4
         return label
     }()
@@ -53,7 +53,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var webViewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .ypBlackLight
+        button.tintColor = .primary
         button.setTitle("Перейти на сайт пользователя", for: .normal)
         button.titleLabel?.font = .caption1
         button.layer.cornerRadius = 16
@@ -65,7 +65,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var collectionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .ypBlackLight
+        button.tintColor = .primary
         button.backgroundColor = .systemBackground
         
         let containerView = UIView()
@@ -74,13 +74,13 @@ final class UserCardViewController: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = "Коллекция NFT (112)"
-        titleLabel.font = .bodyBold
-        titleLabel.textColor = .ypBlackLight
+        titleLabel.font = .titleMedium
+        titleLabel.textColor = .primary
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let iconImageView = UIImageView()
         iconImageView.image = UIImage(named: "backward")?.withRenderingMode(.alwaysTemplate)
-        iconImageView.tintColor = .ypBlackLight
+        iconImageView.tintColor = .primary
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -162,7 +162,7 @@ final class UserCardViewController: UIViewController {
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+        navigationItem.leftBarButtonItem?.tintColor = .primary
     }
     
     private func setupWebViewButton() {
