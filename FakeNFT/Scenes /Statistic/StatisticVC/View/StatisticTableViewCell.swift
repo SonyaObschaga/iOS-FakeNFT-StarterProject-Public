@@ -19,8 +19,8 @@ final class StatisticTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .headline3
         label.textColor = .ypBlackLight
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -29,6 +29,8 @@ final class StatisticTableViewCell: UITableViewCell {
         label.textAlignment = .right
         label.font = .headline3
         label.textColor = .ypBlackLight
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
     
