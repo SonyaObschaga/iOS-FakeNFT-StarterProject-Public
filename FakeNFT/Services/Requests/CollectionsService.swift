@@ -11,6 +11,7 @@ typealias CollectionsCompletion = (Result<[NFTCollection], Error>) -> Void
 
 protocol CollectionsService {
     func loadCollections(completion: @escaping CollectionsCompletion)
+    func loadCollection(by id: String, completion: @escaping (Result<CollectionDetailResponse, Error>) -> Void)
 }
 
 final class CollectionsServiceImpl: CollectionsService {
@@ -37,6 +38,19 @@ final class CollectionsServiceImpl: CollectionsService {
                 }
                 completion(.success(collections))
                 
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func loadCollection(by id: String, completion: @escaping (Result<CollectionDetailResponse, Error>) -> Void) {
+        let request = CollectionByIdRequest(id: id)
+        
+        networkClient.send(request: request, type: CollectionDetailResponse.self) { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
             case .failure(let error):
                 completion(.failure(error))
             }
