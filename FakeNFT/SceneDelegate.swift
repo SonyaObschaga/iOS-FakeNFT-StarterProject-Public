@@ -16,6 +16,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let splashViewController = SplashViewController()
         
         splashViewController.onFinish = { [weak self] in
+            
             self?.showMainScreen()
         }
         

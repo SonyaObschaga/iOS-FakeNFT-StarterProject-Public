@@ -2,28 +2,28 @@
 //  SplashViewController.swift
 //  FakeNFT
 //
-//  Created by Илья on 07.12.2025.
+//  Created by Илья on 30.11.2025.
 //
 
 import UIKit
 
 final class SplashViewController: UIViewController {
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.isHidden = true
+        return indicator
+    }()
+    
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        // ✅ Можно использовать логотип из Assets или системную иконку
-        imageView.image = UIImage(systemName: "photo.artframe") // Заменить на свой логотип
+        imageView.image = UIImage(resource: .splash)
         imageView.tintColor = .label
         return imageView
-    }()
-    
-    private let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.hidesWhenStopped = true
-        return indicator
     }()
     
     var onFinish: (() -> Void)?
@@ -43,8 +43,8 @@ final class SplashViewController: UIViewController {
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 120),
-            logoImageView.heightAnchor.constraint(equalToConstant: 120),
+            logoImageView.widthAnchor.constraint(equalToConstant: 75),
+            logoImageView.heightAnchor.constraint(equalToConstant: 77.68),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.topAnchor.constraint(
@@ -55,9 +55,6 @@ final class SplashViewController: UIViewController {
     }
     
     private func startAnimation() {
-        activityIndicator.startAnimating()
-        
-        // ✅ Анимация появления логотипа
         logoImageView.alpha = 0
         logoImageView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         
@@ -72,7 +69,6 @@ final class SplashViewController: UIViewController {
             self.logoImageView.transform = .identity
         }
         
-        // ✅ Показывать splash минимум 2 секунды, затем переходить
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             self?.finishSplash()
         }
@@ -89,4 +85,8 @@ final class SplashViewController: UIViewController {
             }
         )
     }
+}
+
+extension SplashViewController: LoadingView {
+
 }
