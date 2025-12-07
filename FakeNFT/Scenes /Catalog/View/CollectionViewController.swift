@@ -7,6 +7,7 @@
 
 import Kingfisher
 import UIKit
+import SafariServices
 
 final class CollectionViewController: UIViewController {
 
@@ -15,6 +16,7 @@ final class CollectionViewController: UIViewController {
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let authorLabel = UILabel()
+    let authorNameLabel = UILabel()
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -162,25 +164,55 @@ final class CollectionViewController: UIViewController {
     private func setupAuthor() {
         scrollView.addSubview(authorLabel)
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
-
         authorLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-
-        NSLayoutConstraint.activate([
-            authorLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 16
-            ),
-            authorLabel.leadingAnchor.constraint(
-                equalTo: scrollView.leadingAnchor,
-                constant: 16
-            ),
-            authorLabel.trailingAnchor.constraint(
-                equalTo: scrollView.trailingAnchor,
-                constant: -16
-            ),
-            authorLabel.heightAnchor.constraint(equalToConstant: 28),
-        ])
+        authorLabel.text = NSLocalizedString(
+                "collectionAuthor",
+                comment: "Автор коллекции"
+            ) + ":"
+        authorLabel.textColor = .label
+        
+       
+        scrollView.addSubview(authorNameLabel)
+           authorNameLabel.translatesAutoresizingMaskIntoConstraints = false
+           authorNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+           authorNameLabel.textColor = .systemBlue  // Синий цвет для ссылки
+           authorNameLabel.isUserInteractionEnabled = true
+           
+           let tapGesture = UITapGestureRecognizer(
+               target: self,
+               action: #selector(openAuthorWebsite)
+           )
+           authorNameLabel.addGestureRecognizer(tapGesture)
+           
+           NSLayoutConstraint.activate([
+            
+               authorLabel.topAnchor.constraint(
+                   equalTo: titleLabel.bottomAnchor,
+                   constant: 16
+               ),
+               authorLabel.leadingAnchor.constraint(
+                   equalTo: scrollView.leadingAnchor,
+                   constant: 16
+               ),
+               authorLabel.heightAnchor.constraint(equalToConstant: 28),
+        
+               authorNameLabel.topAnchor.constraint(
+                   equalTo: authorLabel.topAnchor
+               ),
+               authorNameLabel.leadingAnchor.constraint(
+                   equalTo: authorLabel.trailingAnchor,
+                   constant: 4
+               ),
+               authorNameLabel.trailingAnchor.constraint(
+                   lessThanOrEqualTo: scrollView.trailingAnchor,
+                   constant: -16
+               ),
+               authorNameLabel.heightAnchor.constraint(
+                   equalTo: authorLabel.heightAnchor
+               ),
+           ])
     }
+    
     private func setupDescription() {
         scrollView.addSubview(descriptionLabel)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -280,6 +312,14 @@ final class CollectionViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc
+    private func openAuthorWebsite() {
+        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
+    }
 }
 
 extension CollectionViewController: CollectionViewProtocol {
@@ -291,11 +331,7 @@ extension CollectionViewController: CollectionViewProtocol {
     ) {
         titleLabel.text = title
         descriptionLabel.text = description
-        authorLabel.text =
-            NSLocalizedString(
-                "collectionAuthor",
-                comment: "Автор коллекции"
-            ) + ": \(author)"
+        authorNameLabel.text = author
         topImage.kf.setImage(with: coverURL)
     }
 
