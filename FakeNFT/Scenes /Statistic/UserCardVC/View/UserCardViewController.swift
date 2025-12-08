@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 // MARK: - UserCardViewController
 final class UserCardViewController: UIViewController {
@@ -10,8 +11,9 @@ final class UserCardViewController: UIViewController {
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 35
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
@@ -209,5 +211,11 @@ extension UserCardViewController: UserCardViewProtocol {
     func displayUser(_ user: User) {
         nameLabel.text = user.name
         descriptionLabel.text = "\(user.score)"
+        
+        if let avatarURLString = user.avatar, let avatarURL = URL(string: avatarURLString) {
+            avatarImageView.kf.setImage(with: avatarURL, placeholder: UIImage(systemName: "person.crop.circle.fill"))
+        } else {
+            avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        }
     }
 }

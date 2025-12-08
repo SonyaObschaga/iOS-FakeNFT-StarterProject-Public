@@ -4,6 +4,7 @@ struct User {
     let name: String
     let score: Int
     let website: String?
+    let avatar: String?
 }
 
 // MARK: Sort Options

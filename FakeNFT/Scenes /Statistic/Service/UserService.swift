@@ -17,7 +17,8 @@ final class UserService: UserServiceProtocol {
                     User(
                         name: response.name,
                         score: response.nfts.count,
-                        website: response.website
+                        website: response.website,
+                        avatar: response.avatar
                     )
                 }
                 completion(.success(users))
