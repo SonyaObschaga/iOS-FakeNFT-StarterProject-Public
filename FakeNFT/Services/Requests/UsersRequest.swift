@@ -23,5 +23,6 @@ struct UserResponse: Decodable {
     let nfts: [String]
     let rating: String
     let id: String
+    let description: String?
 }
 

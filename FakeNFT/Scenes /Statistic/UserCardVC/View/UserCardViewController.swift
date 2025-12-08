@@ -210,7 +210,7 @@ final class UserCardViewController: UIViewController {
 extension UserCardViewController: UserCardViewProtocol {
     func displayUser(_ user: User) {
         nameLabel.text = user.name
-        descriptionLabel.text = "\(user.score)"
+        descriptionLabel.text = user.description
         
         if let avatarURLString = user.avatar, let avatarURL = URL(string: avatarURLString) {
             avatarImageView.kf.setImage(with: avatarURL, placeholder: UIImage(systemName: "person.crop.circle.fill"))
