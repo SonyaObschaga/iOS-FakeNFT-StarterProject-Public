@@ -75,7 +75,7 @@ final class StatisticViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: StatisticConstants.sortButtonTableViewSpacing),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: StatisticConstants.leadingInset),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: StatisticConstants.trailingInset),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: StatisticConstants.bottomInset)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: StatisticConstants.bottomInset)
         ])
     }
     
