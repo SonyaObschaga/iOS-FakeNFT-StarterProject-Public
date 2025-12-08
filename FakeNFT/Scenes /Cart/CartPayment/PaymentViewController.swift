@@ -5,6 +5,7 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private properties
     
     private var selectedCurrency: PaymentCurrency?
+    private var presenter: PaymentPresenter?
     
     // MARK: - UI Elements
     
@@ -83,12 +84,14 @@ final class PaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter = PaymentPresenter(view: self)
+        
         view.backgroundColor = .backgroundPrimary
         
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
-        
+
         setupViews()
         setupConstraints()
         setupTargets()
@@ -160,7 +163,7 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mockCurrencies.count
+        presenter?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -168,22 +171,11 @@ extension PaymentViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let currency = mockCurrencies[indexPath.item]
+        guard let currency = presenter?.model(at: indexPath) else { return cell }
         cell.configureCell(with: currency)
         
-        let isSelected = currency.id == selectedCurrency?.id
-            cell.setSelectedState(isSelected)
-        
-        return cell
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PaymentCell", for: indexPath)
-        let currency = mockCurrencies[indexPath.row]
-        //обработать выбранную валюту
-        cell.selectionStyle = .default
-        cell.backgroundColor = .clear
+        let isSelected = currency.id == presenter?.selected?.id
+        cell.setSelectedState(isSelected)
         
         return cell
     }
@@ -191,8 +183,7 @@ extension PaymentViewController: UICollectionViewDataSource {
 
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedCurrency = mockCurrencies[indexPath.item]
-        collectionView.reloadData()
+        presenter?.select(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -213,4 +204,10 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
     }
+}
+
+extension PaymentViewController: PaymentView {
+        func reload() {
+            collectionView.reloadData()
+        }
 }

@@ -2,18 +2,21 @@ import UIKit
 
 final class CartViewController: UIViewController {
     
-    // MARK: - MockData
-    
-    private var nftData: [TestNFTModel] = [TestNFTModel(name: "Atheen", rating: 5, price: 1.15),
-                                           TestNFTModel(name: "Bulbasaur", rating: 3, price: 2.22),
-                                           TestNFTModel(name: "Greena", rating: 1, price: 3.09)]
-    
-    
     // MARK: - Private Properties
     
     private let reuseIdentifier = "CartCell"
+    private var presenter: CartPresenter?
+    private var savedImageForDelete: UIImage?
     
     // MARK: - UI Elements
+    
+    private let sortButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(resource: .sort), for: .normal)
+        button.tintColor = .blackAdaptive
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     private let cartTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -71,15 +74,18 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundPrimary
         
+        presenter = CartPresenter(view: self)
+        
         setupViews()
         setupConstraints()
-        calculateTotal()
+        presenter?.recalcTotal()
         setupTargets()
     }
     
     // MARK: - Setup UI Methods
     
     private func setupViews() {
+        view.addSubview(sortButton)
         view.addSubview(cartTableView)
         view.addSubview(totalOfCartView)
         totalOfCartView.addSubview(totalNft)
@@ -92,7 +98,10 @@ final class CartViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            cartTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            sortButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -9),
+            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
+            
+            cartTableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
             cartTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             cartTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             cartTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -119,15 +128,6 @@ final class CartViewController: UIViewController {
         goToPayButton.addTarget(self, action: #selector(goToPayment), for: .touchUpInside)
     }
     
-    // MARK: - Setup Methods
-    
-    func calculateTotal() {
-        totalNft.text = "\(nftData.count) NFT"
-        let totalPrice = nftData.reduce(0) { $0 + $1.price }
-        let priceString = String(totalPrice).replacingOccurrences(of: ".", with: ",")
-        totalCost.text = "\(priceString) ETH"
-    }
-    
     // MARK: - Actions
     
     @objc
@@ -141,7 +141,7 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nftData.count
+        return presenter?.rows ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -149,7 +149,7 @@ extension CartViewController: UITableViewDataSource {
         
         cell.delegate = self
         
-        let nft = nftData[indexPath.row]
+        guard let nft = presenter?.model(at: indexPath) else { return UITableViewCell() }
         cell.configure(nftName: nft.name, nftImageURL: "", rating: nft.rating, price: nft.price)
         return cell
     }
@@ -157,20 +157,32 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController: CartCellDelegate {
     func didTapDelete(in cell: CartTableViewCell, with image: UIImage) {
-          guard let indexPath = cartTableView.indexPath(for: cell) else { return }
-
-        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, indexPath: indexPath)
-        deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
-        deleteConfirmationViewController.delegate = self
-
-        present(deleteConfirmationViewController, animated: true)
-      }
+        guard let indexPath = cartTableView.indexPath(for: cell) else { return }
+        presenter?.handleDeleteTap(at: indexPath)
+        savedImageForDelete = image
+    }
 }
 
 extension CartViewController: DeleteConfirmationDelegate {
     func didConfirmDelete(at indexPath: IndexPath) {
-        nftData.remove(at: indexPath.row)
-        cartTableView.reloadData()
-        calculateTotal()
+        presenter?.delete(at: indexPath)
+    }
+}
+
+extension CartViewController: CartView {
+    func reload() { cartTableView.reloadData() }
+    
+    func updateTotal(nftCount: Int, totalPrice: String) {
+        totalNft.text = "\(nftCount) NFT"
+        totalCost.text = "\(totalPrice) ETH"
+    }
+    
+    func showDelete(at indexPath: IndexPath) {
+        guard let image = savedImageForDelete else { return }
+        
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, indexPath: indexPath)
+        deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
+        deleteConfirmationViewController.delegate = self
+        present(deleteConfirmationViewController, animated: true)
     }
 }
