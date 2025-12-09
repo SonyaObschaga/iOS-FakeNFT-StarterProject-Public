@@ -26,4 +26,28 @@ extension EditProfileViewController: ProfileViewProtocol {
         // not used here
     }
 
+    func profileUpdated(profile: ProfileDto) {
+        print("Profile updated id = \(profile.id)")
+    }
+ 
+    func errorDetected(error: any Error) {
+        print("Error detected: \(error.localizedDescription)")
+    }
+    
+    func hideControls() {
+        // not used here
+    }
+
+    func unhideControls() {
+        // not used here
+    }
+    
+    func showLoading() {
+        activityIndicator.startAnimating()
+    }
+
+    func hideLoading() {
+        activityIndicator.stopAnimating()
+    }
+
 }

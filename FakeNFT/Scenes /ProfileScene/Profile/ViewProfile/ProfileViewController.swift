@@ -8,8 +8,10 @@
 import UIKit
 import SafariServices
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, LoadingView {
 
+    var originalBackgroundColor: UIColor = .black
+    
     //let profile = FakeNFTService.shared.profile
     var tableCells: [ProfileCellModel] = []
 
@@ -22,11 +24,18 @@ final class ProfileViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = .ypBlackDay
         setupView()
+        hideControls()
+        self.showLoading()
         presenter.viewDidLoad()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.viewWillAppear()
+    }
+    
+    
     //MARK: - Layout variables
     private lazy var editButton: UIButton = {
         let imageButton = UIImage(resource: .edit)
@@ -93,7 +102,7 @@ final class ProfileViewController: UIViewController {
         
         tableView.register(
             ProfileTableViewCell.self,
-            forCellReuseIdentifier: ProfileTableViewCell.cellName
+            forCellReuseIdentifier: ProfileTableViewCell.reuseIdentifier
         )
         tableView.alwaysBounceVertical = false
         tableView.separatorStyle = .none
@@ -105,7 +114,23 @@ final class ProfileViewController: UIViewController {
         
         return tableView
     }()
-
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
+    }()
+    
 }
 
 //MARK: - UITableViewDelegate
@@ -124,7 +149,7 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: ProfileTableViewCell.cellName,
+            withIdentifier: ProfileTableViewCell.reuseIdentifier,
             for: indexPath
         ) as? ProfileTableViewCell else {
             return UITableViewCell()
@@ -146,7 +171,7 @@ extension ProfileViewController {
         view.backgroundColor = .ypWhiteDay
         navigationController?.navigationBar.isHidden = true
         
-//        fillTableCells()
+        //        fillTableCells()
         fillTableCells(nftsCount: 0, likesCount: 0)
         addSubViews()
         configureConstraints()
@@ -191,18 +216,24 @@ extension ProfileViewController {
         ])
     }
     
-//    func fillTableCells()
-    func fillTableCells(nftsCount: Int, likesCount: Int) {
-        let favoriteNftsViewController = FavoriteNftsViewController()
-        let presenter = NFTPresenter()
-        favoriteNftsViewController.configure(presenter)
-        favoriteNftsViewController.hidesBottomBarWhenPushed = true
-        
+    private func myNftViewController() -> MyNftViewController {
         let myNftViewController = MyNftViewController()
-        let nftPresenter = NFTPresenter()
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, isFavoritesPresenter: false)
         myNftViewController.configure(nftPresenter)
-
         myNftViewController.hidesBottomBarWhenPushed = true
+        
+        return myNftViewController
+    }
+    private func likedNftViewController() -> FavoriteNftsViewController {
+        let myNftViewController = FavoriteNftsViewController()
+        let nftPresenter = NFTPresenter(servicesAssembly: self.presenter.servicesAssembly, isFavoritesPresenter: true)
+        myNftViewController.configure(nftPresenter)
+        myNftViewController.hidesBottomBarWhenPushed = true
+        
+        return myNftViewController
+    }
+    
+    func fillTableCells(nftsCount: Int, likesCount: Int) {
         
         tableCells.append(
             ProfileCellModel(
@@ -211,7 +242,7 @@ extension ProfileViewController {
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
-                        myNftViewController,
+                        myNftViewController(),
                         animated: true
                     )
                 })
@@ -223,40 +254,42 @@ extension ProfileViewController {
                 action: { [weak self] in
                     guard let self = self else { return }
                     self.navigationController?.pushViewController(
-                        favoriteNftsViewController,
+                        likedNftViewController(),
                         animated: true
                     )
                 })
         )
         tableCells.append(
-                    ProfileCellModel(
-                        name: "О разработчике",
-                        count: nil,
-                        action: { [weak self] in
-                            guard let self = self else { return }
-                            self.openWebView()
-                        })
-                )
+            ProfileCellModel(
+                name: "О разработчике",
+                count: nil,
+                action: { [weak self] in
+                    guard let self = self else { return }
+                    self.openWebView()
+                })
+        )
     }
     
     @objc
     func editProfile() {
         let vc = EditProfileViewController()
-        vc.configure(presenter)
+        
+        let profilePresenter =
+        ProfilePresenter(servicesAssembly:presenter.servicesAssembly)
+        vc.configure(profilePresenter)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }
     
     @objc
-        func openWebView() {
-            if let url = URL(string: "https://practicum.yandex.ru/") {
-                presentSafariViewController(with: url)
-            }
+    func openWebView() {
+        if let url = URL(string: "https://practicum.yandex.ru/") {
+            presentSafariViewController(with: url)
         }
-        
-        private func presentSafariViewController(with url: URL) {
-             let safariVC = SFSafariViewController(url: url)
-             present(safariVC, animated: true)
-        }
+    }
+    
+    private func presentSafariViewController(with url: URL) {
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
+    }
 }
-

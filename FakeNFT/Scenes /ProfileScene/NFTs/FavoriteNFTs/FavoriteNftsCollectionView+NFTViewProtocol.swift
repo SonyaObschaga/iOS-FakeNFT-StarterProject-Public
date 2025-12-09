@@ -8,8 +8,20 @@
 import Foundation
 
 extension FavoriteNftsViewController: NFTViewProtocol {
+    
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel]) {
-        self._likedNFTs = likedNFTs
+        DispatchQueue.main.async {
+            self.hideLoading()
+            self.likedNFTs = likedNFTs
+            self.toggleControlsVisibility()
+            self.nftCollectionView.reloadData()
+        }
     }
+    
+   func errorDetected(error: any Error)
+   {
+       print("Error detected: \(error.localizedDescription)")
+   }
+
 
 }

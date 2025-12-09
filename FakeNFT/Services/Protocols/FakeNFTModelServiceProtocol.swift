@@ -5,10 +5,16 @@
 //  Created by Damir Salakhetdinov on 27.11.2025.
 //
 
+//
 protocol FakeNFTModelServiceProtocol {
     
-    var profile: ProfileModel {get}
+    var profileModel: ProfileModel {get}
+    var operationInProgress: Bool {get}
+    
     func fetchProfile()
+    func fetchProfileMyNFTs()
+    func fetchProfileLikedNFTs()
+    
     var myNFTsCount: Int { get}
     var likedNFTsCount: Int { get}
 

@@ -7,16 +7,9 @@
 
 import UIKit
 
-final class FavoriteNftsViewController: UIViewController {
+final class FavoriteNftsViewController: UIViewController, LoadingView {
  
-    var _likedNFTs : [NFTModel]?
-    var likedNFTs: [NFTModel] {
-        guard let nftsArray = _likedNFTs else {
-            assertionFailure("Undefined NFTs array for FavoriteNftsViewController")
-            return []
-        }
-        return nftsArray
-    }
+    var likedNFTs : [NFTModel] = []
 
     private var presenter: NFTPresenterProtocol!
     func configure (_ presenter: NFTPresenterProtocol) {
@@ -27,6 +20,7 @@ final class FavoriteNftsViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.showLoading()
         presenter.viewDidLoad()
         setupView()
     }
@@ -61,7 +55,7 @@ final class FavoriteNftsViewController: UIViewController {
         
         return label
     }()
-    private lazy var nftCollectionView: UICollectionView = {
+    lazy var nftCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
@@ -73,10 +67,27 @@ final class FavoriteNftsViewController: UIViewController {
         
         collectionView.register(
             FavoriteNftsCollectionViewCell.self,
-            forCellWithReuseIdentifier: FavoriteNftsCollectionViewCell.cellName
+            forCellWithReuseIdentifier: FavoriteNftsCollectionViewCell.reuseIdentifier
         )
         
         return collectionView
+    }()
+    
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
     }()
 }
 
@@ -92,7 +103,7 @@ extension FavoriteNftsViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: FavoriteNftsCollectionViewCell.cellName,
+            withReuseIdentifier: FavoriteNftsCollectionViewCell.reuseIdentifier,
             for: indexPath
         ) as? FavoriteNftsCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
@@ -122,15 +133,17 @@ extension FavoriteNftsViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - Privtae functions
-private extension FavoriteNftsViewController {
-    func setupView() {
-        view.backgroundColor = .ypWhiteDay
-        
+extension FavoriteNftsViewController {
+    func toggleControlsVisibility() {
         let showHideElements = likedNFTs.isEmpty
         emptyNftsLabel.isHidden = !showHideElements
         nftCollectionView.isHidden = showHideElements
         headerLabel.isHidden = showHideElements
+    }
+    
+    func setupView() {
+        view.backgroundColor = .ypWhiteDay
+        
         
         addSubViews()
         configureConstraints()

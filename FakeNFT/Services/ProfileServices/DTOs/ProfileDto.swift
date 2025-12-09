@@ -7,17 +7,28 @@
 
 import Foundation
 
-struct ProfileDto: Codable {
-    static func dto() -> ProfileDto {
-        return ProfileDto(name:"", avatar_url: "", description: "", website: "", nfts: [], likes:[], id:"")
+struct ProfileDto: Codable, Dto {
+    func dto() -> ProfileDto {
+        return self //ProfileDto(name:"", avatar_url: "", description: "", website: "", nfts: [], likes:[], id:"")
     }
-    var name: String
+    
+    public static var EmptyProfile: ProfileDto = ProfileDto()
+ 
+    func asDictionary() -> [String: String] {
+        return [
+            "name": name,
+            "avatar": avatar_url ?? "",
+            "description": description ?? ""
+        ]
+    }
+    
+    var name: String = ""
     var avatar_url: String?
     var description: String?
-    var website: String
+    var website: String = ""
     var nfts: [String]?
     var likes: [String]?
-    var id: String
+    var id: String = ""
     
     enum CodingKeys: String, CodingKey {
         case name

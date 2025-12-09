@@ -8,22 +8,36 @@
 import UIKit
 
 final class EditProfileViewController: UIViewController {
-    //let profile = FakeNFTService.shared.profile
     private var presenter: ProfilePresenterProtocol!
     func configure (_ presenter: ProfilePresenterProtocol) {
         self.presenter = presenter
         presenter.view = self
     }
-    
+    private var newUrl: String = ""
+ 
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = .ypBlackDay
         setupView()
         presenter.viewDidLoad()
+        nameTextField.addTarget(self, action: #selector(changed), for: .editingChanged)
+        urlTextField.addTarget(self, action: #selector(changed), for: .editingChanged)
+        descriptionTextField.delegate = self
     }
 
     //MARK: - Layout variables
+    private lazy var saveButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Сохранить", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        button.backgroundColor = .ypBlackDay
+        button.tintColor = .ypWhiteUniversal
+        button.layer.cornerRadius = 16
+        button.isHidden = true
+        button.addTarget(self, action: #selector(saveChanges), for: .touchUpInside)
+        return button
+    }()
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -77,8 +91,6 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .ypLightGreyDay
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         
-        //textField.text = profile.name
-        
         return textField
     }()
     private lazy var descriptionLabel: UILabel = {
@@ -100,8 +112,6 @@ final class EditProfileViewController: UIViewController {
         textView.backgroundColor = .ypLightGreyDay
         textView.font = .systemFont(ofSize: 17, weight: .regular)
         textView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
-        
-        //textView.text = profile.description
         
         return textView
     }()
@@ -126,9 +136,23 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .ypLightGreyDay
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         
-        //textField.text = profile.website
-        
         return textField
+    }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+        
+        // Center the activity indicator
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return indicator
     }()
     
 }
@@ -144,6 +168,7 @@ private extension EditProfileViewController {
     }
     
     func addSubViews() {
+        view.addSubview(saveButton)
         view.addSubview(closeButton)
         view.addSubview(editPhotoButton)
         view.addSubview(nameLabel)
@@ -152,10 +177,15 @@ private extension EditProfileViewController {
         view.addSubview(descriptionTextField)
         view.addSubview(urlLabel)
         view.addSubview(urlTextField)
+        view.addSubview(activityIndicator)
     }
     
     func configureConstraints() {
         NSLayoutConstraint.activate([
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            saveButton.heightAnchor.constraint(equalToConstant: 60),
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 9),
             
@@ -195,6 +225,90 @@ private extension EditProfileViewController {
             urlTextField.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
+    
+    func showChangePhotoAlert() {
+        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)
+
+        alert.addTextField { textField in
+            textField.placeholder = "http://example.com/avatar.png"
+            textField.keyboardType = .URL
+            textField.text = "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
+        }
+
+        let cancel = UIAlertAction(title: "Отмена", style: .default)
+
+        let save = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+            guard let text = alert.textFields?.first?.text,
+                  let url = URL(string: text) else { return }
+
+            self?.updateAvatarImage(from: url)
+            self?.saveButton.isHidden = false
+        }
+
+        alert.addAction(cancel)
+        alert.addAction(save)
+
+        present(alert, animated: true)
+    }
+    
+    func updateAvatarImage(from url: URL) {
+        newUrl = url.absoluteString
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self,
+                  let data = try? Data(contentsOf: url),
+                  let image = UIImage(data: data) else { return }
+
+            // Масштабируем изображение до 70x70
+            let size = CGSize(width: 70, height: 70)
+            UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+            image.draw(in: CGRect(origin: .zero, size: size))
+            let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            DispatchQueue.main.async {
+                self.editPhotoButton.setBackgroundImage(resizedImage, for: .normal)
+                self.editPhotoButton.setTitle("", for: .normal)
+
+                // Делаем кнопку круглой
+                self.editPhotoButton.layer.cornerRadius = 35 // половина размера
+                self.editPhotoButton.clipsToBounds = true
+            }
+        }
+        
+ 
+    }
+
+    func removeAvatar() {
+        let placeholder = UIImage(resource: .joaquin).alpha(0.6)
+        editPhotoButton.setBackgroundImage(placeholder, for: .normal)
+        editPhotoButton.setTitle("Сменить \n фото", for: .normal)
+        saveButton.isHidden = false
+    }
+    
+    @objc private func changed() {
+        saveButton.isHidden = false
+    }
+    
+    @objc
+    func saveChanges() {
+        //TODO: Update user profile data
+        
+        var profile = ProfileDto()
+        if let name = nameTextField.text {
+            profile.name = name
+        }
+        profile.description = descriptionTextField.text
+        if let website = urlTextField.text {
+            profile.website = website
+        }
+        if !newUrl.isEmpty {
+            profile.avatar_url = newUrl
+        }
+        
+        presenter.updateProfile(profile: profile)
+        
+        print("Profile info update started")
+    }
 
     @objc
     func close() {
@@ -203,7 +317,33 @@ private extension EditProfileViewController {
     
     @objc
     func changeAvatar() {
-        
+        let sheet = UIAlertController(
+                title: "Фото профиля",
+                message: nil,
+                preferredStyle: .actionSheet
+            )
+
+            let edit = UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+                self?.showChangePhotoAlert()
+            }
+
+            let delete = UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+                self?.removeAvatar()
+            }
+
+            let cancel = UIAlertAction(title: "Отмена", style: .cancel)
+
+            sheet.addAction(edit)
+            sheet.addAction(delete)
+            sheet.addAction(cancel)
+
+            present(sheet, animated: true)
+    }
+}
+
+extension EditProfileViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        saveButton.isHidden = false
     }
 }
 
@@ -217,4 +357,6 @@ private extension EditProfileViewController {
     func tapGesture() {
         descriptionTextField.resignFirstResponder()
     }
+
+
 }
