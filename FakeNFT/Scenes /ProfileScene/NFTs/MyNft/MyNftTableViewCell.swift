@@ -7,10 +7,8 @@ final class MyNftTableViewCell: UITableViewCell {
     static let reuseIdentifier = "MyNftTableViewCell"
 
     private var presenter: NFTPresenterProtocol?
-
-    func configure(presenter: NFTPresenterProtocol) {
-        self.presenter = presenter
-    }
+    
+    private var nftId: String = ""
 
     // MARK: - Layout Views
     private lazy var cardView: UIView = {
@@ -106,7 +104,11 @@ final class MyNftTableViewCell: UITableViewCell {
     }
 
     // MARK: - Configuration
-    func configureCell(nft: NFTModel) {
+    func configureCell(nft: NFTModel, presenter: NFTPresenterProtocol) {
+        self.presenter = presenter
+        let myPresenter = presenter as! NFTPresenter
+        myPresenter.addMyNFTLikedObserver()
+        self.nftId = nft.id
         nameLabel.text = nft.nftName
         costLabel.text = "\(nft.price) ETH"
         authorLabel.text = "От \(nft.nftAuthor)"
@@ -129,6 +131,7 @@ private extension MyNftTableViewCell {
         contentView.addSubview(cardView)
         cardView.addSubview(nftImageView)
         cardView.addSubview(likeButton)
+        likeButton.addTarget(self, action: #selector(changeLike), for: .touchUpInside)
         cardView.addSubview(nameLabel)
         cardView.addSubview(authorLabel)
         cardView.addSubview(ratingImageView)
@@ -172,6 +175,7 @@ private extension MyNftTableViewCell {
     
     @objc
     func changeLike() {
+        presenter?.toggleLike(nftId: nftId)
     }
 }
 

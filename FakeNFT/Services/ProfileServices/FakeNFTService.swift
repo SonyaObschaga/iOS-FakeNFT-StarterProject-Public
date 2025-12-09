@@ -87,8 +87,8 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     }
     
     public static var DEFAULT_USER_INDEX = 1
-    public static var dataSourceType: AppDataSourceType = .webAPI
-    //public static var dataSourceType: AppDataSourceType = .mockData
+//    public static var dataSourceType: AppDataSourceType = .webAPI
+    public static var dataSourceType: AppDataSourceType = .mockData
  
     private(set) var userDefaults: FakeNFTUserDefaultsKeeperService = FakeNFTUserDefaultsKeeperService()
     
@@ -229,6 +229,16 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
         
         nft.isLiked = flagValue
         saveUserProfile()
+        let result: Result<ProfileDto, Error>
+        let profile2 = self.profile
+        result = .success(profile2)
+        NotificationCenter.default.post(
+            name: FakeNFTModelServicesNotifications.likedNFTSavedNotification,
+            object: self,
+            userInfo: ["Result": result]
+        )
+        print("Profile likedNFT updated successfully, C = \(profile.name)")
+        
         notifyProfileModelChanged()
     }
     

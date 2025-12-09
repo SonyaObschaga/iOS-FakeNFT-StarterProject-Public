@@ -14,6 +14,7 @@ final class FakeNFTModelServicesNotifications {
     static let profileSavedNotification = Notification.Name(rawValue: "ProfileSaved")
     static let profileNTFsLoadedNotification = Notification.Name(rawValue: "ProfileNTFsLoaded")
     static let profileLikedNTFsLoadedNotification = Notification.Name(rawValue: "ProfileLikedNTFsLoaded")
+    static let likedNFTSavedNotification = Notification.Name(rawValue: "LikedNFTSaved")
 }
 
 // MARK: - Protocol
@@ -160,7 +161,51 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        // TODO
+        // Инициализация, если nil
+        if profile.likes == nil {
+            profile.likes = []
+        }
+
+        if flagValue {
+            // Лайк
+            if !profile.likes!.contains(nftId) {
+                profile.likes!.append(nftId)
+            }
+        } else {
+            // Анлайк
+            profile.likes!.removeAll { $0 == nftId }
+        }
+
+        // Сохраняем профиль
+//        saveUserProfile()
+        guard self.profile.name != "" else { return }
+        
+        loadingStarted()
+        
+        profileService.saveProfile(id: loadedProfileId, profile: self.profile) { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                NotificationCenter.default.post(
+                    name: FakeNFTModelServicesNotifications.likedNFTSavedNotification,
+                    object: self,
+                    userInfo: ["Result": result]
+                )
+                print("Profile likedNFT updated successfully, C = \(profile.name)")
+                self.loadingCompleted()
+                
+            case .failure(let error):
+                NotificationCenter.default.post(
+                    name: FakeNFTModelServicesNotifications.likedNFTSavedNotification,
+                    object: self,
+                    userInfo: ["Result": result]
+                )
+                print("Error updating likedNFT: \(error)")
+                self.loadingCompleted()
+            }
+        }
     }
     
     func resetUserDefaults() {}

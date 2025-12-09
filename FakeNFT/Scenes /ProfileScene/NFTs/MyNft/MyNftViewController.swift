@@ -116,7 +116,7 @@ extension MyNftViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configureCell(nft: nfts[indexPath.row])
+        cell.configureCell(nft: nfts[indexPath.row], presenter: presenter)
         
         return cell
     }

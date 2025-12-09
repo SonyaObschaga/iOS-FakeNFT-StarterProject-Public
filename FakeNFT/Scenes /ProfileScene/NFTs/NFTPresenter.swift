@@ -5,9 +5,11 @@ final class NFTPresenter: NFTPresenterProtocol {
     // MARK: - Properties
     let agent: FakeNFTModelServiceAgentProtocol
     private let isFavoritesPresenter: Bool
+    private var myNFTsLikedObserverAdded: Bool = false
     weak var view: NFTViewProtocol?
 
     private var notificationObserver: NSObjectProtocol?
+    private var nftLikedNotificationObserver: NSObjectProtocol?
 
     // MARK: - Sorting
     private var activeSortField: UserNFTCollectionSortField {
@@ -57,9 +59,25 @@ final class NFTPresenter: NFTPresenterProtocol {
             self?.handleNotification(notification)
         }
     }
+    
+    func addMyNFTLikedObserver() {
+        if self.myNFTsLikedObserverAdded == true { return }
+        let notificationName = FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification
+        nftLikedNotificationObserver = NotificationCenter.default.addObserver(
+            forName: notificationName,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleLikedNFTSavedNotification(notification)
+        }
+        self.myNFTsLikedObserverAdded = true
+    }
 
     private func removeObserver() {
         if let observer = notificationObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = nftLikedNotificationObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -81,6 +99,23 @@ final class NFTPresenter: NFTPresenterProtocol {
             } else {
                 view?.updateNFTs(nfts: sortedNFTs, likedNFTs: [])
             }
+        case .failure(let error):
+            view?.errorDetected(error: error)
+        }
+    }
+    
+    private func handleLikedNFTSavedNotification(_ notification: Notification) {
+        view?.hideLoading()
+
+        guard let userInfo = notification.userInfo,
+              let result = userInfo["Result"] as? Result<ProfileDto, Error> else {
+            print("Invalid notification data")
+            return
+        }
+
+        switch result {
+        case .success(let profile):
+            print("Successfully saved liked NFTs for profile = \(profile.id)")
         case .failure(let error):
             view?.errorDetected(error: error)
         }
@@ -128,4 +163,21 @@ final class NFTPresenter: NFTPresenterProtocol {
             }
         }
     }
+    
+    func toggleLike(nftId: String) {
+        // Получаем текущее состояние
+        let isCurrentlyLiked = agent.profile.likes?.contains(nftId) ?? false
+
+        // Переключаем
+        agent.toggleNFTLikedFlag(nftId, !isCurrentlyLiked)
+
+        // Обновляем UI
+        if isFavoritesPresenter {
+            agent.fetchProfileLikedNFTs()
+        } else {
+            agent.fetchProfileMyNFTs()
+        }
+    }
+    
+    
 }
