@@ -9,9 +9,9 @@ final class DeleteConfirmationViewController: UIViewController {
     weak var delegate: DeleteConfirmationDelegate?
     
     private let nftImage: UIImage?
-    private let indexPath: IndexPath?
+    private let indexPath: IndexPath
     
-    let confirmDeleteButton: UIButton = {
+    private lazy var confirmDeleteButton: UIButton = {
         let button = UIButton()
         button.setTitle("Удалить", for: .normal)
         button.backgroundColor = .blackAdaptive
@@ -21,8 +21,8 @@ final class DeleteConfirmationViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
-    let cancelButton: UIButton = {
+    
+    private lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.setTitle("Вернуться", for: .normal)
         button.backgroundColor = .blackAdaptive
@@ -32,8 +32,8 @@ final class DeleteConfirmationViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
-    private let imageView: UIImageView = {
+    
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 12
         imageView.layer.masksToBounds = true
@@ -41,7 +41,7 @@ final class DeleteConfirmationViewController: UIViewController {
         return imageView
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Вы уверены, что хотите\nудалить объект из корзины?"
         label.textColor = .blackAdaptive
@@ -52,13 +52,13 @@ final class DeleteConfirmationViewController: UIViewController {
         return label
     }()
     
-    let blurBackground: UIVisualEffectView = {
+    private lazy var blurBackground: UIVisualEffectView = {
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
         blur.translatesAutoresizingMaskIntoConstraints = false
         return blur
     }()
     
-    private let buttonsStackView: UIStackView = {
+    private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -81,7 +81,7 @@ final class DeleteConfirmationViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clear
-
+        
         imageView.image = nftImage
         
         setupViews()
@@ -104,7 +104,7 @@ final class DeleteConfirmationViewController: UIViewController {
             blurBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             blurBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             blurBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
+            
             imageView.widthAnchor.constraint(equalToConstant: 108),
             imageView.heightAnchor.constraint(equalToConstant: 108),
             imageView.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -54),
@@ -126,11 +126,10 @@ final class DeleteConfirmationViewController: UIViewController {
     }
     
     @objc private func confirmTapped() {
-        guard let indexPath else { return }
         delegate?.didConfirmDelete(at: indexPath)
         dismiss(animated: true)
     }
-
+    
     @objc private func cancelTapped() {
         dismiss(animated: true)
     }

@@ -10,7 +10,7 @@ final class CartViewController: UIViewController {
     
     // MARK: - UI Elements
     
-    private let sortButton: UIButton = {
+    private lazy var sortButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(resource: .sort), for: .normal)
         button.tintColor = .blackAdaptive
@@ -18,7 +18,7 @@ final class CartViewController: UIViewController {
         return button
     }()
     
-    private let cartTableView: UITableView = {
+    private lazy var cartTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -29,7 +29,7 @@ final class CartViewController: UIViewController {
         return tableView
     }()
     
-    private let totalOfCartView: UIView = {
+    private lazy var totalOfCartView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -39,7 +39,7 @@ final class CartViewController: UIViewController {
         return view
     }()
     
-    private let totalNft: UILabel = {
+    private lazy var totalNft: UILabel = {
         let label = UILabel()
         label.font = .bodyRegular15
         label.textColor = .textPrimary
@@ -48,7 +48,7 @@ final class CartViewController: UIViewController {
         return label
     }()
     
-    private let totalCost: UILabel = {
+    private lazy var totalCost: UILabel = {
         let label = UILabel()
         label.font = .titleMedium
         label.textColor = .semanticGreen
@@ -57,7 +57,7 @@ final class CartViewController: UIViewController {
         return label
     }()
     
-    private let goToPayButton: UIButton = {
+    private lazy var goToPayButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackAdaptive
@@ -134,7 +134,7 @@ final class CartViewController: UIViewController {
     private func goToPayment() {
         let paymentViewController = PaymentViewController()
         paymentViewController.modalPresentationStyle = .overFullScreen
-
+        
         present(paymentViewController, animated: true)
     }
 }

@@ -10,7 +10,7 @@ class CartTableViewCell: UITableViewCell {
     
     weak var delegate: CartCellDelegate?
     
-    private let cellView: UIView = {
+    private lazy var cellView: UIView = {
         let container = UIView()
         container.backgroundColor = .backgroundPrimary
         container.layer.cornerRadius = 12
@@ -19,7 +19,7 @@ class CartTableViewCell: UITableViewCell {
         return container
     }()
     
-    private let nftImageView: UIImageView = {
+    private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 12
         imageView.layer.masksToBounds = true
@@ -27,7 +27,7 @@ class CartTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let nftNameLabel: UILabel = {
+    private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .textPrimary
@@ -35,14 +35,14 @@ class CartTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let ratingOfNftImageView: UIImageView = {
+    private lazy var ratingOfNftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .rating0)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private let costTitleLabel: UILabel = {
+    private lazy var costTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .textPrimary
@@ -50,7 +50,7 @@ class CartTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let costOfNftLabel: UILabel = {
+    private lazy var costOfNftLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .textPrimary
@@ -58,7 +58,7 @@ class CartTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let deleteNftButton: UIButton = {
+    private lazy var deleteNftButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(resource: .deleteFromCart), for: .normal)
         button.tintColor = .blackAdaptive
@@ -133,15 +133,15 @@ class CartTableViewCell: UITableViewCell {
     private func setRatingStars(rating: Int) {
         let boundedRating = max(1, min(rating, 5))
         let image: UIImage
-            switch boundedRating {
-            case 0: image = UIImage(resource: .rating0)
-            case 1: image = UIImage(resource: .rating1)
-            case 2: image = UIImage(resource: .rating2)
-            case 3: image = UIImage(resource: .rating3)
-            case 4: image = UIImage(resource: .rating4)
-            case 5: image = UIImage(resource: .rating5)
-            default: image = UIImage(resource: .rating0)
-            }
+        switch boundedRating {
+        case 0: image = UIImage(resource: .rating0)
+        case 1: image = UIImage(resource: .rating1)
+        case 2: image = UIImage(resource: .rating2)
+        case 3: image = UIImage(resource: .rating3)
+        case 4: image = UIImage(resource: .rating4)
+        case 5: image = UIImage(resource: .rating5)
+        default: image = UIImage(resource: .rating0)
+        }
         ratingOfNftImageView.image = image
     }
     

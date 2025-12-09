@@ -4,12 +4,11 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Private properties
     
-    private var selectedCurrency: PaymentCurrency?
     private var presenter: PaymentPresenter?
     
     // MARK: - UI Elements
     
-    private let backButton: UIButton = {
+    private lazy var backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(resource: .backChevron), for: .normal)
         button.tintColor = .blackAdaptive
@@ -17,7 +16,7 @@ final class PaymentViewController: UIViewController {
         return button
     }()
     
-    private let headerLabel: UILabel = {
+    private lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Выберите способ оплаты"
         label.font = .titleMedium
@@ -27,7 +26,7 @@ final class PaymentViewController: UIViewController {
         return label
     }()
     
-    private var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 0
@@ -40,7 +39,7 @@ final class PaymentViewController: UIViewController {
         return collection
     }()
     
-    private let bottomView: UIView = {
+    private lazy var bottomView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -50,7 +49,7 @@ final class PaymentViewController: UIViewController {
         return view
     }()
     
-    private let privacyPolitcyTitleLabel: UILabel = {
+    private lazy var privacyPolitcyTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Совершая покупку, вы соглашаетесь с условиями"
         label.font = .bodyRegular13
@@ -59,7 +58,7 @@ final class PaymentViewController: UIViewController {
         return label
     }()
     
-    private let privacyPolitcyLinkLabel: UILabel = {
+    private lazy var privacyPolitcyLinkLabel: UILabel = {
         let label = UILabel()
         label.text = "Пользовательского соглашения"
         label.font = .bodyRegular13
@@ -68,7 +67,7 @@ final class PaymentViewController: UIViewController {
         return label
     }()
     
-    private let proceedPaymentButton: UIButton = {
+    private lazy var proceedPaymentButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .blackAdaptive
         button.layer.cornerRadius = 16
@@ -91,7 +90,7 @@ final class PaymentViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
-
+        
         setupViews()
         setupConstraints()
         setupTargets()
@@ -185,10 +184,6 @@ extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         presenter?.select(at: indexPath)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        collectionView.reloadData()
-    }
 }
 
 extension PaymentViewController: UICollectionViewDelegateFlowLayout {
@@ -207,7 +202,15 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PaymentViewController: PaymentView {
-        func reload() {
-            collectionView.reloadData()
+    func reload() {
+        collectionView.reloadData()
+    }
+    
+    func reloadItems(oldIndex: Int?, newIndex: Int) {
+        var indexPaths = [IndexPath(item: newIndex, section: 0)]
+        if let oldIndex {
+            indexPaths.append(IndexPath(item: oldIndex, section: 0))
         }
+        collectionView.reloadItems(at: indexPaths)
+    }
 }

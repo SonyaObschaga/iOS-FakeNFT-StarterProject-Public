@@ -4,7 +4,7 @@ import Kingfisher
 final class PaymentCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "PaymentCell"
     
-    let cardView: UIView = {
+    private lazy var cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 12
         view.backgroundColor = .secondary
