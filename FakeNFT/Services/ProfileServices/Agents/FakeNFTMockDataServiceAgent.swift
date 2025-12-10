@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FakeNFTService: FakeNFTModelServiceAgentProtocol
+class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
                       //FakeNFTModelServiceProtocol,
                       //FakeNFTModelTestsHelperMethodsProtocol
 {
@@ -42,7 +42,7 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
         }
     }
  
-    var MyNfts: [NFTModel] {
+    var myNfts: [NFTModel] {
         get {
             //guard let p = self.userProfile else {
             //    assertionFailure("Undefined user profile")
@@ -58,7 +58,7 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     
     func fetchProfileMyNFTs() {
         let result2: Result<[NFTModel], Error>
-        result2 = .success(self.MyNfts )
+        result2 = .success(self.myNfts )
 
         NotificationCenter.default.post(
             name: FakeNFTModelServicesNotifications.profileNTFsLoadedNotification, // self.profileNTFsLoadedNotification,
@@ -82,14 +82,10 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
    }
     
     
-    public static let shared: FakeNFTService = FakeNFTService()
+    public static let shared: FakeNFTMockDataServiceAgent = FakeNFTMockDataServiceAgent()
     init() {
     }
-    
-    public static var DEFAULT_USER_INDEX = 1
-//    public static var dataSourceType: AppDataSourceType = .webAPI
-    public static var dataSourceType: AppDataSourceType = .mockData
- 
+     
     private(set) var userDefaults: FakeNFTUserDefaultsKeeperService = FakeNFTUserDefaultsKeeperService()
     
     var operationInProgress: Bool = false  // from FakeNFTModelServiceProtocol => not used here
@@ -98,10 +94,6 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     private var _userProfile: ProfileModel = ProfileModel() // ?
     var profileModel: ProfileModel {
         get {
-            //guard let p = self._userProfile else {
-            //    assertionFailure("Undefined user profile")
-            //    return ProfileModel() //TODO: edit
-            //}
             return _userProfile
         }
         set {
@@ -115,22 +107,12 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
         ProfileModelChanged?(self.profileModel)
     }
     
-    private var fakeNFTBackendService: FakeNFTBackendServiceProtocol?
+    private var fakeNFTBackendService: FakeNFTBackendServiceProtocol = FakeNFTMockDataBackendService()
     var backend: FakeNFTBackendServiceProtocol {
-        guard let service = self.fakeNFTBackendService else {
-            assertionFailure("Undefined backend service")
-            return FakeNFTMockDataBackendService() //TODO: edit
-        }
-        return service
+        return fakeNFTBackendService
     }
     var profileFetched: Bool = false
     func fetchProfile() {
-        switch FakeNFTService.dataSourceType {
-        case .mockData:
-            fakeNFTBackendService = FakeNFTMockDataBackendService()
-        case .webAPI:
-            assertionFailure("'WebAPI' источник данных ещё не реализован")
-        }
         self.profileModel = defaultUserProfile
         
         let result: Result<ProfileDto, Error>
@@ -147,7 +129,7 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     }
     
     private lazy var defaultUserProfile: ProfileModel = {
-        return getUserProfile(FakeNFTService.DEFAULT_USER_INDEX)
+        return getUserProfile(FakeNFTModelServiceAgent.DEFAULT_USER_INDEX)
     }()
     
     private var myNFTs: [NFTModel] {
@@ -222,28 +204,41 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        guard var nft = self.profileModel.nfts.first(where: { $0.id == nftId }) else {
-            assertionFailure("NFT с ID '\(nftId)' не найден в коллекции пользователя")
-            return //TODO: edit
+        //guard var nft = self.profileModel.nfts.first(where: { $0.id == nftId }) else {
+        //    assertionFailure("NFT с ID '\(nftId)' не найден в коллекции пользователя")
+        //    return //TODO: edit
+        //}
+        var index = 0
+        for nft in profileModel.nfts {
+            if nft.id == nftId {
+                //nft.isLiked = flagValue
+                profileModel.nfts[index].isLiked = flagValue
+                break;
+            }
+            index += 1
         }
+        //nft.isLiked = flagValue
         
-        nft.isLiked = flagValue
         saveUserProfile()
+        
         let result: Result<ProfileDto, Error>
-        let profile2 = self.profile
-        result = .success(profile2)
+        result = .success(self.profile)
         NotificationCenter.default.post(
             name: FakeNFTModelServicesNotifications.likedNFTSavedNotification,
             object: self,
             userInfo: ["Result": result]
         )
-        print("Profile likedNFT updated successfully, C = \(profile.name)")
+        var count = 0;
+        if let count2 = self.profile.likes?.count {
+            count = count2
+        }
+        print("Profile likedNFT updated successfully, Count = \(count)")
         
         notifyProfileModelChanged()
     }
     
     private func getNFT(_ id: String) -> NFTModel {
-        guard let nftDto = try? fakeNFTBackendService?.getNFT(id) else {
+        guard let nftDto = try? fakeNFTBackendService.getNFT(id) else {
             assertionFailure("NFT с ID '\(id)' не найден")
             return NFTModel() //TODO: edit
         }
@@ -278,20 +273,8 @@ class FakeNFTService: FakeNFTModelServiceAgentProtocol
     }
     
     func saveUserProfile() {
-        var p = ProfileDto().dto()
-        p.name = profileModel.name
-        p.avatar_url = profileModel.avatar
-        p.description = profileModel.description
-        p.website = profileModel.website ?? ""
-        p.id = profileModel.id
+        let p = self.profile  // Dto
         
-        for nft in self.myNFTs {
-            p.nfts?.append(nft.id)
-        }
-        
-        for likeNft in self.likedNFTs {
-            p.likes?.append(likeNft.id)
-        }
         backend.saveUserProfile(p)
         
         let result: Result<ProfileDto, Error>

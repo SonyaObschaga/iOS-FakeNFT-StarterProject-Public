@@ -106,8 +106,6 @@ final class MyNftTableViewCell: UITableViewCell {
     // MARK: - Configuration
     func configureCell(nft: NFTModel, presenter: NFTPresenterProtocol) {
         self.presenter = presenter
-        let myPresenter = presenter as! NFTPresenter
-        myPresenter.addMyNFTLikedObserver()
         self.nftId = nft.id
         nameLabel.text = nft.nftName
         costLabel.text = "\(nft.price) ETH"
@@ -178,4 +176,3 @@ private extension MyNftTableViewCell {
         presenter?.toggleLike(nftId: nftId)
     }
 }
-

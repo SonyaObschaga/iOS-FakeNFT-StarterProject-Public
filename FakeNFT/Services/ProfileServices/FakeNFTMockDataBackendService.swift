@@ -42,7 +42,7 @@ class FakeNFTMockDataBackendService: FakeNFTBackendServiceProtocol {
 
     func resetUserDefaults() -> ProfileModel {
         let users = usersDtos
-        var p = users[FakeNFTService.DEFAULT_USER_INDEX-1]
+        var p = users[FakeNFTModelServiceAgent.DEFAULT_USER_INDEX-1]
         p.likes = []
         
         let ntfs = nftsDtos

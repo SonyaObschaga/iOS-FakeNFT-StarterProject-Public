@@ -45,11 +45,16 @@ extension ProfileViewController: ProfileViewProtocol {
             self.bioTextView.text = profile.description
             self.urlButton.setTitle(profile.website, for: .normal)
         }
+        
+        guard let nftsCount = profile.nfts?.count,
+              let likedNftsCount = profile.likes?.count else { return }
+        updateNftsCount(nftsCount:nftsCount, likedNftsCount:likedNftsCount)
     }
     
     func errorDetected(error: any Error)
     {
         print("Error detected: \(error.localizedDescription)")
+        showErrorDialog(title: "Error", message: error.localizedDescription)
     }
     
     func hideControls() {
@@ -65,6 +70,15 @@ extension ProfileViewController: ProfileViewProtocol {
         for sw in view.subviews {
             sw.alpha = 1
         }
+    }
+    
+    func showErrorDialog(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button tap (optional)
+        }
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
 }

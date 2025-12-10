@@ -39,6 +39,7 @@ final class NFTPresenter: NFTPresenterProtocol {
         self.isFavoritesPresenter = isFavoritesPresenter
         self.agent = servicesAssembly.modelServiceAgent
         addObserver()
+        addMyNFTLikedObserver()
     }
 
     deinit {
@@ -62,7 +63,8 @@ final class NFTPresenter: NFTPresenterProtocol {
     
     func addMyNFTLikedObserver() {
         if self.myNFTsLikedObserverAdded == true { return }
-        let notificationName = FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification
+        //Mistyping error: let notificationName = FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification
+        let notificationName = FakeNFTModelServicesNotifications.likedNFTSavedNotification
         nftLikedNotificationObserver = NotificationCenter.default.addObserver(
             forName: notificationName,
             object: nil,
@@ -114,8 +116,14 @@ final class NFTPresenter: NFTPresenterProtocol {
         }
 
         switch result {
-        case .success(let profile):
-            print("Successfully saved liked NFTs for profile = \(profile.id)")
+        case .success(_): //let profile):
+            if isFavoritesPresenter {
+                // do nothing - it cannot happen
+            } else {
+                let sortedNFTs = getSortedUserNFTs(activeSortField, useUserDefaults: true)
+                view?.updateNFTs(nfts: sortedNFTs, likedNFTs: [])
+                print("Successfully saved liked NFTs, Count = \(sortedNFTs.count)")
+            }
         case .failure(let error):
             view?.errorDetected(error: error)
         }
@@ -151,11 +159,11 @@ final class NFTPresenter: NFTPresenterProtocol {
 
         switch field {
         case .byName:
-            return agent.MyNfts.sorted { $0.nftName < $1.nftName }
+            return agent.myNfts.sorted { $0.nftName < $1.nftName }
         case .byPrice:
-            return agent.MyNfts.sorted { $0.price > $1.price } // по убыванию
+            return agent.myNfts.sorted { $0.price > $1.price } // по убыванию
         case .byRating:
-            return agent.MyNfts.sorted {
+            return agent.myNfts.sorted {
                 if let r0 = $0.rating, let r1 = $1.rating {
                     return r0 > r1 || (r0 == r1 && $0.nftName < $1.nftName)
                 }
@@ -172,12 +180,11 @@ final class NFTPresenter: NFTPresenterProtocol {
         agent.toggleNFTLikedFlag(nftId, !isCurrentlyLiked)
 
         // Обновляем UI
-        if isFavoritesPresenter {
-            agent.fetchProfileLikedNFTs()
-        } else {
-            agent.fetchProfileMyNFTs()
-        }
+        //if isFavoritesPresenter {
+        //    agent.fetchProfileLikedNFTs()
+        //} else {
+        //    agent.fetchProfileMyNFTs()
+        //}
     }
-    
     
 }

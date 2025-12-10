@@ -4,6 +4,10 @@ import Kingfisher
 final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "favoriteNftsCell"
     
+    private var nftId: String = ""
+    
+    private var presenter: NFTPresenterProtocol?
+    
     // MARK: - Layout variables
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
@@ -66,7 +70,8 @@ final class FavoriteNftsCollectionViewCell: UICollectionViewCell {
     
     func configureCell(likedNFT: NFTModel) {
         backgroundColor = .ypWhiteDay
-        
+        self.presenter = presenter
+        self.nftId = nft.id
         nameLabel.text = likedNFT.nftName
         costLabel.text = "\(likedNFT.price) ETH"
         ratingImageView.image = UIImage(named: "Rating_\(likedNFT.rating ?? 1)")
@@ -108,6 +113,7 @@ private extension FavoriteNftsCollectionViewCell {
     func setupUI() {
         contentView.addSubview(nftImageView)
         contentView.addSubview(likeButton)
+        likeButton.addTarget(self, action: #selector(changeLike), for: .touchUpInside)
         contentView.addSubview(ratingImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(costLabel)
@@ -139,6 +145,6 @@ private extension FavoriteNftsCollectionViewCell {
     
     @objc
     func changeLike() {
-        // TODO: смена лайка
+        presenter?.toggleLike(nftId: nftId)
     }
 }

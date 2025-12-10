@@ -21,6 +21,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     private var profileLoadingOperationObserver: NSObjectProtocol?
     private var profileSavedOperationObserver: NSObjectProtocol?
+    private var nftLikedNotificationObserver: NSObjectProtocol?
     private var profileLoaded: Bool
     
     private func addObservers() {
@@ -42,6 +43,31 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             guard let self = self else { return }
             self.handleProfileSavedNotification(notification: notification)
         }
+        
+        nftLikedNotificationObserver = NotificationCenter.default.addObserver(
+            forName: FakeNFTModelServicesNotifications.likedNFTSavedNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleLikedNFTSavedNotification(notification)
+        }
+
+    }
+    
+    deinit {
+        removeObservers()
+    }
+
+    private func removeObservers() {
+        if let observer = profileLoadingOperationObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = profileSavedOperationObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = nftLikedNotificationObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     private func handleProfileLoadedNotification(notification: Notification) {
@@ -56,6 +82,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
                 profileLoaded = true
                 self.profileDtoLoaded(profile: profile)
                 print("Profile fetched, name = \(profile.name)")
+
             case .failure(let error):
                 view?.errorDetected(error: error)
             }
@@ -83,6 +110,33 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         }
     }
     
+    private func handleLikedNFTSavedNotification(_ notification: Notification) {
+        view?.hideLoading()
+
+        guard let userInfo = notification.userInfo,
+              let result = userInfo["Result"] as? Result<ProfileDto, Error> else {
+            print("Invalid notification data")
+            return
+        }
+
+        switch result {
+        case .success(let profile):
+            var nftsCount = 0, likesCount = 0
+            if ((profile.nfts) != nil) { nftsCount = profile.nfts?.count ?? 0}
+            if ((profile.likes) != nil) { likesCount = profile.likes?.count ?? 0 }
+            
+            // Warning once only: UITableView was told to layout its visible cells and other contents without being in the view hierarchy (the table view or one of its superviews has not been added to a window). This may cause bugs by forcing views inside the table view to load and perform layout without accurate information (e.g. table view bounds, trait collection, layout margins, safe area insets, etc), and will also cause unnecessary performance overhead due to extra layout passes.
+            //view?.updateNftsCount(nftsCount: nftsCount, likedNftsCount: likesCount)
+            print("To be set for profile: MyNTFs.Count = \(nftsCount), liked NFTs.Count = \(likesCount)")
+            
+            myNFTsCountToBeUpdated = nftsCount
+            likedNFTsCountToBeUpdated = likesCount
+ 
+        case .failure(let error):
+            view?.errorDetected(error: error)
+        }
+    }
+
     
     private func profileDtoLoaded(profile:ProfileDto) {
         view?.unhideControls()  // !
@@ -118,10 +172,9 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         view?.profileUpdated(profile: profile)
     }
     
+    private var myNFTsCountToBeUpdated: Int?
+    private var likedNFTsCountToBeUpdated: Int?
     func viewDidLoad() {
-        //view?.showLoading()
-        //view?.hideControls()
-        
         print("Fetching user profile...")
         agent.fetchProfile()
     }
@@ -132,5 +185,13 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             let profile = agent.profile
             view?.updateProfile(name: profile.name, descripton: profile.description, website: profile.website)
         }
+        
+        if let nc = myNFTsCountToBeUpdated,
+           let lc = likedNFTsCountToBeUpdated {
+            view?.updateNftsCount(nftsCount: nc, likedNftsCount: lc)
+            myNFTsCountToBeUpdated = nil
+            likedNFTsCountToBeUpdated = nil
+        }
+
     }
 }

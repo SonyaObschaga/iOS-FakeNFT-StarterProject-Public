@@ -10,7 +10,7 @@ struct Nft: Decodable {
     
     public static var emptyNft: Nft = Nft(id:"", images: [], rating:0, description:"", price:0, author:"")
     
-    public func NftModelObject() -> NFTModel {
+    public func NftModelObject(isLiked: Bool) -> NFTModel {
         var m = NFTModel()
         m.createdAt = Date()
         m.images = []
@@ -18,7 +18,7 @@ struct Nft: Decodable {
         m.rating = self.rating
         m.description = self.description
         m.price = self.price
-        
+        m.isLiked = isLiked;
         m.author = self.author
         m.name = self.author
         m.id = self.id

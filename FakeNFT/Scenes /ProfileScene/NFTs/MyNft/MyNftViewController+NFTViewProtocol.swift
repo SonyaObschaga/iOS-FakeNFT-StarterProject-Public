@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension MyNftViewController: NFTViewProtocol {
     func updateNFTs(nfts: [NFTModel], likedNFTs: [NFTModel]) {
@@ -20,7 +21,15 @@ extension MyNftViewController: NFTViewProtocol {
    func errorDetected(error: any Error)
    {
        print("Error detected: \(error.localizedDescription)")
+       showErrorDialog(title: "Error", message: error.localizedDescription)
    }
 
-
+    func showErrorDialog(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button tap (optional)
+        }
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
