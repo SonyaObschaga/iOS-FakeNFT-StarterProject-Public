@@ -46,7 +46,8 @@ final class CollectionViewController: UIViewController {
     }()
 
     var presenter: CollectionPresenterProtocol?
-
+    var onNftSelected: ((String, String, Double, Int, String) -> Void)?
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -165,10 +166,6 @@ final class CollectionViewController: UIViewController {
         scrollView.addSubview(authorLabel)
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
         authorLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        authorLabel.text = NSLocalizedString(
-                "collectionAuthor",
-                comment: "Автор коллекции"
-            ) + ":"
         authorLabel.textColor = .label
         
        
@@ -332,6 +329,10 @@ extension CollectionViewController: CollectionViewProtocol {
         titleLabel.text = title
         descriptionLabel.text = description
         authorNameLabel.text = author
+        authorLabel.text = NSLocalizedString(
+                "collectionAuthor",
+                comment: "Автор коллекции"
+            ) + ":"
         topImage.kf.setImage(with: coverURL)
     }
 
@@ -415,10 +416,19 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         let totalSpacing = sideInsets + spacingBetweenCells
 
         let width = (screenWidth - totalSpacing) / 3
-        print(
-            "🔵 sizeForItemAt indexPath: \(indexPath), size: \(CGSize(width: width, height: width))"
-        )
 
         return CGSize(width: width, height: 192)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let nftItem = presenter?.nft(at: indexPath.item) else { return }
+        let collectionName = titleLabel.text ?? ""
+        onNftSelected?(
+            nftItem.id,
+            nftItem.title,
+            nftItem.price,
+            Int(nftItem.rating),
+            collectionName
+        )
     }
 }
