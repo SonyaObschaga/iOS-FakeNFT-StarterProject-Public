@@ -5,18 +5,6 @@
 //  Created by Damir Salakhetdinov on 02.12.2025.
 //
 
-
-
-
-/*
- protocol ProfileService {
-     func loadProfile(id: Int, completion: @escaping ProfileOperationCompletion)
-     func saveProfile(id: Int, profile: ProfileDto, completion: @escaping ProfileOperationCompletion)
- }
-
-
- */
-
 final class ProfileServiceImpl: ProfileService
                                  {
     private let networkClient: NetworkClient
@@ -28,7 +16,7 @@ final class ProfileServiceImpl: ProfileService
     }
     
     var inMemoryStorageProfile: ProfileDto? {
-        let id = FakeNFTService.DEFAULT_USER_INDEX
+        let id = FakeNFTModelServiceAgent.DEFAULT_USER_INDEX
         guard let profile = storage.getProfile(with: "\(id)")  else {
             return nil
         }
@@ -69,7 +57,4 @@ final class ProfileServiceImpl: ProfileService
         }
 
     }
-    
-    
-
 }

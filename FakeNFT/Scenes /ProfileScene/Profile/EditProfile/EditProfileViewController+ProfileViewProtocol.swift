@@ -32,6 +32,7 @@ extension EditProfileViewController: ProfileViewProtocol {
  
     func errorDetected(error: any Error) {
         print("Error detected: \(error.localizedDescription)")
+        showErrorDialog(title: "Error", message: error.localizedDescription)
     }
     
     func hideControls() {
@@ -49,5 +50,13 @@ extension EditProfileViewController: ProfileViewProtocol {
     func hideLoading() {
         activityIndicator.stopAnimating()
     }
-
+    
+    func showErrorDialog(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button tap (optional)
+        }
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }

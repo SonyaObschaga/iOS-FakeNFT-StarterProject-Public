@@ -171,10 +171,10 @@ extension ProfileViewController {
         view.backgroundColor = .ypWhiteDay
         navigationController?.navigationBar.isHidden = true
         
-        //        fillTableCells()
-        fillTableCells(nftsCount: 0, likesCount: 0)
         addSubViews()
         configureConstraints()
+        fillTableCells(nftsCount: 0, likesCount: 0)
+        
     }
     
     func addSubViews() {
@@ -268,6 +268,9 @@ extension ProfileViewController {
                     self.openWebView()
                 })
         )
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
     @objc
