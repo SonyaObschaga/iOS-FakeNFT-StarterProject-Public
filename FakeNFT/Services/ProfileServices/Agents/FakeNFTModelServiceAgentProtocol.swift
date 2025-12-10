@@ -10,6 +10,7 @@ protocol FakeNFTModelServiceAgentProtocol: FakeNFTModelServiceProtocol,
                                            FakeNFTModelTestsHelperMethodsProtocol {
     var profile: ProfileDto { get set }
     var myNfts: [NFTModel] { get }
+    var likedNfts: [NFTModel] {get}
 }
 
 

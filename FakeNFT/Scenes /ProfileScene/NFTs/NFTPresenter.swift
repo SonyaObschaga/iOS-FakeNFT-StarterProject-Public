@@ -118,11 +118,15 @@ final class NFTPresenter: NFTPresenterProtocol {
         switch result {
         case .success(_): //let profile):
             if isFavoritesPresenter {
+                
                 // do nothing - it cannot happen
+                let likedNFTs = agent.likedNfts
+                view?.updateNFTs(nfts: [], likedNFTs: likedNFTs)
+                print("Successfully saved favorites liked NFTs, Count = \(likedNFTs.count)")
             } else {
                 let sortedNFTs = getSortedUserNFTs(activeSortField, useUserDefaults: true)
                 view?.updateNFTs(nfts: sortedNFTs, likedNFTs: [])
-                print("Successfully saved liked NFTs, Count = \(sortedNFTs.count)")
+                print("Successfully saved my liked NFTs, Count = \(sortedNFTs.count)")
             }
         case .failure(let error):
             view?.errorDetected(error: error)

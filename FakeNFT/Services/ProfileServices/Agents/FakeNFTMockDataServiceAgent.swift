@@ -54,6 +54,15 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             //_profile = newValue
         }
     }
+    
+    var likedNfts: [NFTModel] {
+        get {
+            return profileModel.likedNFTs// p.nfts
+        }
+        set {
+            //_profile = newValue
+        }
+    }
  
     
     func fetchProfileMyNFTs() {

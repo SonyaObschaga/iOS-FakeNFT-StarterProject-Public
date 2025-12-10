@@ -71,7 +71,6 @@
 		F4296A3A2EDC95E600BB37BA /* FakeNFTMockDataBackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969EB2EDC95E600BB37BA /* FakeNFTMockDataBackendService.swift */; };
 		F4296A3C2EDC95E600BB37BA /* NFTDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969EE2EDC95E600BB37BA /* NFTDto.swift */; };
 		F4296A3D2EDC95E600BB37BA /* FakeNFTUserDefaultsKeeperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969EF2EDC95E600BB37BA /* FakeNFTUserDefaultsKeeperService.swift */; };
-		F4296A3E2EDC95E600BB37BA /* remove_FakeNFTService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969F02EDC95E600BB37BA /* remove_FakeNFTService.swift */; };
 		F4296A3F2EDC95E600BB37BA /* ExamplePutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969F12EDC95E600BB37BA /* ExamplePutService.swift */; };
 		F4296A402EDC95E600BB37BA /* RequestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969F32EDC95E600BB37BA /* RequestConstants.swift */; };
 		F4296A412EDC95E600BB37BA /* ExamplePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42969F42EDC95E600BB37BA /* ExamplePutRequest.swift */; };
@@ -186,7 +185,6 @@
 		F42969EB2EDC95E600BB37BA /* FakeNFTMockDataBackendService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeNFTMockDataBackendService.swift; sourceTree = "<group>"; };
 		F42969EE2EDC95E600BB37BA /* NFTDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NFTDto.swift; sourceTree = "<group>"; };
 		F42969EF2EDC95E600BB37BA /* FakeNFTUserDefaultsKeeperService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeNFTUserDefaultsKeeperService.swift; sourceTree = "<group>"; };
-		F42969F02EDC95E600BB37BA /* remove_FakeNFTService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remove_FakeNFTService.swift; sourceTree = "<group>"; };
 		F42969F12EDC95E600BB37BA /* ExamplePutService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamplePutService.swift; sourceTree = "<group>"; };
 		F42969F32EDC95E600BB37BA /* RequestConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestConstants.swift; sourceTree = "<group>"; };
 		F42969F42EDC95E600BB37BA /* ExamplePutRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamplePutRequest.swift; sourceTree = "<group>"; };
@@ -610,7 +608,6 @@
 				F42969EB2EDC95E600BB37BA /* FakeNFTMockDataBackendService.swift */,
 				F42969EC2EDC95E600BB37BA /* DTOs */,
 				F42969EF2EDC95E600BB37BA /* FakeNFTUserDefaultsKeeperService.swift */,
-				F42969F02EDC95E600BB37BA /* remove_FakeNFTService.swift */,
 			);
 			path = ProfileServices;
 			sourceTree = "<group>";
@@ -889,7 +886,6 @@
 				F4296A452EDC95E600BB37BA /* FakeNFTModelServiceProtocol.swift in Sources */,
 				F4296A402EDC95E600BB37BA /* RequestConstants.swift in Sources */,
 				F4296A132EDC95E600BB37BA /* ProfileModel.swift in Sources */,
-				F4296A3E2EDC95E600BB37BA /* remove_FakeNFTService.swift in Sources */,
 				F4296A392EDC95E600BB37BA /* FakeNFTMockData.swift in Sources */,
 				F4296A2D2EDC95E600BB37BA /* FavoriteNftsCollectionViewCell.swift in Sources */,
 				F4296A162EDC95E600BB37BA /* NftDetailCellModel.swift in Sources */,

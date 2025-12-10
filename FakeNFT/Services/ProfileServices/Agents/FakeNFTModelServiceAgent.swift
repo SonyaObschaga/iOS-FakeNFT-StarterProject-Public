@@ -11,7 +11,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     public static var DEFAULT_USER_INDEX = 1
     
     public static var dataSourceType: AppDataSourceType = .webAPI
-    //public static var dataSourceType: AppDataSourceType = .mockData
+//    public static var dataSourceType: AppDataSourceType = .mockData
 
     // MARK: - Public Variables
     var profile: ProfileDto = ProfileDto.EmptyProfile
@@ -111,6 +111,9 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     }
     
     func fetchProfileLikedNFTs() {
+        if self.myNfts.isEmpty{
+            fetchProfileMyNFTs()
+        }
         loadingStarted()
         var nfts: [NFTModel] = []
         self.likedNfts = []
@@ -180,9 +183,13 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         }
         
         var index = 0
+        self.likedNfts = []
         for nft in self.myNfts {
             if nft.id == nftId {
                 self.myNfts[index].isLiked = flagValue
+            }
+            if self.myNfts[index].isLiked {
+                self.likedNfts.append(nft)
             }
             index += 1
         }
