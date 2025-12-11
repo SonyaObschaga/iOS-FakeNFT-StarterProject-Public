@@ -8,6 +8,8 @@ final class CartViewController: UIViewController {
     private var presenter: CartPresenter?
     private var savedImageForDelete: UIImage?
     
+    private var fetchedNftIds: [String] = []
+    
     // MARK: - UI Elements
     
     private lazy var sortButton: UIButton = {
@@ -84,7 +86,7 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundPrimary
         
-        presenter = CartPresenter(view: self)
+        presenter = CartPresenter(view: self, cartService: CartOrderService(networkClient: DefaultNetworkClient()))
         
         setupViews()
         setupConstraints()
@@ -174,6 +176,12 @@ final class CartViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
 
         present(alert, animated: true)
+    }
+    
+    func updateCart(with nftIds: [String]) {
+        self.fetchedNftIds = nftIds
+        print(fetchedNftIds)
+        //cartTableView.reloadData()
     }
     
     // MARK: - Actions

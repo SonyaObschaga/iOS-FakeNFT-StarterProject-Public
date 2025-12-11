@@ -5,12 +5,16 @@ protocol CartView: AnyObject {
     func updateTotal(nftCount: Int, totalPrice: String)
     func showDelete(at indexPath: IndexPath)
     func showSortOptions()
+    func updateCart(with nftIds: [String])
 }
 
 final class CartPresenter {
     
     private weak var view: CartView?
     private let sortManager = CartSortPreferenceManager()
+    
+    private let cartService: CartService
+    private var nftIds: [String] = []
     
     var currentSortOption: CartSortOption {
         sortManager.load()
@@ -22,8 +26,10 @@ final class CartPresenter {
         TestNFTModel(name: "Greena", rating: 1, price: 3.09)
     ]
     
-    init(view: CartView) {
+    init(view: CartView, cartService: CartService) {
         self.view = view
+        self.cartService = cartService
+        loadCart()
         applySort(option: currentSortOption)
     }
     
@@ -51,7 +57,6 @@ final class CartPresenter {
         view?.showDelete(at: indexPath)
     }
     
-    
     func applySort(option: CartSortOption) {
         sortManager.save(option)
 
@@ -66,6 +71,20 @@ final class CartPresenter {
 
         view?.reload()
         recalcTotal()
+    }
+    
+    func loadCart() {
+        cartService.loadCart() { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let ids):
+                    self?.nftIds = ids
+                    self?.view?.updateCart(with: ids)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
     
     func sortTapped() {
