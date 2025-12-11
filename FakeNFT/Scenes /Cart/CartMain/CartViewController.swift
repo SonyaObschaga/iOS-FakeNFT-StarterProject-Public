@@ -34,7 +34,7 @@ final class CartViewController: UIViewController {
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
-        view.backgroundColor = .backgroundPrimary
+        view.backgroundColor = .backgroundSecondary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -141,7 +141,7 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter?.rows ?? 0
+        presenter?.rows ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

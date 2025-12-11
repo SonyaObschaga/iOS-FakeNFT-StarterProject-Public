@@ -4,7 +4,7 @@ protocol CartCellDelegate: AnyObject {
     func didTapDelete(in cell: CartTableViewCell, with image: UIImage)
 }
 
-class CartTableViewCell: UITableViewCell {
+final class CartTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = "CartCell"
     
@@ -35,7 +35,7 @@ class CartTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var ratingOfNftImageView: UIImageView = {
+    private let ratingOfNftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .rating0)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +79,7 @@ class CartTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
     }
     
     private func setupViews() {
@@ -132,17 +132,15 @@ class CartTableViewCell: UITableViewCell {
     
     private func setRatingStars(rating: Int) {
         let boundedRating = max(1, min(rating, 5))
-        let image: UIImage
-        switch boundedRating {
-        case 0: image = UIImage(resource: .rating0)
-        case 1: image = UIImage(resource: .rating1)
-        case 2: image = UIImage(resource: .rating2)
-        case 3: image = UIImage(resource: .rating3)
-        case 4: image = UIImage(resource: .rating4)
-        case 5: image = UIImage(resource: .rating5)
-        default: image = UIImage(resource: .rating0)
+        
+        ratingOfNftImageView.image = switch boundedRating {
+        case 1: UIImage(resource: .rating1)
+        case 2: UIImage(resource: .rating2)
+        case 3: UIImage(resource: .rating3)
+        case 4: UIImage(resource: .rating4)
+        case 5: UIImage(resource: .rating5)
+        default: UIImage(resource: .rating0)
         }
-        ratingOfNftImageView.image = image
     }
     
     

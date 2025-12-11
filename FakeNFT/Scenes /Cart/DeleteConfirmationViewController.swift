@@ -53,7 +53,7 @@ final class DeleteConfirmationViewController: UIViewController {
     }()
     
     private lazy var blurBackground: UIVisualEffectView = {
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         blur.translatesAutoresizingMaskIntoConstraints = false
         return blur
     }()
