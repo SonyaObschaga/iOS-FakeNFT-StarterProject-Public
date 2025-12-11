@@ -152,6 +152,10 @@ final class PaymentViewController: UIViewController {
     @objc
     private func proceedPaymentButtonTapped() {
         //вызвать VC успешной оплаты при положительном ответе от сервера
+        let successfullPaymentViewController = SuccessfullPaymentViewController()
+        successfullPaymentViewController.modalPresentationStyle = .overFullScreen
+        
+        present(successfullPaymentViewController, animated: true)
     }
 }
 
