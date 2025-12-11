@@ -141,6 +141,7 @@ final class CartViewController: UIViewController {
     
     private func setupTargets() {
         goToPayButton.addTarget(self, action: #selector(goToPayment), for: .touchUpInside)
+        sortButton.addTarget(self, action: #selector(sortTapped), for: .touchUpInside)
     }
     
     private func updateEmptyState(isEmpty: Bool) {
@@ -148,6 +149,31 @@ final class CartViewController: UIViewController {
         cartTableView.isHidden = isEmpty
         totalOfCartView.isHidden = isEmpty
         sortButton.isHidden = isEmpty
+    }
+    
+    
+    func showSortOptions() {
+        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+
+        let priceTitle = CartSortOption.price.displayTitle
+        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .price)
+        }))
+
+        let ratingTitle = CartSortOption.rating.displayTitle
+        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .rating)
+        }))
+
+        let nameTitle = CartSortOption.name.displayTitle
+        
+        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .name)
+        }))
+
+        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+
+        present(alert, animated: true)
     }
     
     // MARK: - Actions
@@ -158,6 +184,11 @@ final class CartViewController: UIViewController {
         paymentViewController.modalPresentationStyle = .overFullScreen
         
         present(paymentViewController, animated: true)
+    }
+    
+    @objc
+    private func sortTapped() {
+        presenter?.sortTapped()
     }
 }
 
