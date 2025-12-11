@@ -6,6 +6,7 @@ protocol PaymentView: AnyObject {
     func showLoading()
     func hideLoading()
     func showSuccess()
+    func showPaymentError()
 }
 
 final class PaymentPresenter {
@@ -40,7 +41,7 @@ final class PaymentPresenter {
         // пока нет работы с сетью - делаем небольшую задержку для показа ProgressHUD
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.view?.hideLoading()
-            self?.view?.showSuccess()
+            self?.view?.showPaymentError()
         }
     }
 }

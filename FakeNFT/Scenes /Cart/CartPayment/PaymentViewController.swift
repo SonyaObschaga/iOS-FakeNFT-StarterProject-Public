@@ -218,6 +218,18 @@ extension PaymentViewController: PaymentView {
         present(vc, animated: true)
     }
     
+    func showPaymentError() {
+        let alert = UIAlertController(title: "Не удалось произвести оплату", message: nil, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Отмена", style: .default))
+
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
+            self?.showSuccess()
+        }))
+
+        present(alert, animated: true)
+    }
+    
     func reload() {
         collectionView.reloadData()
     }
