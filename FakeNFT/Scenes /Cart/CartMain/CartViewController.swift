@@ -68,6 +68,16 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.font = .titleMedium
+        label.textColor = .textPrimary
+        label.textAlignment = .center
+        label.text = "Корзина пуста"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -91,6 +101,7 @@ final class CartViewController: UIViewController {
         totalOfCartView.addSubview(totalNft)
         totalOfCartView.addSubview(totalCost)
         totalOfCartView.addSubview(goToPayButton)
+        view.addSubview(emptyCartLabel)
         
         cartTableView.register(CartTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         cartTableView.dataSource = self
@@ -120,12 +131,23 @@ final class CartViewController: UIViewController {
             goToPayButton.topAnchor.constraint(equalTo: totalOfCartView.topAnchor, constant: 16),
             goToPayButton.bottomAnchor.constraint(equalTo: totalOfCartView.bottomAnchor, constant: -16),
             goToPayButton.trailingAnchor.constraint(equalTo: totalOfCartView.trailingAnchor, constant: -16),
-            goToPayButton.widthAnchor.constraint(equalToConstant: 240)
+            goToPayButton.widthAnchor.constraint(equalToConstant: 240),
+            
+            emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emptyCartLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
     private func setupTargets() {
         goToPayButton.addTarget(self, action: #selector(goToPayment), for: .touchUpInside)
+    }
+    
+    private func updateEmptyState(isEmpty: Bool) {
+        emptyCartLabel.isHidden = !isEmpty
+        cartTableView.isHidden = isEmpty
+        totalOfCartView.isHidden = isEmpty
+        sortButton.isHidden = isEmpty
     }
     
     // MARK: - Actions
@@ -175,6 +197,8 @@ extension CartViewController: CartView {
     func updateTotal(nftCount: Int, totalPrice: String) {
         totalNft.text = "\(nftCount) NFT"
         totalCost.text = "\(totalPrice) ETH"
+        
+        updateEmptyState(isEmpty: nftCount == 0)
     }
     
     func showDelete(at indexPath: IndexPath) {
