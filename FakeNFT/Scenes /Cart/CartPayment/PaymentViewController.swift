@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class PaymentViewController: UIViewController {
     
@@ -151,11 +152,7 @@ final class PaymentViewController: UIViewController {
     
     @objc
     private func proceedPaymentButtonTapped() {
-        //вызвать VC успешной оплаты при положительном ответе от сервера
-        let successfullPaymentViewController = SuccessfullPaymentViewController()
-        successfullPaymentViewController.modalPresentationStyle = .overFullScreen
-        
-        present(successfullPaymentViewController, animated: true)
+        presenter?.proceedPayment()
     }
 }
 
@@ -206,6 +203,21 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PaymentViewController: PaymentView {
+    
+    func showLoading() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        ProgressHUD.dismiss()
+    }
+    
+    func showSuccess() {
+        let vc = SuccessfullPaymentViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
+    }
+    
     func reload() {
         collectionView.reloadData()
     }
