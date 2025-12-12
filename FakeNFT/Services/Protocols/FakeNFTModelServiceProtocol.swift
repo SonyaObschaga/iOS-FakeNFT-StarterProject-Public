@@ -23,14 +23,4 @@ protocol FakeNFTModelServiceProtocol {
     func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel]
 
     func saveUserProfile()
-
-    // Оповещение наблюдателей о смене профиля
-    //var ProfileModelChanged: ((ProfileModel) -> Void)? {get}
- 
-    //var backend: FakeNFTBackendServiceProtocol {get}
-    //var myNFTs: [NFT] { get}
-    //var likedNFTs: [NFT] { get}
-    
-    //func getUserProfile (_ index: Int) -> ProfileModel
-    //func getNFT(_ id: String) -> NFT
 }

@@ -11,7 +11,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     let servicesAssembly: ServicesAssembly
     var agent: FakeNFTModelServiceAgentProtocol
-    //let notifications: FakeNFTServiceAgentNotificationsProtocol
     init(servicesAssembly: ServicesAssembly) {
         profileLoaded = false
         self.servicesAssembly = servicesAssembly
@@ -27,7 +26,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     private func addObservers() {
         profileLoadingOperationObserver =
         NotificationCenter.default.addObserver(
-            forName: FakeNFTModelServicesNotifications.profileLoadedNotification, // agent.profileLoadedNotification,
+            forName: FakeNFTModelServicesNotifications.profileLoadedNotification,
             object: nil,
             queue: .main
         ) { [weak self] notification in
@@ -36,7 +35,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         }
         profileSavedOperationObserver =
         NotificationCenter.default.addObserver(
-            forName: FakeNFTModelServicesNotifications.profileSavedNotification, // agent.profileSavedNotification,
+            forName: FakeNFTModelServicesNotifications.profileSavedNotification,
             object: nil,
             queue: .main
         ) { [weak self] notification in
@@ -124,9 +123,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             var nftsCount = 0, likesCount = 0
             if ((profile.nfts) != nil) { nftsCount = profile.nfts?.count ?? 0}
             if ((profile.likes) != nil) { likesCount = profile.likes?.count ?? 0 }
-            
-            // Warning once only: UITableView was told to layout its visible cells and other contents without being in the view hierarchy (the table view or one of its superviews has not been added to a window). This may cause bugs by forcing views inside the table view to load and perform layout without accurate information (e.g. table view bounds, trait collection, layout margins, safe area insets, etc), and will also cause unnecessary performance overhead due to extra layout passes.
-            //view?.updateNftsCount(nftsCount: nftsCount, likedNftsCount: likesCount)
             print("To be set for profile: MyNTFs.Count = \(nftsCount), liked NFTs.Count = \(likesCount)")
             
             myNFTsCountToBeUpdated = nftsCount
@@ -139,7 +135,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
 
     
     private func profileDtoLoaded(profile:ProfileDto) {
-        view?.unhideControls()  // !
+        view?.unhideControls()
         
         view?.updateProfile(name: profile.name, descripton: profile.description, website: profile.website)
         
@@ -167,7 +163,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     private func profileDtoSaved(profile:ProfileDto) {
-        view?.unhideControls()  // !
+        view?.unhideControls()
         
         view?.profileUpdated(profile: profile)
     }

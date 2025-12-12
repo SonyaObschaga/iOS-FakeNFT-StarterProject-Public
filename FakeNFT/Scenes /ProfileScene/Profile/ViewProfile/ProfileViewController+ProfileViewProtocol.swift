@@ -16,14 +16,12 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func updateNftsCount(nftsCount:Int, likedNftsCount:Int) {
-        // acquiring a background thread from the threads pool
         DispatchQueue.global().async { [weak self ] in
             guard let self = self else { return }
             
             self.tableCells[0].count = nftsCount
             self.tableCells[1].count = likedNftsCount
             
-            // scheduling a task to be executed on the main thread asynchronously
             DispatchQueue.main.async {
                 let indexPathsToReload = [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)]
                 self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)

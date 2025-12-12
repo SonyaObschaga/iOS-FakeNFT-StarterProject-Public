@@ -8,16 +8,10 @@
 import Foundation
 
 class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
-                      //FakeNFTModelServiceProtocol,
-                      //FakeNFTModelTestsHelperMethodsProtocol
 {
     private var _profile: ProfileDto = ProfileDto.EmptyProfile
     var profile: ProfileDto {
         get {
-            //guard let p = self.profileModel else {
-            //    assertionFailure("Undefined user profile")
-            //    return ProfileDto.EmptyProfile
-            //}
             let p = self.profileModel
             var p2 = _profile
             p2.name = p.name
@@ -44,14 +38,9 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
  
     var myNfts: [NFTModel] {
         get {
-            //guard let p = self.userProfile else {
-            //    assertionFailure("Undefined user profile")
-            //    return []
-            //}
             return profileModel.nfts // p.nfts
         }
         set {
-            //_profile = newValue
         }
     }
     
@@ -60,7 +49,6 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             return profileModel.likedNFTs// p.nfts
         }
         set {
-            //_profile = newValue
         }
     }
  
@@ -79,7 +67,6 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
     }
     
     func fetchProfileLikedNFTs() {
-        // profileLikedNTFsLoadedNotification
         let result3: Result<[NFTModel], Error>
         result3 = .success(self.likedNFTs )
 
@@ -97,9 +84,8 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
      
     private(set) var userDefaults: FakeNFTUserDefaultsKeeperService = FakeNFTUserDefaultsKeeperService()
     
-    var operationInProgress: Bool = false  // from FakeNFTModelServiceProtocol => not used here
+    var operationInProgress: Bool = false
     
-    //private(set)
     private var _userProfile: ProfileModel = ProfileModel() // ?
     var profileModel: ProfileModel {
         get {
@@ -213,10 +199,6 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        //guard var nft = self.profileModel.nfts.first(where: { $0.id == nftId }) else {
-        //    assertionFailure("NFT с ID '\(nftId)' не найден в коллекции пользователя")
-        //    return //TODO: edit
-        //}
         var index = 0
         for nft in profileModel.nfts {
             if nft.id == nftId {
@@ -226,7 +208,6 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             }
             index += 1
         }
-        //nft.isLiked = flagValue
         
         saveUserProfile()
         

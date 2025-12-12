@@ -25,20 +25,10 @@ struct ProfilePutRequest: NetworkRequest {
         
     }
    var endpoint: URL? {
-       //error 404: URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(profile.id)")
        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(index)")
    }
-   var httpMethod: HttpMethod = .put
-   //var dto: Dto? = profile
-    /*
-    func asDictionary() -> [String: String] {
-        return [
-            "name": profile.name,
-            "avatar": self.profile.avatar_url!,
-            "description": profile.description!
-        ]
-    }
-     */
+    var httpMethod: HttpMethod = .put
+    
     var dto: Dto?
     
 }

@@ -8,29 +8,25 @@
 import Foundation
 
 final class NftServiceAgent {
-    //weak var view: NftViewProtocol?
   
     let service : NftService //Impl
     
     init(_ networkClient: DefaultNetworkClient, _ storage:NftStorageImpl) {
         self.service = NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
     }
-    init(_ service: NftService) { //Impl) {
+    init(_ service: NftService) {
         self.service = service
     }
-
-    var nft: Nft = Nft.emptyNft
+    //public static var emptyNft: Nft = Nft(id:"", images: [], rating:0, description:"", price:0, author:"")
+    //var nft: Nft = Nft.emptyNft
+    static var nft = Nft(id:"", images: [], rating:0, description:"", price:0, author:"")
     
     var loadingProgress: Bool = false
     
     private func showLoading() {
         loadingProgress = true
-        //DispatchQueue.main.async { self.view?.showLoading() }
     }
     private func hideLoading() {
-        //DispatchQueue.main.async {
-            //self.view?.hideLoading()
-        //}
         loadingProgress = false
     }
 
@@ -40,10 +36,8 @@ final class NftServiceAgent {
         self.service.loadNft(id: nftId) { [weak self] result in
             switch result {
             case .success(let nft):
-                self?.nft = nft
-                //self?.applySavedSortOption()
+                NftServiceAgent.nft = nft
                 self?.hideLoading()
-                //self?.reloadTable()
                 
             case .failure(let error):
                 self?.hideLoading()

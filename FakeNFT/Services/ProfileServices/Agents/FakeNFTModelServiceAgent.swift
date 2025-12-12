@@ -78,7 +78,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                             isLiked = isLiked2
                         }
                         
-                        let nftModel = nft.NftModelObject(isLiked: isLiked)
+                        let nftModel = NftModelObject(from: nft, isLiked: isLiked)
                         nfts.append(nftModel)
                         
                         if nfts.count < totalNFTs {
@@ -128,7 +128,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                 
                 switch result {
                 case .success(let nft):
-                    let nftModel = nft.NftModelObject(isLiked:true)
+                    let nftModel = NftModelObject(from: nft, isLiked:true)
                     nfts.append(nftModel)
                     
                     if nfts.count < totalLikedNFTs {
@@ -158,6 +158,8 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
             }
         }
     }
+    
+    
     
     func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel] {
         // TODO: implement sorting
@@ -193,10 +195,6 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
             }
             index += 1
         }
-
-        // Сохраняем профиль
-//        saveUserProfile()
-//        guard self.profile.name != "" else { return }
         
         loadingStarted()
         
@@ -235,6 +233,22 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     func clearMyNFTsCollection() {}
     
     // MARK: - Private Methods
+    
+    private func NftModelObject(from nft: Nft, isLiked: Bool) -> NFTModel {
+            var m = NFTModel()
+            m.createdAt = Date()
+            m.images = []
+        m.images = nft.images.map { $0.absoluteString }
+            m.rating = nft.rating
+            m.description = nft.description
+            m.price = nft.price
+            m.isLiked = isLiked;
+            m.author = nft.author
+            m.name = nft.author
+            m.id = nft.id
+            return m
+        }
+    
     private func loadingStarted() {
         operationInProgress = true
     }

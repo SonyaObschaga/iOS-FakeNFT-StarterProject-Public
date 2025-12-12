@@ -63,7 +63,6 @@ final class NFTPresenter: NFTPresenterProtocol {
     
     func addMyNFTLikedObserver() {
         if self.myNFTsLikedObserverAdded == true { return }
-        //Mistyping error: let notificationName = FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification
         let notificationName = FakeNFTModelServicesNotifications.likedNFTSavedNotification
         nftLikedNotificationObserver = NotificationCenter.default.addObserver(
             forName: notificationName,
@@ -116,10 +115,8 @@ final class NFTPresenter: NFTPresenterProtocol {
         }
 
         switch result {
-        case .success(_): //let profile):
+        case .success(_):
             if isFavoritesPresenter {
-                
-                // do nothing - it cannot happen
                 let likedNFTs = agent.likedNfts
                 view?.updateNFTs(nfts: [], likedNFTs: likedNFTs)
                 print("Successfully saved favorites liked NFTs, Count = \(likedNFTs.count)")
@@ -182,13 +179,6 @@ final class NFTPresenter: NFTPresenterProtocol {
 
         // Переключаем
         agent.toggleNFTLikedFlag(nftId, !isCurrentlyLiked)
-
-        // Обновляем UI
-        //if isFavoritesPresenter {
-        //    agent.fetchProfileLikedNFTs()
-        //} else {
-        //    agent.fetchProfileMyNFTs()
-        //}
     }
     
 }

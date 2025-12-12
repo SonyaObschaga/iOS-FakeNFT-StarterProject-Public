@@ -6,8 +6,6 @@
 //
 
 struct ProfileDtoObject: Dto {
-   //let param1: String
-   //let param2: String
 
     let name: String
     let avatar: String
@@ -17,8 +15,6 @@ struct ProfileDtoObject: Dto {
     var likes: [String]
     
     enum CodingKeys: String, CodingKey {
-        //case param1 = "param_1" //имя поля в запросе будет param_1
-        //case param2 //имя поля в запросе будет param_2
         case name
         case description
         case avatar
