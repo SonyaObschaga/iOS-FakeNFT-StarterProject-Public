@@ -64,12 +64,19 @@ final class CurrencyCell: UITableViewCell {
     }
 
     private func setupUI() {
+        setupSubviews()
+        setupConstraints()
+    }
+
+    private func setupSubviews() {
         contentView.addSubview(logoView)
         contentView.addSubview(namePriceView)
         namePriceView.addSubview(titleLabel)
         namePriceView.addSubview(priceUsdLabel)
         contentView.addSubview(priceBtcLabel)
+    }
 
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             logoView.topAnchor.constraint(
                 equalTo: contentView.topAnchor,

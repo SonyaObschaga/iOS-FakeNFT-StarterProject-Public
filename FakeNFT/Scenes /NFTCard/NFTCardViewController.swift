@@ -486,7 +486,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
     }
 
     @objc private func openSellerWebsite() {
-        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+        if let url = URL(string: AppURLs.practicumIOSDeveloper) {
             let safariVC = SFSafariViewController(url: url)
             present(safariVC, animated: true)
         }
@@ -588,15 +588,16 @@ extension NFTCardViewController: UICollectionViewDataSource {
             return cell
         }
 
-        // Для коллекции изображений NFT
-        let cell =
-            collectionView.dequeueReusableCell(
-                withReuseIdentifier: "NftImageCell",
-                for: indexPath
-            ) as! NftImageCollectionViewCell
-        let cellModel = NftDetailCellModel(url: imageURLs[indexPath.item])
-        cell.configure(with: cellModel)
-        return cell
+        guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "NftImageCell",
+                    for: indexPath
+                ) as? NftImageCollectionViewCell else {
+                    assertionFailure("Failed to dequeue NftImageCollectionViewCell")
+                    return UICollectionViewCell()
+                }
+                let cellModel = NftDetailCellModel(url: imageURLs[indexPath.item])
+                cell.configure(with: cellModel)
+                return cell
     }
 }
 

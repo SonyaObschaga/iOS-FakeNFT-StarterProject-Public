@@ -55,9 +55,21 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
     }
 
     func viewDidLoad() {
+        loadData()
+    }
+
+    private func loadData() {
+        loadInitialData()
+        displayInitialNFTData()
+        loadAsyncData()
+    }
+
+    private func loadInitialData() {
         loadProfile()
         loadOrder()
+    }
 
+    private func displayInitialNFTData() {
         view?.displayNFT(
             name: input.name,
             rating: input.rating,
@@ -65,9 +77,22 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
             collectionName: input.collectionName
         )
         view?.displayNFTCollection(input.collectionNFTs)
+    }
+
+    private func loadAsyncData() {
         view?.showLoading()
 
         let group = DispatchGroup()
+
+        loadNFTImages(group: group)
+        loadCurrencies(group: group)
+
+        group.notify(queue: .main) { [weak self] in
+            self?.view?.hideLoading()
+        }
+    }
+
+    private func loadNFTImages(group: DispatchGroup) {
         group.enter()
         nftService.loadNft(id: input.id) { [weak self] result in
             defer { group.leave() }
@@ -76,7 +101,6 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let nft):
-
                     self.view?.displayImages(nft.images)
                 case .failure(let error):
                     self.view?.hideLoading()
@@ -84,13 +108,15 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
                 }
             }
         }
+    }
+
+    private func loadCurrencies(group: DispatchGroup) {
         group.enter()
         currencyService.loadCurrencies { [weak self] result in
             defer { group.leave() }
             guard let self = self else { return }
 
             DispatchQueue.main.async {
-
                 switch result {
                 case .success(let currencies):
                     self.view?.displayCurrencies(currencies)
@@ -98,10 +124,6 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
                     print("Error loading currencies: \(error)")
                 }
             }
-        }
-
-        group.notify(queue: .main) { [weak self] in
-            self?.view?.hideLoading()
         }
     }
 
@@ -156,14 +178,16 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
     }
 
     private func updateNFTItemsWithFavorites() {
-        for i in 0..<nftItems.count {
-            nftItems[i].isFavorite = favoriteNFTIds.contains(nftItems[i].id)
+        for index in 0..<nftItems.count {
+            nftItems[index].isFavorite = favoriteNFTIds.contains(
+                nftItems[index].id
+            )
         }
     }
 
     private func updateNFTItemsWithCart() {
-        for i in 0..<nftItems.count {
-            nftItems[i].isInCart = cartNFTIds.contains(nftItems[i].id)
+        for index in 0..<nftItems.count {
+            nftItems[index].isInCart = cartNFTIds.contains(nftItems[index].id)
         }
     }
 

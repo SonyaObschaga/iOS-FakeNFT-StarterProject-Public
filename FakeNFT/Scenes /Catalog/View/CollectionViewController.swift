@@ -46,7 +46,7 @@ final class CollectionViewController: UIViewController {
     }()
 
     var presenter: CollectionPresenterProtocol?
-    var onNftSelected: ((String, String, Double, Int, String) -> Void)?
+    var router: CollectionRouterProtocol?
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
@@ -172,7 +172,7 @@ final class CollectionViewController: UIViewController {
         scrollView.addSubview(authorNameLabel)
            authorNameLabel.translatesAutoresizingMaskIntoConstraints = false
            authorNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-           authorNameLabel.textColor = .systemBlue  // Синий цвет для ссылки
+           authorNameLabel.textColor = .systemBlue
            authorNameLabel.isUserInteractionEnabled = true
            
            let tapGesture = UITapGestureRecognizer(
@@ -312,7 +312,7 @@ final class CollectionViewController: UIViewController {
     
     @objc
     private func openAuthorWebsite() {
-        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+        if let url = URL(string: AppURLs.practicumIOSDeveloper) {
             let safariVC = SFSafariViewController(url: url)
             present(safariVC, animated: true)
         }
@@ -320,6 +320,10 @@ final class CollectionViewController: UIViewController {
 }
 
 extension CollectionViewController: CollectionViewProtocol {
+    var viewController: UIViewController? {
+           return self
+       }
+    
     func displayCollection(
         title: String,
         description: String,
@@ -409,26 +413,27 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         let screenWidth =
-            view.bounds.width > 0
-            ? view.bounds.width : UIScreen.main.bounds.width
+        view.bounds.width > 0
+        ? view.bounds.width : UIScreen.main.bounds.width
         let sideInsets: CGFloat = 32
         let spacingBetweenCells: CGFloat = 8 * 2
         let totalSpacing = sideInsets + spacingBetweenCells
-
+        
         let width = (screenWidth - totalSpacing) / 3
-
+        
         return CGSize(width: width, height: 192)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let nftItem = presenter?.nft(at: indexPath.item) else { return }
+        guard let presenter = presenter else { return }
         let collectionName = titleLabel.text ?? ""
-        onNftSelected?(
-            nftItem.id,
-            nftItem.title,
-            nftItem.price,
-            Int(nftItem.rating),
-            collectionName
-        )
+        
+        var allNFTs: [NFTItem] = []
+        for index in 0..<presenter.numberOfNFTs() {
+            allNFTs.append(presenter.nft(at: index))
+        }
+        
+        presenter.didSelectNFT(at: indexPath.item, collectionName: collectionName, allNFTs: allNFTs)
     }
+
 }
