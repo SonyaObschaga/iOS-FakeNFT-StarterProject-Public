@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class PaymentViewController: UIViewController {
     
@@ -151,7 +152,7 @@ final class PaymentViewController: UIViewController {
     
     @objc
     private func proceedPaymentButtonTapped() {
-        //вызвать VC успешной оплаты при положительном ответе от сервера
+        presenter?.proceedPayment()
     }
 }
 
@@ -202,6 +203,33 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PaymentViewController: PaymentView {
+    
+    func showLoading() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        ProgressHUD.dismiss()
+    }
+    
+    func showSuccess() {
+        let vc = SuccessfullPaymentViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
+    }
+    
+    func showPaymentError() {
+        let alert = UIAlertController(title: "Не удалось произвести оплату", message: nil, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Отмена", style: .default))
+
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
+            self?.showSuccess()
+        }))
+
+        present(alert, animated: true)
+    }
+    
     func reload() {
         collectionView.reloadData()
     }

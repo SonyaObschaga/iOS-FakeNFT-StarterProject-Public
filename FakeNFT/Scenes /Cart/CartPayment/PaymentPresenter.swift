@@ -3,6 +3,10 @@ import Foundation
 protocol PaymentView: AnyObject {
     func reload()
     func reloadItems(oldIndex: Int?, newIndex: Int)
+    func showLoading()
+    func hideLoading()
+    func showSuccess()
+    func showPaymentError()
 }
 
 final class PaymentPresenter {
@@ -30,5 +34,14 @@ final class PaymentPresenter {
         previousSelectedIndex = newIndex
         
         view?.reloadItems(oldIndex: oldIndex, newIndex: newIndex)
+    }
+    
+    func proceedPayment() {
+        view?.showLoading()
+        // пока нет работы с сетью - делаем небольшую задержку для показа ProgressHUD
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.view?.hideLoading()
+            self?.view?.showPaymentError()
+        }
     }
 }

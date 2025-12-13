@@ -8,6 +8,8 @@ final class CartViewController: UIViewController {
     private var presenter: CartPresenter?
     private var savedImageForDelete: UIImage?
     
+    private var fetchedNftIds: [String] = []
+    
     // MARK: - UI Elements
     
     private lazy var sortButton: UIButton = {
@@ -68,13 +70,23 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.font = .titleMedium
+        label.textColor = .textPrimary
+        label.textAlignment = .center
+        label.text = "Корзина пуста"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundPrimary
         
-        presenter = CartPresenter(view: self)
+        presenter = CartPresenter(view: self, cartService: CartOrderService(networkClient: DefaultNetworkClient()))
         
         setupViews()
         setupConstraints()
@@ -91,6 +103,7 @@ final class CartViewController: UIViewController {
         totalOfCartView.addSubview(totalNft)
         totalOfCartView.addSubview(totalCost)
         totalOfCartView.addSubview(goToPayButton)
+        view.addSubview(emptyCartLabel)
         
         cartTableView.register(CartTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         cartTableView.dataSource = self
@@ -120,12 +133,55 @@ final class CartViewController: UIViewController {
             goToPayButton.topAnchor.constraint(equalTo: totalOfCartView.topAnchor, constant: 16),
             goToPayButton.bottomAnchor.constraint(equalTo: totalOfCartView.bottomAnchor, constant: -16),
             goToPayButton.trailingAnchor.constraint(equalTo: totalOfCartView.trailingAnchor, constant: -16),
-            goToPayButton.widthAnchor.constraint(equalToConstant: 240)
+            goToPayButton.widthAnchor.constraint(equalToConstant: 240),
+            
+            emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emptyCartLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
     private func setupTargets() {
         goToPayButton.addTarget(self, action: #selector(goToPayment), for: .touchUpInside)
+        sortButton.addTarget(self, action: #selector(sortTapped), for: .touchUpInside)
+    }
+    
+    private func updateEmptyState(isEmpty: Bool) {
+        emptyCartLabel.isHidden = !isEmpty
+        cartTableView.isHidden = isEmpty
+        totalOfCartView.isHidden = isEmpty
+        sortButton.isHidden = isEmpty
+    }
+    
+    
+    func showSortOptions() {
+        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+
+        let priceTitle = CartSortOption.price.displayTitle
+        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .price)
+        }))
+
+        let ratingTitle = CartSortOption.rating.displayTitle
+        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .rating)
+        }))
+
+        let nameTitle = CartSortOption.name.displayTitle
+        
+        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak self] _ in
+            self?.presenter?.applySort(option: .name)
+        }))
+
+        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+
+        present(alert, animated: true)
+    }
+    
+    func updateCart(with nftIds: [String]) {
+        self.fetchedNftIds = nftIds
+        print(fetchedNftIds)
+        //cartTableView.reloadData()
     }
     
     // MARK: - Actions
@@ -136,6 +192,11 @@ final class CartViewController: UIViewController {
         paymentViewController.modalPresentationStyle = .overFullScreen
         
         present(paymentViewController, animated: true)
+    }
+    
+    @objc
+    private func sortTapped() {
+        presenter?.sortTapped()
     }
 }
 
@@ -175,6 +236,8 @@ extension CartViewController: CartView {
     func updateTotal(nftCount: Int, totalPrice: String) {
         totalNft.text = "\(nftCount) NFT"
         totalCost.text = "\(totalPrice) ETH"
+        
+        updateEmptyState(isEmpty: nftCount == 0)
     }
     
     func showDelete(at indexPath: IndexPath) {
