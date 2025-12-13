@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class CartViewController: UIViewController {
     
@@ -156,25 +157,25 @@ final class CartViewController: UIViewController {
     
     func showSortOptions() {
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
-
+        
         let priceTitle = CartSortOption.price.displayTitle
         alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak presenter] _ in
             presenter?.applySort(option: .price)
         }))
-
+        
         let ratingTitle = CartSortOption.rating.displayTitle
         alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak presenter] _ in
             presenter?.applySort(option: .rating)
         }))
-
+        
         let nameTitle = CartSortOption.name.displayTitle
         
         alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak presenter] _ in
             presenter?.applySort(option: .name)
         }))
-
+        
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
-
+        
         present(alert, animated: true)
     }
     
@@ -211,8 +212,7 @@ extension CartViewController: UITableViewDataSource {
         cell.delegate = self
         
         guard let nft = presenter?.nft(at: indexPath) else { return UITableViewCell() }
-        let urlString = nft.images.first?.absoluteString ?? ""
-        cell.configure(nftName: nft.name, nftImageURL: urlString, rating: nft.rating, price: Float(nft.price))
+        cell.configure(nftName: nft.name, nftImageURL: nft.images.first, rating: nft.rating, price: Float(nft.price))
         return cell
     }
 }
@@ -248,5 +248,13 @@ extension CartViewController: CartView {
         deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
         deleteConfirmationViewController.delegate = self
         present(deleteConfirmationViewController, animated: true)
+    }
+    
+    func showLoading() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        ProgressHUD.dismiss()
     }
 }

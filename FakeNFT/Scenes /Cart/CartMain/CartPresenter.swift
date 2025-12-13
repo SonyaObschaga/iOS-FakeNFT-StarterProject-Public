@@ -6,6 +6,8 @@ protocol CartView: AnyObject {
     func showDelete(at indexPath: IndexPath)
     func showSortOptions()
     func updateCart(with nftIds: [String])
+    func showLoading()
+    func hideLoading()
 }
 
 final class CartPresenter {
@@ -72,8 +74,11 @@ final class CartPresenter {
     }
     
     func loadCart() {
+        view?.showLoading()
+        
         servicesAssembly.cartOredrService.loadCart() { [weak self] result in
             DispatchQueue.main.async {
+                self?.view?.hideLoading()
                 switch result {
                 case .success(let ids):
                     self?.nftIds = ids
