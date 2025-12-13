@@ -158,19 +158,19 @@ final class CartViewController: UIViewController {
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
 
         let priceTitle = CartSortOption.price.displayTitle
-        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .price)
+        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .price)
         }))
 
         let ratingTitle = CartSortOption.rating.displayTitle
-        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .rating)
+        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .rating)
         }))
 
         let nameTitle = CartSortOption.name.displayTitle
         
-        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .name)
+        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .name)
         }))
 
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
@@ -179,9 +179,9 @@ final class CartViewController: UIViewController {
     }
     
     func updateCart(with nftIds: [String]) {
-        self.fetchedNftIds = nftIds
+        fetchedNftIds = nftIds
         print(fetchedNftIds)
-        //cartTableView.reloadData()
+        cartTableView.reloadData()
     }
     
     // MARK: - Actions
