@@ -13,22 +13,20 @@ final class CartPresenter {
     private weak var view: CartView?
     private let sortManager = CartSortPreferenceManager()
     
-    private let cartService: CartService
+    private let servicesAssembly = ServicesAssembly(
+        networkClient: DefaultNetworkClient(),
+        nftStorage: NftStorageImpl()
+    )
     private var nftIds: [String] = []
     
     var currentSortOption: CartSortOption {
         sortManager.load()
     }
     
-    private var nftData: [TestNFTModel] = [
-        TestNFTModel(name: "Atheen", rating: 2, price: 5.15),
-        TestNFTModel(name: "Bulbasaur", rating: 3, price: 2.22),
-        TestNFTModel(name: "Greena", rating: 1, price: 3.09)
-    ]
+    private var nftData: [Nft] = []
     
-    init(view: CartView, cartService: CartService) {
+    init(view: CartView) {
         self.view = view
-        self.cartService = cartService
         loadCart()
         applySort(option: currentSortOption)
     }
@@ -37,7 +35,7 @@ final class CartPresenter {
     
     var rows: Int { nftData.count }
     
-    func model(at indexPath: IndexPath) -> TestNFTModel {
+    func nft(at indexPath: IndexPath) -> Nft {
         nftData[indexPath.row]
     }
     
@@ -59,7 +57,7 @@ final class CartPresenter {
     
     func applySort(option: CartSortOption) {
         sortManager.save(option)
-
+        
         switch option {
         case .price:
             nftData.sort { $0.price < $1.price }
@@ -68,18 +66,32 @@ final class CartPresenter {
         case .name:
             nftData.sort { $0.name.lowercased() < $1.name.lowercased() }
         }
-
+        
         view?.reload()
         recalcTotal()
     }
     
     func loadCart() {
-        cartService.loadCart() { [weak self] result in
+        servicesAssembly.cartOredrService.loadCart() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let ids):
                     self?.nftIds = ids
-                    self?.view?.updateCart(with: ids)
+                    ids.forEach { self?.loadNft(id: $0) }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    private func loadNft(id: String) {
+        servicesAssembly.nftService.loadNft(id: id) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let nft):
+                    self?.nftData.append(nft)
+                    self?.applySort(option: self?.currentSortOption ?? .price)
                 case .failure(let error):
                     print(error)
                 }

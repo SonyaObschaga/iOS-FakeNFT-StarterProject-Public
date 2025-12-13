@@ -11,7 +11,7 @@ protocol CartService {
     func loadCart(completion: @escaping CartCompletion)
 }
 
-final class CartOrderService: CartService {
+final class CartOrderServiceImpl: CartService {
 
     private let networkClient: NetworkClient
     private var nftIds: [String] = []

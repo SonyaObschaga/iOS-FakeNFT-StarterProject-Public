@@ -86,7 +86,7 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundPrimary
         
-        presenter = CartPresenter(view: self, cartService: CartOrderService(networkClient: DefaultNetworkClient()))
+        presenter = CartPresenter(view: self)
         
         setupViews()
         setupConstraints()
@@ -210,8 +210,9 @@ extension CartViewController: UITableViewDataSource {
         
         cell.delegate = self
         
-        guard let nft = presenter?.model(at: indexPath) else { return UITableViewCell() }
-        cell.configure(nftName: nft.name, nftImageURL: "", rating: nft.rating, price: nft.price)
+        guard let nft = presenter?.nft(at: indexPath) else { return UITableViewCell() }
+        let urlString = nft.images.first?.absoluteString ?? ""
+        cell.configure(nftName: nft.name, nftImageURL: urlString, rating: nft.rating, price: Float(nft.price))
         return cell
     }
 }
