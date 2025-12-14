@@ -146,11 +146,11 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
         let button = UIButton(type: .system)
         button.setTitle("Перейти на сайт продавца", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        button.backgroundColor = .white
+        button.backgroundColor = .systemBackground
         button.setTitleColor(.label, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderColor = UIColor.label.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
