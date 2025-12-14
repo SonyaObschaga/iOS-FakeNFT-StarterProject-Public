@@ -193,7 +193,7 @@ final class CartViewController: UIViewController {
     
     @objc
     private func goToPayment() {
-        let paymentViewController = PaymentViewController()
+        let paymentViewController = PaymentViewController(nftIds: fetchedNftIds)
         paymentViewController.modalPresentationStyle = .overFullScreen
         
         present(paymentViewController, animated: true)

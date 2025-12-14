@@ -6,6 +6,7 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private properties
     
     private var presenter: PaymentPresenter?
+    private var nftIds: [String]
     
     // MARK: - UI Elements
     
@@ -79,12 +80,21 @@ final class PaymentViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
+    init(nftIds: [String]) {
+        self.nftIds = nftIds
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = PaymentPresenter(view: self)
+        presenter = PaymentPresenter(view: self, nftIds: nftIds)
         
         view.backgroundColor = .backgroundPrimary
         
@@ -220,21 +230,21 @@ extension PaymentViewController: PaymentView {
     
     func showPaymentError() {
         let alert = UIAlertController(title: "Не удалось произвести оплату", message: nil, preferredStyle: .alert)
-
+        
         alert.addAction(UIAlertAction(title: "Отмена", style: .default))
-
+        
         alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
             self?.showSuccess()
         }))
-
+        
         present(alert, animated: true)
     }
     
     func showError(_ error: AppError) {
         let alert = UIAlertController(title: error.title, message: nil, preferredStyle: .alert)
-
+        
         alert.addAction(UIAlertAction(title: error.cancelTitle, style: .default))
-
+        
         alert.addAction(UIAlertAction(
             title: error.retryTitle,
             style: .default,
@@ -242,7 +252,7 @@ extension PaymentViewController: PaymentView {
                 self?.presenter?.retry(for: error)
             }
         ))
-
+        
         present(alert, animated: true)
     }
     
