@@ -18,7 +18,11 @@ final class ServicesAssembly {
         )
     }
     
-    var cartOredrService: CartService {
-        CartOrderServiceImpl(networkClient: networkClient)
+    var cartGetOrderService: GetCartService {
+        CartGetOrderServiceImpl(networkClient: networkClient)
+    }
+    
+    var setCurrencyService: SetCurrencyService {
+        SetCurrencyServiceImpl(networkClient: networkClient)
     }
 }

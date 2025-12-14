@@ -230,6 +230,22 @@ extension PaymentViewController: PaymentView {
         present(alert, animated: true)
     }
     
+    func showError(_ error: AppError) {
+        let alert = UIAlertController(title: error.title, message: nil, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: error.cancelTitle, style: .default))
+
+        alert.addAction(UIAlertAction(
+            title: error.retryTitle,
+            style: .default,
+            handler: { [weak self] _ in
+                self?.presenter?.retry(for: error)
+            }
+        ))
+
+        present(alert, animated: true)
+    }
+    
     func reload() {
         collectionView.reloadData()
     }
