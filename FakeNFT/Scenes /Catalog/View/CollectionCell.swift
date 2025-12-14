@@ -40,6 +40,7 @@ final class CollectionCell: UICollectionViewCell {
         iv.contentMode = .center
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = .label
         return iv
     }()
 
