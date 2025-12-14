@@ -1,7 +1,7 @@
 import UIKit
 
 protocol DeleteConfirmationDelegate: AnyObject {
-    func didConfirmDelete(at indexPath: IndexPath)
+    func didConfirmDelete()
 }
 
 final class DeleteConfirmationViewController: UIViewController {
@@ -9,7 +9,6 @@ final class DeleteConfirmationViewController: UIViewController {
     weak var delegate: DeleteConfirmationDelegate?
     
     private let nftImage: UIImage?
-    private let indexPath: IndexPath
     
     private lazy var confirmDeleteButton: UIButton = {
         let button = UIButton()
@@ -67,9 +66,8 @@ final class DeleteConfirmationViewController: UIViewController {
         return stackView
     }()
     
-    init(image: UIImage?, indexPath: IndexPath) {
+    init(image: UIImage?) {
         self.nftImage = image
-        self.indexPath = indexPath
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -126,7 +124,7 @@ final class DeleteConfirmationViewController: UIViewController {
     }
     
     @objc private func confirmTapped() {
-        delegate?.didConfirmDelete(at: indexPath)
+        delegate?.didConfirmDelete()
         dismiss(animated: true)
     }
     

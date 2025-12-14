@@ -43,10 +43,11 @@ final class CartPresenter {
         nftData[indexPath.row]
     }
     
-    func delete(at indexPath: IndexPath) {
-        nftData.remove(at: indexPath.row)
-        view?.reload()
-        recalcTotal()
+    func delete(nftId: String) {
+        if let index = nftIds.firstIndex(where: { $0 == nftId }) {
+            nftData.remove(at: index)
+            updateOrderAfterDelete()
+        }
     }
     
     func recalcTotal() {
@@ -109,5 +110,27 @@ final class CartPresenter {
     
     func sortTapped() {
         view?.showSortOptions()
+    }
+    
+    func updateOrderAfterDelete() {
+        view?.showLoading()
+        
+        servicesAssembly.updateAndPayOrderService.updateOrder(nftIds: nftIds) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                
+                self.view?.hideLoading()
+                
+                switch result {
+                case .success:
+                    print("[CartPresenter/updateOrderAfterDelete]: Deleting nft success")
+                    self.view?.reload()
+                    self.recalcTotal()
+                    
+                case .failure(let error):
+                    print("[CartPresenter/updateOrderAfterDelete]: Failed to delete nft: \(error)")
+                }
+            }
+        }
     }
 }

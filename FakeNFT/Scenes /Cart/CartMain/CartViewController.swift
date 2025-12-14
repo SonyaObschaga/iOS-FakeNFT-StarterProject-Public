@@ -8,6 +8,7 @@ final class CartViewController: UIViewController {
     private let reuseIdentifier = "CartCell"
     private var presenter: CartPresenter?
     private var savedImageForDelete: UIImage?
+    private var nftIdForDelete: String?
     
     private var fetchedNftIds: [String] = []
     
@@ -216,22 +217,24 @@ extension CartViewController: UITableViewDataSource {
         cell.delegate = self
         
         guard let nft = presenter?.nft(at: indexPath) else { return UITableViewCell() }
-        cell.configure(nftName: nft.name, nftImageURL: nft.images.first, rating: nft.rating, price: Float(nft.price))
+        cell.configure(nftName: nft.name, nftImageURL: nft.images.first, rating: nft.rating, price: Float(nft.price), nftId: nft.id)
         return cell
     }
 }
 
 extension CartViewController: CartCellDelegate {
-    func didTapDelete(in cell: CartTableViewCell, with image: UIImage) {
+    func didTapDelete(in cell: CartTableViewCell, with image: UIImage, nftId: String) {
         guard let indexPath = cartTableView.indexPath(for: cell) else { return }
         presenter?.handleDeleteTap(at: indexPath)
         savedImageForDelete = image
+        nftIdForDelete = nftId
     }
 }
 
 extension CartViewController: DeleteConfirmationDelegate {
-    func didConfirmDelete(at indexPath: IndexPath) {
-        presenter?.delete(at: indexPath)
+    func didConfirmDelete() {
+        guard let nftIdForDelete else { return }
+        presenter?.delete(nftId: nftIdForDelete)
     }
 }
 
@@ -248,7 +251,7 @@ extension CartViewController: CartView {
     func showDelete(at indexPath: IndexPath) {
         guard let image = savedImageForDelete else { return }
         
-        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, indexPath: indexPath)
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image)
         deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
         deleteConfirmationViewController.delegate = self
         present(deleteConfirmationViewController, animated: true)
