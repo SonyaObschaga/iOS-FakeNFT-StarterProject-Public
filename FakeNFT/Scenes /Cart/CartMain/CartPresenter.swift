@@ -33,9 +33,11 @@ final class CartPresenter {
         applySort(option: currentSortOption)
     }
     
-    // MARK: - Public
-    
     var rows: Int { nftData.count }
+    
+    func viewWillAppear() {
+        loadCart()
+    }
     
     func nft(at indexPath: IndexPath) -> Nft {
         nftData[indexPath.row]

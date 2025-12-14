@@ -95,6 +95,11 @@ final class CartViewController: UIViewController {
         setupTargets()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.viewWillAppear()
+    }
+    
     // MARK: - Setup UI Methods
     
     private func setupViews() {
@@ -181,7 +186,6 @@ final class CartViewController: UIViewController {
     
     func updateCart(with nftIds: [String]) {
         fetchedNftIds = nftIds
-        print(fetchedNftIds)
         cartTableView.reloadData()
     }
     
