@@ -8,5 +8,5 @@ struct Nft: Decodable {
     let price: Double
     let description: String?
     let author: String?
-    let createdAt: String?  // Опционально
+    let createdAt: String? 
 }

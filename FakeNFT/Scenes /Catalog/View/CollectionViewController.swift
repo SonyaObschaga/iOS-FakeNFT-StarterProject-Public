@@ -7,6 +7,7 @@
 
 import Kingfisher
 import UIKit
+import SafariServices
 
 final class CollectionViewController: UIViewController {
 
@@ -15,6 +16,7 @@ final class CollectionViewController: UIViewController {
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let authorLabel = UILabel()
+    let authorNameLabel = UILabel()
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -44,7 +46,8 @@ final class CollectionViewController: UIViewController {
     }()
 
     var presenter: CollectionPresenterProtocol?
-
+    var router: CollectionRouterProtocol?
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -162,25 +165,51 @@ final class CollectionViewController: UIViewController {
     private func setupAuthor() {
         scrollView.addSubview(authorLabel)
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
-
         authorLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-
-        NSLayoutConstraint.activate([
-            authorLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 16
-            ),
-            authorLabel.leadingAnchor.constraint(
-                equalTo: scrollView.leadingAnchor,
-                constant: 16
-            ),
-            authorLabel.trailingAnchor.constraint(
-                equalTo: scrollView.trailingAnchor,
-                constant: -16
-            ),
-            authorLabel.heightAnchor.constraint(equalToConstant: 28),
-        ])
+        authorLabel.textColor = .label
+        
+       
+        scrollView.addSubview(authorNameLabel)
+           authorNameLabel.translatesAutoresizingMaskIntoConstraints = false
+           authorNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+           authorNameLabel.textColor = .systemBlue
+           authorNameLabel.isUserInteractionEnabled = true
+           
+           let tapGesture = UITapGestureRecognizer(
+               target: self,
+               action: #selector(openAuthorWebsite)
+           )
+           authorNameLabel.addGestureRecognizer(tapGesture)
+           
+           NSLayoutConstraint.activate([
+            
+               authorLabel.topAnchor.constraint(
+                   equalTo: titleLabel.bottomAnchor,
+                   constant: 16
+               ),
+               authorLabel.leadingAnchor.constraint(
+                   equalTo: scrollView.leadingAnchor,
+                   constant: 16
+               ),
+               authorLabel.heightAnchor.constraint(equalToConstant: 28),
+        
+               authorNameLabel.topAnchor.constraint(
+                   equalTo: authorLabel.topAnchor
+               ),
+               authorNameLabel.leadingAnchor.constraint(
+                   equalTo: authorLabel.trailingAnchor,
+                   constant: 4
+               ),
+               authorNameLabel.trailingAnchor.constraint(
+                   lessThanOrEqualTo: scrollView.trailingAnchor,
+                   constant: -16
+               ),
+               authorNameLabel.heightAnchor.constraint(
+                   equalTo: authorLabel.heightAnchor
+               ),
+           ])
     }
+    
     private func setupDescription() {
         scrollView.addSubview(descriptionLabel)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -280,9 +309,21 @@ final class CollectionViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc
+    private func openAuthorWebsite() {
+        if let url = URL(string: AppURLs.practicumIOSDeveloper) {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
+    }
 }
 
 extension CollectionViewController: CollectionViewProtocol {
+    var viewController: UIViewController? {
+           return self
+       }
+    
     func displayCollection(
         title: String,
         description: String,
@@ -291,11 +332,11 @@ extension CollectionViewController: CollectionViewProtocol {
     ) {
         titleLabel.text = title
         descriptionLabel.text = description
-        authorLabel.text =
-            NSLocalizedString(
+        authorNameLabel.text = author
+        authorLabel.text = NSLocalizedString(
                 "collectionAuthor",
                 comment: "Автор коллекции"
-            ) + ": \(author)"
+            ) + ":"
         topImage.kf.setImage(with: coverURL)
     }
 
@@ -372,17 +413,27 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         let screenWidth =
-            view.bounds.width > 0
-            ? view.bounds.width : UIScreen.main.bounds.width
+        view.bounds.width > 0
+        ? view.bounds.width : UIScreen.main.bounds.width
         let sideInsets: CGFloat = 32
         let spacingBetweenCells: CGFloat = 8 * 2
         let totalSpacing = sideInsets + spacingBetweenCells
-
+        
         let width = (screenWidth - totalSpacing) / 3
-        print(
-            "🔵 sizeForItemAt indexPath: \(indexPath), size: \(CGSize(width: width, height: width))"
-        )
-
+        
         return CGSize(width: width, height: 192)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let presenter else { return }
+        let collectionName = titleLabel.text ?? ""
+        
+        var allNFTs: [NFTItem] = []
+        for index in 0..<presenter.numberOfNFTs() {
+            allNFTs.append(presenter.nft(at: index))
+        }
+        
+        presenter.didSelectNFT(at: indexPath.item, collectionName: collectionName, allNFTs: allNFTs)
+    }
+
 }

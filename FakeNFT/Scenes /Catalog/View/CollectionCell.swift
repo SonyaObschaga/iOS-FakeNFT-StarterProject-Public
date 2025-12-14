@@ -139,6 +139,7 @@ final class CollectionCell: UICollectionViewCell {
                 equalTo: contentView.leadingAnchor
             ),
             ratingView.heightAnchor.constraint(equalToConstant: 12),
+            
             verticalStack.topAnchor.constraint(
                 equalTo: ratingView.bottomAnchor,
                 constant: 4
@@ -214,7 +215,7 @@ final class CollectionCell: UICollectionViewCell {
             ? UIImage(resource: .likeButtonOn)
             : UIImage(resource: .likeButtonOff)
 
-        ratingView.image = ratingImage(for: Int(model.rating))
+        ratingView.image = UIImage.ratingImage(for: Int(model.rating))
         priceLabel.text = "\(model.price) ETH"
 
         cartImageView.image =
@@ -222,16 +223,5 @@ final class CollectionCell: UICollectionViewCell {
             ? UIImage(resource: .deleteFromCart)
             : UIImage(resource: .addToCart)
     }
-
-    private func ratingImage(for rating: Int) -> UIImage? {
-        switch rating {
-        case 0: return UIImage(resource: .rating0)
-        case 1: return UIImage(resource: .rating1)
-        case 2: return UIImage(resource: .rating2)
-        case 3: return UIImage(resource: .rating3)
-        case 4: return UIImage(resource: .rating4)
-        case 5: return UIImage(resource: .rating5)
-        default: return UIImage(resource: .rating0)
-        }
-    }
 }
+

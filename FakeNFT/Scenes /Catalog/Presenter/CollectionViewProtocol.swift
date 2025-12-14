@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol CollectionViewProtocol: AnyObject {
     func displayCollection(
@@ -18,4 +19,5 @@ protocol CollectionViewProtocol: AnyObject {
     func reloadNFT(at index: Int)
     func showLoading()
     func hideLoading()
+    var viewController: UIViewController? { get }
 }
