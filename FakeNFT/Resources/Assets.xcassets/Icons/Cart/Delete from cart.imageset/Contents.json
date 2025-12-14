@@ -17,6 +17,7 @@
       "scale" : "1x"
     },
     {
+      "filename" : "tabler_trash-x@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -27,10 +28,12 @@
           "value" : "dark"
         }
       ],
+      "filename" : "Frame.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tabler_trash-x@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     },
@@ -41,6 +44,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "Frame.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -48,5 +52,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "template-rendering-intent" : "template"
   }
 }
