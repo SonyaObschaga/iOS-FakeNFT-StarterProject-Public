@@ -78,7 +78,7 @@ final class CartPresenter {
     func loadCart() {
         view?.showLoading()
         
-        servicesAssembly.cartOredrService.loadCart() { [weak self] result in
+        servicesAssembly.cartGetOrderService.loadCart() { [weak self] result in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
                 switch result {
