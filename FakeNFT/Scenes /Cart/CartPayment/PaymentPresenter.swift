@@ -42,6 +42,7 @@ final class PaymentPresenter {
     
     func proceedPayment() {
         view?.showLoading()
+        
         // пока нет работы с сетью - делаем небольшую задержку для показа ProgressHUD
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.view?.hideLoading()

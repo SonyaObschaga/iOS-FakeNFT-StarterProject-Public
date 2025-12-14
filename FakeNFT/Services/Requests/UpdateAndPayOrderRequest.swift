@@ -1,6 +1,6 @@
 import Foundation
 
-struct UpdateOrderDto: Dto {
+struct UpdateAndPayOrderDto: Dto {
     let nftIds: [String]
 
     func asDictionary() -> [String: String] {
@@ -10,7 +10,7 @@ struct UpdateOrderDto: Dto {
     }
 }
 
-struct UpdateOrderRequest: NetworkRequest {
+struct UpdateAndPayOrderRequest: NetworkRequest {
 
     struct DtoModel: Dto {
         let nftIds: [String]
@@ -23,7 +23,6 @@ struct UpdateOrderRequest: NetworkRequest {
     }
 
     let nftIds: [String]
-
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
     }

@@ -25,4 +25,8 @@ final class ServicesAssembly {
     var setCurrencyService: SetCurrencyService {
         SetCurrencyServiceImpl(networkClient: networkClient)
     }
+    
+    var updateAndPayOrderService: UpdateAndPayService {
+        UpdateAndPayOrderServiceImpl(networkClient: networkClient)
+    }
 }
