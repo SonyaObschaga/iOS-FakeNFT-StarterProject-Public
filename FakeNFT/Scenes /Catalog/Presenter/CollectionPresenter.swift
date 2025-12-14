@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol CollectionPresenterProtocol {
     func viewDidLoad()
@@ -13,6 +14,7 @@ protocol CollectionPresenterProtocol {
     func nft(at index: Int) -> NFTItem
     func didTapFavorite(at index: Int)
     func didTapCart(at index: Int)
+    func didSelectNFT(at index: Int, collectionName: String, allNFTs: [NFTItem])
 }
 
 final class CollectionPresenter: CollectionPresenterProtocol {
@@ -22,6 +24,8 @@ final class CollectionPresenter: CollectionPresenterProtocol {
     }
 
     weak var view: CollectionViewProtocol?
+    weak var router: CollectionRouterProtocol?
+
     private let input: CollectionInput
     private let collectionsService: CollectionsService
     private let nftService: NftService
@@ -37,13 +41,15 @@ final class CollectionPresenter: CollectionPresenterProtocol {
         collectionsService: CollectionsService,
         nftService: NftService,
         profileService: ProfileService,
-        orderService: OrderService
+        orderService: OrderService,
+        router: CollectionRouterProtocol? = nil
     ) {
         self.input = input
         self.collectionsService = collectionsService
         self.nftService = nftService
         self.profileService = profileService
         self.orderService = orderService
+        self.router = router
     }
 
     private var currentLikesArray: [String] = []
@@ -269,4 +275,30 @@ final class CollectionPresenter: CollectionPresenterProtocol {
             }
         }
     }
+
+    func didSelectNFT(at index: Int, collectionName: String, allNFTs: [NFTItem]) {
+        guard index < allNFTs.count else {
+            print("⚠️ Index out of bounds: \(index) >= \(allNFTs.count)")
+            return
+        }
+        guard let viewController = view?.viewController else {
+            print("⚠️ View controller is nil")
+            return
+        }
+        guard let router = router else {
+            print("⚠️ Router is nil")
+            return
+        }
+        
+        let nftItem = allNFTs[index]
+        let data = NFTSelectionData(
+            nftItem: nftItem,
+            collectionName: collectionName,
+            collectionNFTs: allNFTs
+        )
+        
+        print("✅ Navigating to NFTCard with id: \(nftItem.id)")
+        router.showNFTCard(data: data, from: viewController)
+    }
+
 }

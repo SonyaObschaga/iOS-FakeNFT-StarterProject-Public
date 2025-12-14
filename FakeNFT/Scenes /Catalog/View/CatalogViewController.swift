@@ -63,7 +63,6 @@ final class CatalogViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
-        // Создаем кнопку сортировки для navigation bar
         let sortButton = UIBarButtonItem(
             image: UIImage(resource: .sort),
             style: .plain,
@@ -71,8 +70,6 @@ final class CatalogViewController: UIViewController {
             action: #selector(sortButtonTapped)
         )
         sortButton.tintColor = .label
-
-        // Добавляем кнопку в правую часть navigation bar
         navigationItem.rightBarButtonItem = sortButton
     }
 
@@ -115,7 +112,6 @@ final class CatalogViewController: UIViewController {
         alertController.addAction(sortByCountAction)
         alertController.addAction(cancelAction)
 
-        // Для iPad: указываем, откуда должно появиться меню
         if let popover = alertController.popoverPresentationController {
             popover.barButtonItem = navigationItem.rightBarButtonItem
         }
