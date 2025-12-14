@@ -51,7 +51,7 @@ final class CartPresenter {
     
     func recalcTotal() {
         let total = nftData.reduce(0) { $0 + $1.price }
-        let totalString = String(total).replacingOccurrences(of: ".", with: ",")
+        let totalString = String(format: "%.2f", total).replacingOccurrences(of: ".", with: ",")
         view?.updateTotal(nftCount: nftData.count, totalPrice: totalString)
     }
     
@@ -97,6 +97,7 @@ final class CartPresenter {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let nft):
+                    guard !(self?.nftData.contains(where: { $0.id == nft.id }) ?? false) else { return }
                     self?.nftData.append(nft)
                     self?.applySort(option: self?.currentSortOption ?? .price)
                 case .failure(let error):
