@@ -425,7 +425,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let presenter = presenter else { return }
+        guard let presenter else { return }
         let collectionName = titleLabel.text ?? ""
         
         var allNFTs: [NFTItem] = []
