@@ -27,10 +27,10 @@ extension UIColor {
     static let semanticGreen = UIColor(resource: .greenUniversal)
     static let semanticRed = UIColor(resource: .redUniversal)
     static let semanticYellow = UIColor(resource: .yellowUniversal)
+    static let semanticBlue = UIColor(resource: .blueUniversal)
     
     // Base Colors
     static let baseBlack = UIColor(resource: .blackUniversal)
     static let baseWhite = UIColor(resource: .whiteUniversal)
     static let neutralGray = UIColor(resource: .grayUniversal)
-    
 }

@@ -9,19 +9,40 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nftStorage: NftStorageImpl()
     )
 
-    func scene(
-        _ scene: UIScene,
-        willConnectTo session: UISceneSession,
-        options connectionOptions: UIScene.ConnectionOptions
-    ) {
-        guard let windowScene = scene as? UIWindowScene else { return }
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let window = UIWindow(windowScene: windowScene)
-  
-        let tabBarController = TabBarController(servicesAssembly: servicesAssembly)
+        window = UIWindow(windowScene: windowScene)
         
-        window.rootViewController = tabBarController
-        self.window = window
-        window.makeKeyAndVisible()
+        let splashViewController = SplashViewController()
+        
+        splashViewController.onFinish = { [weak self] in
+            
+            self?.showMainScreen()
+        }
+        
+        window?.rootViewController = splashViewController
+        window?.makeKeyAndVisible()
+    }
+    
+    private func showMainScreen() {
+        guard let window = window else { return }
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let tabBarController = storyboard.instantiateInitialViewController() as? TabBarController else {
+            return
+        }
+        
+        tabBarController.servicesAssembly = servicesAssembly
+        
+        UIView.transition(
+            with: window,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: {
+                window.rootViewController = tabBarController
+            },
+            completion: nil
+        )
     }
 }
