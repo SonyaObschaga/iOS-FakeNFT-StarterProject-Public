@@ -76,8 +76,6 @@ final class PaymentPresenter {
     }
     
     func changeCurrency(id: String) {
-        view?.showLoading()
-        
         servicesAssembly.setCurrencyService.setCurrency(currencyId: id) { [weak self] result in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
