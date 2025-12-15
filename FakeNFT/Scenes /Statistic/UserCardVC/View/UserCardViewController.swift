@@ -11,6 +11,7 @@ final class UserCardViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: UserCardConstants.avatarImageSystemName)
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true

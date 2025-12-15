@@ -30,7 +30,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     }
     
     func didSelectUser(at index: Int) {
-        guard index < users.count else { return }
+        guard users.indices.contains(index) else { return }
         let user = users[index]
         router.showUserCard(user)
     }
