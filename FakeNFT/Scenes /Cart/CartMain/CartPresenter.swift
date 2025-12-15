@@ -5,7 +5,6 @@ protocol CartView: AnyObject {
     func updateTotal(nftCount: Int, totalPrice: String)
     func showDelete(at indexPath: IndexPath)
     func showSortOptions()
-    func updateCart(with nftIds: [String])
     func showLoading()
     func hideLoading()
 }
@@ -29,14 +28,17 @@ final class CartPresenter {
     
     init(view: CartView) {
         self.view = view
-        loadCart()
-        applySort(option: currentSortOption)
     }
     
     var rows: Int { nftData.count }
     
+    var currentNftIds: [String] {
+        nftIds
+    }
+    
     func viewWillAppear() {
         loadCart()
+        applySort(option: currentSortOption)
     }
     
     func nft(at indexPath: IndexPath) -> Nft {
@@ -46,6 +48,7 @@ final class CartPresenter {
     func delete(nftId: String) {
         if let index = nftIds.firstIndex(where: { $0 == nftId }) {
             nftData.remove(at: index)
+            nftIds.removeAll { $0 == nftId }
             updateOrderAfterDelete()
         }
     }
@@ -81,11 +84,17 @@ final class CartPresenter {
         
         servicesAssembly.cartGetOrderService.loadCart() { [weak self] result in
             DispatchQueue.main.async {
-                self?.view?.hideLoading()
+                guard let self else { return }
+                
+                self.view?.hideLoading()
                 switch result {
                 case .success(let ids):
-                    self?.nftIds = ids
-                    ids.forEach { self?.loadNft(id: $0) }
+                    self.nftIds = ids
+                    self.nftData.removeAll()
+                    self.view?.reload()
+                    self.recalcTotal()
+
+                    ids.forEach { self.loadNft(id: $0) }
                 case .failure(let error):
                     print(error)
                 }
@@ -95,12 +104,15 @@ final class CartPresenter {
     
     private func loadNft(id: String) {
         servicesAssembly.nftService.loadNft(id: id) { [weak self] result in
+            guard let self else { return }
+            
             DispatchQueue.main.async {
                 switch result {
                 case .success(let nft):
-                    guard !(self?.nftData.contains(where: { $0.id == nft.id }) ?? false) else { return }
-                    self?.nftData.append(nft)
-                    self?.applySort(option: self?.currentSortOption ?? .price)
+                    guard !(self.nftData.contains(where: { $0.id == nft.id })) else { return }
+                    
+                    self.nftData.append(nft)
+                    self.applySort(option: self.currentSortOption)
                 case .failure(let error):
                     print(error)
                 }

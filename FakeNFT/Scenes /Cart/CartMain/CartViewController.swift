@@ -10,8 +10,6 @@ final class CartViewController: UIViewController {
     private var savedImageForDelete: UIImage?
     private var nftIdForDelete: String?
     
-    private var fetchedNftIds: [String] = []
-    
     // MARK: - UI Elements
     
     private lazy var sortButton: UIButton = {
@@ -185,17 +183,15 @@ final class CartViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    func updateCart(with nftIds: [String]) {
-        fetchedNftIds = nftIds
-        cartTableView.reloadData()
-    }
-    
     // MARK: - Actions
     
     @objc
     private func goToPayment() {
-        let paymentViewController = PaymentViewController(nftIds: fetchedNftIds)
+        let paymentViewController = PaymentViewController(nftIds: presenter?.currentNftIds ?? [])
         paymentViewController.modalPresentationStyle = .overFullScreen
+        paymentViewController.onPaymentFinished = { [weak self] in
+            self?.presenter?.viewWillAppear()
+        }
         
         present(paymentViewController, animated: true)
     }
