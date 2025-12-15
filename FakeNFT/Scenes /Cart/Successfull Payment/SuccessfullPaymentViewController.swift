@@ -2,6 +2,10 @@ import UIKit
 
 final class SuccessfullPaymentViewController: UIViewController {
     
+    //MARK: - Public Properties
+    
+    var onClose: (() -> Void)?
+    
     // MARK: - UI Properties
     
     private lazy var succesfulPaymentImage: UIImageView = {
@@ -77,8 +81,9 @@ final class SuccessfullPaymentViewController: UIViewController {
     
     @objc
     private func backToCart() {
-        presentingViewController?
-            .presentingViewController?
-            .dismiss(animated: true)
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.onClose?()
+        }
     }
 }

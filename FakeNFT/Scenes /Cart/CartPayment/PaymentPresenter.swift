@@ -49,7 +49,7 @@ final class PaymentPresenter {
     }
     
     func proceedPayment() {
-        if !nftIds.isEmpty {
+        if nftIds.isEmpty {
             print("[PaymentPresenter/proceedPayment]: NFT list is empty!")
             return
         }
@@ -64,8 +64,7 @@ final class PaymentPresenter {
                 switch result {
                 case .success:
                     print("[PaymentPresenter/proceedPayment]: Order successfully payed with NFTs: \(self.nftIds)")
-                    self.nftIds = []
-                    self.servicesAssembly.updateAndPayOrderService.updateOrder(nftIds: self.nftIds, completion: {_ in })
+                    self.servicesAssembly.updateAndPayOrderService.updateOrder(nftIds: ["null"], completion: {_ in })
                     self.view?.showSuccess()
                     
                 case .failure(let error):

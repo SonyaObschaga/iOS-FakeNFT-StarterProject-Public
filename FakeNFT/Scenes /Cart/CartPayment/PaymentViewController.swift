@@ -8,6 +8,10 @@ final class PaymentViewController: UIViewController {
     private var presenter: PaymentPresenter?
     private var nftIds: [String]
     
+    // MARK: - Public Properties
+    
+    var onPaymentFinished: (() -> Void)?
+    
     // MARK: - UI Elements
     
     private lazy var backButton: UIButton = {
@@ -105,6 +109,7 @@ final class PaymentViewController: UIViewController {
         setupViews()
         setupConstraints()
         setupTargets()
+        selectFirstCell()
     }
     
     // MARK: - Setup UI Methods
@@ -154,6 +159,25 @@ final class PaymentViewController: UIViewController {
         backButton.addTarget(self, action: #selector(backToCart), for: .touchUpInside)
         proceedPaymentButton.addTarget(self, action: #selector(proceedPaymentButtonTapped), for: .touchUpInside)
     }
+    
+    // MARK: - Setup Methods
+    
+    private func selectFirstCell() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self,
+                  self.presenter?.count ?? 0 > 0 else { return }
+
+            let indexPath = IndexPath(item: 0, section: 0)
+            self.collectionView.selectItem(
+                at: indexPath,
+                animated: false,
+                scrollPosition: []
+            )
+            self.presenter?.select(at: indexPath)
+        }
+    }
+    
+    // MARK: - Actions
     
     @objc
     private func backToCart() {
@@ -225,6 +249,13 @@ extension PaymentViewController: PaymentView {
     func showSuccess() {
         let vc = SuccessfullPaymentViewController()
         vc.modalPresentationStyle = .overFullScreen
+        
+        vc.onClose = { [weak self] in
+            guard let self else { return }
+            self.onPaymentFinished?()
+            self.dismiss(animated: true)
+        }
+        
         present(vc, animated: true)
     }
     
