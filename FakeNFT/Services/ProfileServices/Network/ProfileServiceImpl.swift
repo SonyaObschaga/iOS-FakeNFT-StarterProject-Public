@@ -5,8 +5,8 @@
 //  Created by Damir Salakhetdinov on 02.12.2025.
 //
 
-final class ProfileServiceImpl: ProfileService
-                                 {
+final class ProfileServiceImpl: ProfileServiceProtocol
+{
     private let networkClient: NetworkClient
     private let storage: ProfileStorage
     

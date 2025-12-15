@@ -22,7 +22,6 @@ final class FavoriteNftsViewController: UIViewController, LoadingView {
         super.viewDidLoad()
         setupView()
         self.showLoading()
-//        presenter.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {

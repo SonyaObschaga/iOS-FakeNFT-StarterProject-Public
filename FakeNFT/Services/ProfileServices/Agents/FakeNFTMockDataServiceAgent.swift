@@ -66,7 +66,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
  
     }
     
-    func fetchProfileLikedNFTs() {
+    func fetchProfileLikedNFTs() -> Bool {
         let result3: Result<[NFTModel], Error>
         result3 = .success(self.likedNFTs )
 
@@ -75,6 +75,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             object: self,
             userInfo: ["Result": result3]
         )
+        return true
    }
     
     
@@ -202,7 +203,6 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
         var index = 0
         for nft in profileModel.nfts {
             if nft.id == nftId {
-                //nft.isLiked = flagValue
                 profileModel.nfts[index].isLiked = flagValue
                 break;
             }
@@ -271,7 +271,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
         result = .success(p )
 
         NotificationCenter.default.post(
-            name: FakeNFTModelServicesNotifications.profileSavedNotification, // self.profileSavedNotification,
+            name: FakeNFTModelServicesNotifications.profileSavedNotification,
             object: self,
             userInfo: ["Result":result]
         )

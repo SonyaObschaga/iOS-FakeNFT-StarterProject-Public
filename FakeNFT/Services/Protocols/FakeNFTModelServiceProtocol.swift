@@ -13,14 +13,12 @@ protocol FakeNFTModelServiceProtocol {
     
     func fetchProfile()
     func fetchProfileMyNFTs()
-    func fetchProfileLikedNFTs()
+    func fetchProfileLikedNFTs() -> Bool
     
     var myNFTsCount: Int { get}
     var likedNFTsCount: Int { get}
 
-    func addNFTToMyNFTsCollection(_ nftId: String)
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool)
-    func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel]
 
     func saveUserProfile()
 }

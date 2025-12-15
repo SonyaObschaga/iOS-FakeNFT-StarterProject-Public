@@ -270,7 +270,7 @@ private extension EditProfileViewController {
                 self.editPhotoButton.setTitle("", for: .normal)
 
                 // Делаем кнопку круглой
-                self.editPhotoButton.layer.cornerRadius = 35 // половина размера
+                self.editPhotoButton.layer.cornerRadius = 35
                 self.editPhotoButton.clipsToBounds = true
             }
         }

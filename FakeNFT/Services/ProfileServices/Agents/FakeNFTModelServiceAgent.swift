@@ -31,12 +31,20 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         }
     }
     
-    var myNFTsCount: Int = 0
-    var likedNFTsCount: Int = 0
+    
+    lazy var myNFTsCount: Int = {
+        myNfts.count
+    }()
+    
+    lazy var likedNFTsCount: Int = {
+        likedNfts.count
+    }()
+    
     var operationInProgress: Bool = false
     
     // MARK: - Private Variables
-    private let profileService: ProfileService
+    private let profileService: ProfileServiceProtocol
+    
     private let nftService: NftService
     private var loadedProfileId: Int = -1
     
@@ -47,13 +55,6 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     }
     
     // MARK: - Public Methods
-    func fetchProfile() {
-        loadProfile()
-    }
-    
-    func saveUserProfile() {
-        saveProfile()
-    }
     
     func fetchProfileMyNFTs() {
         loadingStarted()
@@ -110,16 +111,23 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         }
     }
     
-    func fetchProfileLikedNFTs() {
+    func fetchProfileLikedNFTs() -> Bool {
         if self.myNfts.isEmpty{
             fetchProfileMyNFTs()
         }
-        loadingStarted()
         var nfts: [NFTModel] = []
         self.likedNfts = []
         
-        guard let likedNFTIds = profile.likes else { return }
+        guard let likedNFTIds = profile.likes else { 
+            print("Liked NFTs is nil")
+            return false
+        }
         let totalLikedNFTs = likedNFTIds.count
+        if totalLikedNFTs == 0 {
+            print("Liked NFTs collection count = 0")
+            return false
+        }
+        
         print("Fetching liked NFTs...")
         
         for nftId in likedNFTIds {
@@ -157,17 +165,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                 }
             }
         }
-    }
-    
-    
-    
-    func getUserNFTs(_ sortField: UserNFTCollectionSortField) -> [NFTModel] {
-        // TODO: implement sorting
-        return []
-    }
-    
-    func addNFTToMyNFTsCollection(_ nftId: String) {
-        // TODO
+        return true
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
@@ -257,7 +255,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         operationInProgress = false
     }
     
-    private func loadProfile() {
+    func fetchProfile() {
         let id = FakeNFTModelServiceAgent.DEFAULT_USER_INDEX
         loadedProfileId = -1
         loadingStarted()
@@ -293,7 +291,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         }
     }
     
-    private func saveProfile() {
+    func saveUserProfile() {
         guard self.profile.name != "" else { return }
         
         loadingStarted()

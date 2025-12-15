@@ -133,7 +133,9 @@ final class NFTPresenter: NFTPresenterProtocol {
     // MARK: - Public Methods
     func viewDidLoad() {
         if isFavoritesPresenter {
-            agent.fetchProfileLikedNFTs()
+            if agent.fetchProfileLikedNFTs() == false {
+                view?.updateNFTs(nfts: [], likedNFTs: [])
+            }
         } else {
             agent.fetchProfileMyNFTs()
         }
@@ -162,7 +164,7 @@ final class NFTPresenter: NFTPresenterProtocol {
         case .byName:
             return agent.myNfts.sorted { $0.nftName < $1.nftName }
         case .byPrice:
-            return agent.myNfts.sorted { $0.price > $1.price } // по убыванию
+            return agent.myNfts.sorted { $0.price > $1.price }
         case .byRating:
             return agent.myNfts.sorted {
                 if let r0 = $0.rating, let r1 = $1.rating {

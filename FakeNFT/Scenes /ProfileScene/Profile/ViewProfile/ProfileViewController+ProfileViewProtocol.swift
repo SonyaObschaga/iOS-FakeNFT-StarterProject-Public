@@ -30,7 +30,6 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func updateAvatar(url: URL?) {
-        // TODO: retrieve image by URL
         avatarImageView.image = UIImage(named: "Joaquin")
     }
     

@@ -9,7 +9,7 @@ import Foundation
 
 struct ProfileDto: Codable, Dto {
     func dto() -> ProfileDto {
-        return self //ProfileDto(name:"", avatar_url: "", description: "", website: "", nfts: [], likes:[], id:"")
+        return self
     }
     
     public static var EmptyProfile: ProfileDto = ProfileDto()

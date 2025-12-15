@@ -7,7 +7,6 @@
 
 import Foundation
 
-//struct NFTModel: Codable {
 struct NFTModel: Encodable, Decodable {
     init() {
         createdAt = Date()
@@ -17,11 +16,11 @@ struct NFTModel: Encodable, Decodable {
     var images: [String] = []
     var rating: Int? = 0
     var description: String? = ""
-    var price: Float = 0
+    var price: Double = 0
     var author: String = ""
     var id: String = ""
     var isLiked: Bool = false
-    var nftAuthor: String { //TODO: поменять имена переменных
+    var nftAuthor: String {
             return name
         }
         var nftName: String {

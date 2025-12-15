@@ -69,6 +69,8 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         }
     }
     
+    private var profileFetchingFailed: Bool = false
+    
     private func handleProfileLoadedNotification(notification: Notification) {
         self.view?.hideLoading()
         
@@ -79,10 +81,12 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             switch result {
             case .success(let profile):
                 profileLoaded = true
+                profileFetchingFailed = false
                 self.profileDtoLoaded(profile: profile)
                 print("Profile fetched, name = \(profile.name)")
 
             case .failure(let error):
+                profileFetchingFailed = true
                 view?.errorDetected(error: error)
             }
         } else {
@@ -177,6 +181,11 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     func viewWillAppear()
     {
+        if (profileFetchingFailed) {
+            print("Repeat failed user profile fetching...")
+            agent.fetchProfile()
+        }
+        
         if (profileLoaded) {
             let profile = agent.profile
             view?.updateProfile(name: profile.name, descripton: profile.description, website: profile.website)
