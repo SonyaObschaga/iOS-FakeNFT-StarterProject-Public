@@ -13,14 +13,13 @@ struct ProfilePutRequest: NetworkRequest {
         self.index = index
         self.profile = profile
         
-        // ok - self.dto = profile
-        self.dto = ProfileDtoObject(
+        self.dto = SaveProfileDto(
             name: profile.name,
-            avatar: profile.avatar_url ?? "",
+            avatar: profile.avatar ?? "",
             description: profile.description ?? "",
             website: profile.website,
-            nfts: profile.nfts ?? [],
-            likes: profile.likes ?? []
+            nfts: profile.nfts,
+            likes: profile.likes
         )
         
     }
@@ -32,4 +31,3 @@ struct ProfilePutRequest: NetworkRequest {
     var dto: Dto?
     
 }
-

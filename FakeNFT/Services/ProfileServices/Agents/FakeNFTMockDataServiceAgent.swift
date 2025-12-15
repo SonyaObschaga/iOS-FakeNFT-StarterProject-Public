@@ -9,7 +9,7 @@ import Foundation
 
 class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
 {
-    private var _profile: ProfileDto = ProfileDto.EmptyProfile
+    private var _profile: ProfileDto = ProfileDto()
     var profile: ProfileDto {
         get {
             let p = self.profileModel
@@ -19,14 +19,17 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             if let w = p.website {
                 p2.website = w
             }
-            p2.avatar_url = p.avatar
+            
+            p2.avatar = p.avatar
             p2.nfts = []
             for i in p.nfts {
-                p2.nfts?.append(i.id)
+                
+                p2.nfts.append(i.id)
             }
             p2.likes = []
             for i in p.likedNFTs {
-                p2.likes?.append(i.id)
+                
+                p2.likes.append(i.id)
             }
             
             return p2
@@ -71,7 +74,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
         result3 = .success(self.likedNFTs )
 
         NotificationCenter.default.post(
-            name: FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification, // self.profileNTFsLoadedNotification,
+            name: FakeNFTModelServicesNotifications.profileLikedNTFsLoadedNotification,
             object: self,
             userInfo: ["Result": result3]
         )
@@ -150,18 +153,13 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             
             let profile = ProfileModel()
             profile.name = p.name
-            profile.avatar = p.avatar_url
+            profile.avatar = p.avatar
             profile.description = p.description
             profile.website = p.website
             profile.id = p.id
             
-            guard let unwrappedNfts = p.nfts else {
-                print("Ошибка загрузки NFTS")
-                return ProfileModel() //TODO: edit
-            }
-            
-            for id in unwrappedNfts {
-                do { let nftDto = try backend.getNFT(id) //{
+            for id in p.nfts {
+                do { let nftDto = try backend.getNFT(id)
                     var nft = NFTModel()
                     nft.createdAt = nftDto.createdAt
                     nft.name = nftDto.name
@@ -171,11 +169,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
                     nft.price = nftDto.price
                     nft.author = nftDto.author
                     nft.id = nftDto.id
-                    if let likes = p.likes {
-                        nft.isLiked = likes.contains(id)
-                    } else {
-                        nft.isLiked = false // или любое другое подходящее значение по умолчанию
-                    }
+                    nft.isLiked = p.likes.contains(id)
                     profile.nfts.append(nft)
                 }
             }
@@ -218,10 +212,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             object: self,
             userInfo: ["Result": result]
         )
-        var count = 0;
-        if let count2 = self.profile.likes?.count {
-            count = count2
-        }
+        let count = self.profile.likes.count
         print("Profile likedNFT updated successfully, Count = \(count)")
         
         notifyProfileModelChanged()

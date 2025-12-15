@@ -26,7 +26,7 @@ final class ServicesAssembly {
             return FakeNFTMockDataServiceAgent()
         }
     }()
-    var profileService: ProfileServiceProtocol { //Protocol {
+    var profileService: ProfileService {
         ProfileServiceImpl(networkClient: networkClient, storage: profileStorage)
     }
     

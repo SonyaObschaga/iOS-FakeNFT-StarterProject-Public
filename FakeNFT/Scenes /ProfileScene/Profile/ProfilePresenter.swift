@@ -125,8 +125,8 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         switch result {
         case .success(let profile):
             var nftsCount = 0, likesCount = 0
-            if ((profile.nfts) != nil) { nftsCount = profile.nfts?.count ?? 0}
-            if ((profile.likes) != nil) { likesCount = profile.likes?.count ?? 0 }
+            nftsCount = profile.nfts.count
+            likesCount = profile.likes.count
             print("To be set for profile: MyNTFs.Count = \(nftsCount), liked NFTs.Count = \(likesCount)")
             
             myNFTsCountToBeUpdated = nftsCount
@@ -143,13 +143,11 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         
         view?.updateProfile(name: profile.name, descripton: profile.description, website: profile.website)
         
-        var nftsCount = 0, likesCount = 0
-        if ((profile.nfts) != nil) { nftsCount = profile.nfts?.count ?? 0}
-        if ((profile.likes) != nil) { likesCount = profile.likes?.count ?? 0 }
-        
+        let nftsCount = profile.nfts.count, likesCount = profile.likes.count
+ 
         view?.updateNftsCount(nftsCount: nftsCount, likedNftsCount: likesCount)
         
-        if let avatar_url = profile.avatar_url {
+        if let avatar_url = profile.avatar {
             view?.updateAvatar(url: URL(string: avatar_url))
         }
     }
@@ -161,7 +159,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             agent.profile.name = profile.name
             agent.profile.description = profile.description
             agent.profile.website = profile.website
-            agent.profile.avatar_url = profile.avatar_url
+            agent.profile.avatar = profile.avatar
             agent.saveUserProfile()
         }
     }

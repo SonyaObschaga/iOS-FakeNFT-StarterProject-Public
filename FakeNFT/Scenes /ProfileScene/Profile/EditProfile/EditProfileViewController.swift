@@ -302,7 +302,7 @@ private extension EditProfileViewController {
             profile.website = website
         }
         if !newUrl.isEmpty {
-            profile.avatar_url = newUrl
+            profile.avatar = newUrl
         }
         
         presenter.updateProfile(profile: profile)

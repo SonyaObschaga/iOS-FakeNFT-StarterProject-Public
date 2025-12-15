@@ -43,8 +43,8 @@ extension ProfileViewController: ProfileViewProtocol {
             self.urlButton.setTitle(profile.website, for: .normal)
         }
         
-        guard let nftsCount = profile.nfts?.count,
-              let likedNftsCount = profile.likes?.count else { return }
+        let nftsCount = profile.nfts.count
+        let likedNftsCount = profile.likes.count
         updateNftsCount(nftsCount:nftsCount, likedNftsCount:likedNftsCount)
     }
     

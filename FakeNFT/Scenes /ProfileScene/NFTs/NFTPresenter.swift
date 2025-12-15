@@ -177,7 +177,7 @@ final class NFTPresenter: NFTPresenterProtocol {
     
     func toggleLike(nftId: String) {
         // Получаем текущее состояние
-        let isCurrentlyLiked = agent.profile.likes?.contains(nftId) ?? false
+        let isCurrentlyLiked = agent.profile.likes.contains(nftId)
 
         // Переключаем
         agent.toggleNFTLikedFlag(nftId, !isCurrentlyLiked)

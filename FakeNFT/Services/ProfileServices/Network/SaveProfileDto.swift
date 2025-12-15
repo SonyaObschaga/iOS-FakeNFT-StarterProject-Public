@@ -5,8 +5,7 @@
 //  Created by Damir Salakhetdinov on 04.12.2025.
 //
 
-struct ProfileDtoObject: Dto {
-
+struct SaveProfileDto: Dto {
     let name: String
     let avatar: String
     let description: String
@@ -14,6 +13,15 @@ struct ProfileDtoObject: Dto {
     var nfts: [String]
     var likes: [String]
     
+    var likesStr: String {
+
+            return "\(likes.joined(separator: ", "))"
+    }
+
+    var nftsStr: String {
+            return "\(nfts.joined(separator: ", "))"
+    }
+
     enum CodingKeys: String, CodingKey {
         case name
         case description
@@ -23,28 +31,13 @@ struct ProfileDtoObject: Dto {
         case likes
     }
 
-    var likesStr: String {
-        if likes.isEmpty {
-            return "[]"
-        } else {
-            return "\(likes.joined(separator: ", "))"
-        }
-    }
-    var nftsStr: String {
-        if nfts.isEmpty {
-            return "[]"
-        } else {
-            return "\(nfts.joined(separator: ", "))"
-        }
-    }
-    
     func asDictionary() -> [String : String] {
      [
         CodingKeys.name.rawValue: name,
         CodingKeys.avatar.rawValue: avatar,
         CodingKeys.description.rawValue: description,
         CodingKeys.website.rawValue: website,
-        //CodingKeys.nfts.rawValue: nftsStr,
+        CodingKeys.nfts.rawValue: nftsStr,
         CodingKeys.likes.rawValue: likesStr
      ].compactMapValues { value in
          // Filter out empty strings

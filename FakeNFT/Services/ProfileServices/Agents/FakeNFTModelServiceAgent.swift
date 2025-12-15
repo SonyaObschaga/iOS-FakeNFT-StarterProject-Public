@@ -14,7 +14,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
 //    public static var dataSourceType: AppDataSourceType = .mockData
 
     // MARK: - Public Variables
-    var profile: ProfileDto = ProfileDto.EmptyProfile
+    var profile: ProfileDto = ProfileDto()
     var myNfts: [NFTModel] = []
     var likedNfts: [NFTModel] = []
     
@@ -25,7 +25,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
             p2.name = p.name
             p2.description = p.description
             p2.website = p.website
-            p2.avatar = p.avatar_url
+            p2.avatar = p.avatar
             p2.nfts = myNfts
             return p2
         }
@@ -43,7 +43,7 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     var operationInProgress: Bool = false
     
     // MARK: - Private Variables
-    private let profileService: ProfileServiceProtocol
+    private let profileService: ProfileService
     
     private let nftService: NftService
     private var loadedProfileId: Int = -1
@@ -60,10 +60,9 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         loadingStarted()
         var nfts: [NFTModel] = []
         self.myNfts = []
-        
-        guard let myNFTIds = profile.nfts else { return }
-        let totalNFTs = myNFTIds.count
-        print("Fetching my NFTs...")
+        let myNFTIds = profile.nfts
+        let totalNFTs = profile.nfts.count
+         print("Fetching my NFTs...")
         
         DispatchQueue.global().async { [weak self] in
             guard let self else { return }
@@ -73,12 +72,8 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                     guard let self else { return }
                     switch result {
                     case .success(let nft):
-                        
-                        var isLiked = false
-                        if let isLiked2 = self.profile.likes?.contains(nftId) {
-                            isLiked = isLiked2
-                        }
-                        
+
+                        let isLiked = self.profile.likes.contains(nftId)
                         let nftModel = NftModelObject(from: nft, isLiked: isLiked)
                         nfts.append(nftModel)
                         
@@ -118,10 +113,8 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
         var nfts: [NFTModel] = []
         self.likedNfts = []
         
-        guard let likedNFTIds = profile.likes else { 
-            print("Liked NFTs is nil")
-            return false
-        }
+        let likedNFTIds = profile.likes
+
         let totalLikedNFTs = likedNFTIds.count
         if totalLikedNFTs == 0 {
             print("Liked NFTs collection count = 0")
@@ -169,19 +162,15 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
     }
     
     func toggleNFTLikedFlag(_ nftId: String, _ flagValue: Bool) {
-        // Инициализация, если nil
-        if profile.likes == nil {
-            profile.likes = []
-        }
 
-        if flagValue && !profile.likes!.contains(nftId) {
+        if flagValue && !profile.likes.contains(nftId) {
             // Лайк
-                profile.likes!.append(nftId)
+                profile.likes.append(nftId)
         } else {
             // Анлайк
-            profile.likes!.removeAll { $0 == nftId }
+            profile.likes.removeAll { $0 == nftId }
         }
-        
+
         var index = 0
         self.likedNfts = []
         for nft in self.myNfts {
@@ -207,10 +196,9 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                     object: self,
                     userInfo: ["Result": result]
                 )
-                var count = 0;
-                if let count2 = self.profile.likes?.count {
-                    count = count2
-                }
+
+                let count = self.profile.likes.count;
+
                 print("Profile likedNFT updated successfully, Count = \(count)")
                 self.loadingCompleted()
                 
@@ -268,8 +256,8 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
                 case .success(let profile):
                     self.profile = profile
                     self.loadedProfileId = id
-                    self.myNFTsCount = profile.nfts?.count ?? 0
-                    self.likedNFTsCount = profile.likes?.count ?? 0
+                    self.myNFTsCount = profile.nfts.count
+                    self.likedNFTsCount = profile.likes.count
                     
                     NotificationCenter.default.post(
                         name: FakeNFTModelServicesNotifications.profileLoadedNotification,

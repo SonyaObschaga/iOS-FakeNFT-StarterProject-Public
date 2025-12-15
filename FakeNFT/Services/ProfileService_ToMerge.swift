@@ -4,8 +4,18 @@
 //
 //  Created by Damir Salakhetdinov on 02.12.2025.
 //
+typealias ProfileOperationCompletion = (Result<ProfileDto, Error>) -> Void
 
-final class ProfileServiceImpl: ProfileServiceProtocol
+protocol ProfileService {
+    var inMemoryStorageProfile: ProfileDto? {get}
+    func loadProfile(id: Int, completion: @escaping ProfileOperationCompletion)
+    func saveProfile(id: Int, profile: ProfileDto, completion: @escaping ProfileOperationCompletion)
+    
+    func updateProfile(profileId: String, likes: [String], completion: @escaping ProfileOperationCompletion)
+
+}
+
+final class ProfileServiceImpl: ProfileService
 {
     private let networkClient: NetworkClient
     private let storage: ProfileStorage
@@ -30,8 +40,8 @@ final class ProfileServiceImpl: ProfileServiceProtocol
             return
         }
         
-        let request = ProfileRequest(id: id)
-        
+        let request = ProfileRequest(profileId: "\(id)")
+
         networkClient.send(request: request, type: ProfileDto.self) { [weak storage] result in
             switch result {
             case .success(let profile):
@@ -57,4 +67,18 @@ final class ProfileServiceImpl: ProfileServiceProtocol
         }
 
     }
+    
+    func updateProfile(profileId: String, likes: [String], completion: @escaping ProfileOperationCompletion) {
+            let request = UpdateProfileRequest(profileId: profileId, likes: likes)
+            networkClient.send(request: request, type: ProfileDto.self) { [weak storage] result in
+                 switch result {
+                case .success(let profile):
+                    storage?.saveProfile(profile)
+                    completion(.success(profile))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+
 }
