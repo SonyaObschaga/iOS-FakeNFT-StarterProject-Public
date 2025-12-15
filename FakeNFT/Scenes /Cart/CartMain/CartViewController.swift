@@ -122,7 +122,7 @@ final class CartViewController: UIViewController {
             cartTableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
             cartTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             cartTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            cartTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cartTableView.bottomAnchor.constraint(equalTo: totalOfCartView.topAnchor),
             
             totalOfCartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             totalOfCartView.heightAnchor.constraint(equalToConstant: 76),
