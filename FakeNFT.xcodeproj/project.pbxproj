@@ -664,20 +664,12 @@
 		F4E28A352EE1FDC100B7F06F /* Agents */ = {
 			isa = PBXGroup;
 			children = (
-				F4E28A362EE1FDC100B7F06F /* Types */,
 				F4E28A392EE1FDC100B7F06F /* FakeNFTModelServiceAgent.swift */,
 				F4E28A5B2EE9E69400B7F06F /* FakeNFTMockDataServiceAgent.swift */,
 				F4E28A572EE9E61500B7F06F /* FakeNFTModelServiceAgentProtocol.swift */,
 				F4E28A592EE9E65700B7F06F /* FakeNFTModelServicesNotifications.swift */,
 			);
 			path = Agents;
-			sourceTree = "<group>";
-		};
-		F4E28A362EE1FDC100B7F06F /* Types */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Types;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
