@@ -22,7 +22,3 @@ protocol FakeNFTBackendServiceProtocol:
     func resetUserDefaults() -> ProfileModel  // for testing
 
 }
-
-
-
-

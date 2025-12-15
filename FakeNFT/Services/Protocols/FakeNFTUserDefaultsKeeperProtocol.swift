@@ -9,5 +9,3 @@ protocol FakeNFTUserDefaultsKeeperProtocol {
     func saveUserDefaults(_ profile: ProfileModel)
     func resetUserDefaults() -> ProfileModel
 }
-
-

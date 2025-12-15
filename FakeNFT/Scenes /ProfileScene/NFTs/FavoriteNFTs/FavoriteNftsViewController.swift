@@ -20,9 +20,13 @@ final class FavoriteNftsViewController: UIViewController, LoadingView {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showLoading()
-        presenter.viewDidLoad()
         setupView()
+        self.showLoading()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        presenter.viewDidLoad() // теперь safe — collectionView добавлен
     }
 
     //MARK: - Layout variables
@@ -108,7 +112,7 @@ extension FavoriteNftsViewController: UICollectionViewDataSource {
         ) as? FavoriteNftsCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
         
-        cell.configureCell(likedNFT: likedNFTs[indexPath.row])
+        cell.configureCell(likedNFT: likedNFTs[indexPath.row], presenter: presenter)
         
         return cell
     }

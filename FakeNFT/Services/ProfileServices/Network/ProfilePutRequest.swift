@@ -13,33 +13,21 @@ struct ProfilePutRequest: NetworkRequest {
         self.index = index
         self.profile = profile
         
-        // ok - self.dto = profile
-        self.dto = ProfileDtoObject(
+        self.dto = SaveProfileDto(
             name: profile.name,
-            avatar: profile.avatar_url ?? "",
+            avatar: profile.avatar ?? "",
             description: profile.description ?? "",
             website: profile.website,
-            nfts: profile.nfts ?? [],
-            likes: profile.likes ?? []
+            nfts: profile.nfts,
+            likes: profile.likes
         )
         
     }
    var endpoint: URL? {
-       //error 404: URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(profile.id)")
        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(index)")
    }
-   var httpMethod: HttpMethod = .put
-   //var dto: Dto? = profile
-    /*
-    func asDictionary() -> [String: String] {
-        return [
-            "name": profile.name,
-            "avatar": self.profile.avatar_url!,
-            "description": profile.description!
-        ]
-    }
-     */
+    var httpMethod: HttpMethod = .put
+    
     var dto: Dto?
     
 }
-

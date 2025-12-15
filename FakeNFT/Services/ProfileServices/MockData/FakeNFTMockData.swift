@@ -16,7 +16,7 @@ class FakeNFTMockData {
             return []
         }
         
-        guard users.count >= FakeNFTService.DEFAULT_USER_INDEX else {
+        guard users.count >= FakeNFTModelServiceAgent.DEFAULT_USER_INDEX else {
             assertionFailure("Default user index exceeds loaded users array length")
             return []
         }

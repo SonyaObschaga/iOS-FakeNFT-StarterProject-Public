@@ -16,14 +16,12 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func updateNftsCount(nftsCount:Int, likedNftsCount:Int) {
-        // acquiring a background thread from the threads pool
         DispatchQueue.global().async { [weak self ] in
             guard let self = self else { return }
             
             self.tableCells[0].count = nftsCount
             self.tableCells[1].count = likedNftsCount
             
-            // scheduling a task to be executed on the main thread asynchronously
             DispatchQueue.main.async {
                 let indexPathsToReload = [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)]
                 self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)
@@ -32,7 +30,6 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func updateAvatar(url: URL?) {
-        // TODO: retrieve image by URL
         avatarImageView.image = UIImage(named: "Joaquin")
     }
     
@@ -45,11 +42,16 @@ extension ProfileViewController: ProfileViewProtocol {
             self.bioTextView.text = profile.description
             self.urlButton.setTitle(profile.website, for: .normal)
         }
+        
+        let nftsCount = profile.nfts.count
+        let likedNftsCount = profile.likes.count
+        updateNftsCount(nftsCount:nftsCount, likedNftsCount:likedNftsCount)
     }
     
     func errorDetected(error: any Error)
     {
         print("Error detected: \(error.localizedDescription)")
+        showErrorDialog(title: "Error", message: error.localizedDescription)
     }
     
     func hideControls() {
@@ -65,6 +67,15 @@ extension ProfileViewController: ProfileViewProtocol {
         for sw in view.subviews {
             sw.alpha = 1
         }
+    }
+    
+    func showErrorDialog(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button tap (optional)
+        }
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
 }

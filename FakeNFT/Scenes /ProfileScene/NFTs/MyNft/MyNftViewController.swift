@@ -57,8 +57,6 @@ final class MyNftViewController: UIViewController, LoadingView {
         return button
     }()
     
-    // tableView1 added because of error
-    // reference to member 'reloadData' cannot be resolved without a contextual type
     var tableView1:UITableView = UITableView()
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -116,7 +114,7 @@ extension MyNftViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configureCell(nft: nfts[indexPath.row])
+        cell.configureCell(nft: nfts[indexPath.row], presenter: presenter)
         
         return cell
     }

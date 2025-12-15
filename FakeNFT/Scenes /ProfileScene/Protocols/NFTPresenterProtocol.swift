@@ -11,4 +11,5 @@ protocol NFTPresenterProtocol: AnyObject {
     var view: NFTViewProtocol? { get set }
     func viewDidLoad()
     func sortNFTs(by sortField: UserNFTCollectionSortField)
+    func toggleLike(nftId: String)
 }
