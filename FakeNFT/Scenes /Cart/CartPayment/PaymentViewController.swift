@@ -1,5 +1,6 @@
 import UIKit
 import ProgressHUD
+import SafariServices
 
 final class PaymentViewController: UIViewController {
     
@@ -110,6 +111,7 @@ final class PaymentViewController: UIViewController {
         setupConstraints()
         setupTargets()
         selectFirstCell()
+        setupPrivacyTap()
     }
     
     // MARK: - Setup UI Methods
@@ -160,13 +162,19 @@ final class PaymentViewController: UIViewController {
         proceedPaymentButton.addTarget(self, action: #selector(proceedPaymentButtonTapped), for: .touchUpInside)
     }
     
+    private func setupPrivacyTap() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openWebView))
+        privacyPolitcyLinkLabel.isUserInteractionEnabled = true
+        privacyPolitcyLinkLabel.addGestureRecognizer(tap)
+    }
+    
     // MARK: - Setup Methods
     
     private func selectFirstCell() {
         DispatchQueue.main.async { [weak self] in
             guard let self,
                   self.presenter?.count ?? 0 > 0 else { return }
-
+            
             let indexPath = IndexPath(item: 0, section: 0)
             self.collectionView.selectItem(
                 at: indexPath,
@@ -187,6 +195,14 @@ final class PaymentViewController: UIViewController {
     @objc
     private func proceedPaymentButtonTapped() {
         presenter?.proceedPayment()
+    }
+    
+    @objc
+    private func openWebView() {
+        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
     }
 }
 
