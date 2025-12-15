@@ -86,31 +86,48 @@ final class CartPresenter {
             DispatchQueue.main.async {
                 guard let self else { return }
                 
-                self.view?.hideLoading()
                 switch result {
                 case .success(let ids):
                     self.nftIds = ids
                     self.nftData.removeAll()
                     self.view?.reload()
                     self.recalcTotal()
-
-                    ids.forEach { self.loadNft(id: $0) }
+                    
+                    guard !ids.isEmpty else {
+                        self.view?.hideLoading()
+                        return
+                    }
+                    
+                    let group = DispatchGroup()
+                    
+                    ids.forEach { id in
+                        group.enter()
+                        self.loadNft(id: id) {
+                            group.leave()
+                        }
+                    }
+                    
+                    group.notify(queue: .main) {
+                        self.view?.hideLoading()
+                    }
+                    
                 case .failure(let error):
                     print(error)
+                    self.view?.hideLoading()
                 }
             }
         }
     }
     
-    private func loadNft(id: String) {
+    private func loadNft(id: String, completion: (() -> Void)? = nil) {
         servicesAssembly.nftService.loadNft(id: id) { [weak self] result in
-            guard let self else { return }
-            
             DispatchQueue.main.async {
+                defer { completion?() }
+                guard let self else { return }
+                
                 switch result {
                 case .success(let nft):
                     guard !(self.nftData.contains(where: { $0.id == nft.id })) else { return }
-                    
                     self.nftData.append(nft)
                     self.applySort(option: self.currentSortOption)
                 case .failure(let error):
