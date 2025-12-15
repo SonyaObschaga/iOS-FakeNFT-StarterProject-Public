@@ -20,7 +20,7 @@ final class StatisticViewController: UIViewController {
     
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: StatisticConstants.sortMenuImageName), for: .normal)
+        button.setImage(UIImage(named: CellConstants.sortMenuImageName), for: .normal)
         button.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         button.tintColor = .primary
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +110,7 @@ extension StatisticViewController: StatisticViewProtocol {
     
     func showSortOptions() {
         let alertController = UIAlertController(
-            title: StatisticConstants.sortAlertTitle,
+            title: CellConstants.sortAlertTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
