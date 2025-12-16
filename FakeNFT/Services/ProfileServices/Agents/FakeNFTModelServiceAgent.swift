@@ -229,8 +229,8 @@ final class FakeNFTModelServiceAgent: FakeNFTModelServiceAgentProtocol {
             m.description = nft.description
             m.price = nft.price
             m.isLiked = isLiked;
-            m.author = nft.author
-            m.name = nft.author
+            m.author = nft.author ?? ""
+            m.name = nft.author ?? ""
             m.id = nft.id
             return m
         }

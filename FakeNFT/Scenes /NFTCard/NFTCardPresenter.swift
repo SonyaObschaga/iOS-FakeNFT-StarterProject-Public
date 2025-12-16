@@ -22,6 +22,7 @@ protocol NFTCardPresenterProtocol {
 final class NFTCardPresenter: NFTCardPresenterProtocol {
     private enum Constants {
         static let profileId = "1"
+        static let profileIdNumber = 1
         static let orderId = "1"
     }
 
@@ -142,7 +143,7 @@ final class NFTCardPresenter: NFTCardPresenterProtocol {
     }
 
     private func loadProfile() {
-        profileService.loadProfile(profileId: Constants.profileId) {
+        profileService.loadProfile(id: Constants.profileIdNumber) {
             [weak self] result in
             guard let self = self else { return }
 

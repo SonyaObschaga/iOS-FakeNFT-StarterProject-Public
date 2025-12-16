@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MyNftViewController: UIViewController, LoadingView {
+final class MyNftViewController: UIViewController, LoadingView, ErrorView {
 
     var nfts : [NFTModel] = []
     

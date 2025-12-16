@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavoriteNftsViewController: UIViewController, LoadingView {
+final class FavoriteNftsViewController: UIViewController, LoadingView, ErrorView {
  
     var likedNFTs : [NFTModel] = []
 

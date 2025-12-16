@@ -179,8 +179,23 @@ final class NFTPresenter: NFTPresenterProtocol {
         // Получаем текущее состояние
         let isCurrentlyLiked = agent.profile.likes.contains(nftId)
 
+        if agent.likedNFTsCount == 1 {
+            let errorModel = lastLikedNFTCantBeDeletedErrorModel()
+            view?.showError(errorModel)
+            return 
+        }
+        
         // Переключаем
         agent.toggleNFTLikedFlag(nftId, !isCurrentlyLiked)
+        
+    }
+    
+    private func lastLikedNFTCantBeDeletedErrorModel() -> ErrorModel {
+        let message: String = "Последний избранный NFT не может быть удален"
+        
+        let actionText = NSLocalizedString("ok", comment: "")
+        return ErrorModel(message: message, actionText: actionText) {
+        }
     }
     
 }

@@ -12,4 +12,5 @@ protocol NFTViewProtocol: AnyObject {
     func errorDetected(error: Error)
     func showLoading()
     func hideLoading()
+    func showError(_ model: ErrorModel)
 }

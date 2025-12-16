@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EditProfileViewController: UIViewController {
+final class EditProfileViewController: UIViewController, ErrorView {
     private var presenter: ProfilePresenterProtocol!
     func configure (_ presenter: ProfilePresenterProtocol) {
         self.presenter = presenter
@@ -291,7 +291,6 @@ private extension EditProfileViewController {
     
     @objc
     func saveChanges() {
-        //TODO: Update user profile data
         
         var profile = ProfileDto()
         if let name = nameTextField.text {

@@ -30,7 +30,7 @@ public class FakeNFTUserDefaultsKeeperService: FakeNFTUserDefaultsKeeperProtocol
         } catch {
             print("Ошибка при загрузке профиля: \(error.localizedDescription)")
         }
-        return ProfileModel() //TODO: may be later
+        return ProfileModel()
     }
     
     func saveUserDefaults(_ profile: ProfileModel) {

@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-final class ProfileViewController: UIViewController, LoadingView {
+final class ProfileViewController: UIViewController, LoadingView, ErrorView {
 
     var originalBackgroundColor: UIColor = .black
     

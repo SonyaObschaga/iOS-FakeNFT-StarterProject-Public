@@ -88,6 +88,10 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             case .failure(let error):
                 profileFetchingFailed = true
                 view?.errorDetected(error: error)
+                
+                let errorModel = makeErrorModel(error)
+                view?.hideLoading()
+                view?.showError(errorModel)
             }
         } else {
             print("Invalid notification data")
@@ -196,5 +200,23 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             likedNFTsCountToBeUpdated = nil
         }
 
+    }
+    
+    private func makeErrorModel(_ error: Error) -> ErrorModel {
+        let message: String
+        switch error {
+        case is NetworkClientError:
+            message = NSLocalizedString("Error.network", comment: "") + ": \(error)"
+        default:
+            message = NSLocalizedString("Error.unknown", comment: "")
+        }
+        
+        let actionText = NSLocalizedString("Error.repeat", comment: "")
+        return ErrorModel(message: message, actionText: actionText) { [weak self] in
+            //self?.state = .loading
+            print("Fetching user profile after error...")
+            self?.view?.showLoading()
+            self?.agent.fetchProfile()
+        }
     }
 }

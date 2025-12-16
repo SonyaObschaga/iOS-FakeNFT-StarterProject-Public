@@ -20,5 +20,7 @@ protocol ProfileViewProtocol: AnyObject {
     
     func showLoading()
     func hideLoading()
+    
+    func showError(_ model: ErrorModel)
 
 }

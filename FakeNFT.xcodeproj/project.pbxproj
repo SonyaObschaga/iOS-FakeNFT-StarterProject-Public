@@ -121,8 +121,6 @@
 		F4763E1E2EF0A377007F7C8F /* FakeNFTMockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E0B2EF0A377007F7C8F /* FakeNFTMockData.swift */; };
 		F4763E1F2EF0A377007F7C8F /* SaveProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E0D2EF0A377007F7C8F /* SaveProfileDto.swift */; };
 		F4763E212EF0A377007F7C8F /* ProfilePutResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E0F2EF0A377007F7C8F /* ProfilePutResponse.swift */; };
-		F4763E222EF0A377007F7C8F /* x_UpdateProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E102EF0A377007F7C8F /* x_UpdateProfileRequest.swift */; };
-		F4763E232EF0A377007F7C8F /* x_UpdateProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E112EF0A377007F7C8F /* x_UpdateProfileDto.swift */; };
 		F4763E242EF0A377007F7C8F /* ProfileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E122EF0A377007F7C8F /* ProfileStorage.swift */; };
 		F4763E252EF0A377007F7C8F /* ProfilePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E132EF0A377007F7C8F /* ProfilePutRequest.swift */; };
 		F4763E262EF0A377007F7C8F /* FakeNFTModelServiceAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4763E152EF0A377007F7C8F /* FakeNFTModelServiceAgent.swift */; };
@@ -277,8 +275,6 @@
 		F4763E0B2EF0A377007F7C8F /* FakeNFTMockData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeNFTMockData.swift; sourceTree = "<group>"; };
 		F4763E0D2EF0A377007F7C8F /* SaveProfileDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveProfileDto.swift; sourceTree = "<group>"; };
 		F4763E0F2EF0A377007F7C8F /* ProfilePutResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePutResponse.swift; sourceTree = "<group>"; };
-		F4763E102EF0A377007F7C8F /* x_UpdateProfileRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = x_UpdateProfileRequest.swift; sourceTree = "<group>"; };
-		F4763E112EF0A377007F7C8F /* x_UpdateProfileDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = x_UpdateProfileDto.swift; sourceTree = "<group>"; };
 		F4763E122EF0A377007F7C8F /* ProfileStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileStorage.swift; sourceTree = "<group>"; };
 		F4763E132EF0A377007F7C8F /* ProfilePutRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePutRequest.swift; sourceTree = "<group>"; };
 		F4763E152EF0A377007F7C8F /* FakeNFTModelServiceAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeNFTModelServiceAgent.swift; sourceTree = "<group>"; };
@@ -813,8 +809,6 @@
 			children = (
 				F4763E0D2EF0A377007F7C8F /* SaveProfileDto.swift */,
 				F4763E0F2EF0A377007F7C8F /* ProfilePutResponse.swift */,
-				F4763E102EF0A377007F7C8F /* x_UpdateProfileRequest.swift */,
-				F4763E112EF0A377007F7C8F /* x_UpdateProfileDto.swift */,
 				F4763E122EF0A377007F7C8F /* ProfileStorage.swift */,
 				F4763E132EF0A377007F7C8F /* ProfilePutRequest.swift */,
 			);
@@ -1025,7 +1019,6 @@
 				C05B44F72ED176C4008BE8CB /* CatalogPresenter.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				F4763E272EF0A377007F7C8F /* FakeNFTModelServiceAgentProtocol.swift in Sources */,
-				F4763E222EF0A377007F7C8F /* x_UpdateProfileRequest.swift in Sources */,
 				C05B452C2EDF3C94008BE8CB /* OrderResponse.swift in Sources */,
 				F4763DF72EF0A2C9007F7C8F /* EditProfileViewController+ProfileViewProtocol.swift in Sources */,
 				F4763E022EF0A2C9007F7C8F /* NFTPresenter.swift in Sources */,
@@ -1112,7 +1105,6 @@
 				C05B452A2EDDEF1A008BE8CB /* UpdateProfileRequest.swift in Sources */,
 				C05B45122EDAFFAE008BE8CB /* CollectionViewProtocol.swift in Sources */,
 				F4763E242EF0A377007F7C8F /* ProfileStorage.swift in Sources */,
-				F4763E232EF0A377007F7C8F /* x_UpdateProfileDto.swift in Sources */,
 				C05B45322EDF3DB0008BE8CB /* UpdateOrderRequest.swift in Sources */,
 				F4763E262EF0A377007F7C8F /* FakeNFTModelServiceAgent.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,

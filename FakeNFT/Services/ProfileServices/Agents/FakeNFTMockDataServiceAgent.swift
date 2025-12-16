@@ -176,7 +176,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
             return profile
         } catch {
             assertionFailure("Ошибка получения профиля пользователя: \(error.localizedDescription)")
-            return ProfileModel() //TODO: edit
+            return ProfileModel()
         }
     }
     
@@ -221,7 +221,7 @@ class FakeNFTMockDataServiceAgent: FakeNFTModelServiceAgentProtocol
     private func getNFT(_ id: String) -> NFTModel {
         guard let nftDto = try? fakeNFTBackendService.getNFT(id) else {
             assertionFailure("NFT с ID '\(id)' не найден")
-            return NFTModel() //TODO: edit
+            return NFTModel()
         }
         
         var nft = NFTModel()
