@@ -1,11 +1,17 @@
 import UIKit
 import ProgressHUD
+import SafariServices
 
 final class PaymentViewController: UIViewController {
     
     // MARK: - Private properties
     
     private var presenter: PaymentPresenter?
+    private var nftIds: [String]
+    
+    // MARK: - Public Properties
+    
+    var onPaymentFinished: (() -> Void)?
     
     // MARK: - UI Elements
     
@@ -79,12 +85,21 @@ final class PaymentViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
+    init(nftIds: [String]) {
+        self.nftIds = nftIds
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = PaymentPresenter(view: self)
+        presenter = PaymentPresenter(view: self, nftIds: nftIds)
         
         view.backgroundColor = .backgroundPrimary
         
@@ -95,6 +110,8 @@ final class PaymentViewController: UIViewController {
         setupViews()
         setupConstraints()
         setupTargets()
+        selectFirstCell()
+        setupPrivacyTap()
     }
     
     // MARK: - Setup UI Methods
@@ -145,6 +162,30 @@ final class PaymentViewController: UIViewController {
         proceedPaymentButton.addTarget(self, action: #selector(proceedPaymentButtonTapped), for: .touchUpInside)
     }
     
+    private func setupPrivacyTap() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openWebView))
+        privacyPolitcyLinkLabel.isUserInteractionEnabled = true
+        privacyPolitcyLinkLabel.addGestureRecognizer(tap)
+    }
+    
+    // MARK: - Setup Methods
+    
+    private func selectFirstCell() {
+        DispatchQueue.main.async {
+            guard self.presenter?.count ?? 0 > 0 else { return }
+            
+            let indexPath = IndexPath(item: 0, section: 0)
+            self.collectionView.selectItem(
+                at: indexPath,
+                animated: false,
+                scrollPosition: []
+            )
+            self.presenter?.select(at: indexPath)
+        }
+    }
+    
+    // MARK: - Actions
+    
     @objc
     private func backToCart() {
         dismiss(animated: true)
@@ -153,6 +194,14 @@ final class PaymentViewController: UIViewController {
     @objc
     private func proceedPaymentButtonTapped() {
         presenter?.proceedPayment()
+    }
+    
+    @objc
+    private func openWebView() {
+        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
     }
 }
 
@@ -215,18 +264,41 @@ extension PaymentViewController: PaymentView {
     func showSuccess() {
         let vc = SuccessfullPaymentViewController()
         vc.modalPresentationStyle = .overFullScreen
+        
+        vc.onClose = { [weak self] in
+            guard let self else { return }
+            self.onPaymentFinished?()
+            self.dismiss(animated: true)
+        }
+        
         present(vc, animated: true)
     }
     
     func showPaymentError() {
         let alert = UIAlertController(title: "Не удалось произвести оплату", message: nil, preferredStyle: .alert)
-
+        
         alert.addAction(UIAlertAction(title: "Отмена", style: .default))
-
+        
         alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
             self?.showSuccess()
         }))
-
+        
+        present(alert, animated: true)
+    }
+    
+    func showError(_ error: AppError) {
+        let alert = UIAlertController(title: error.title, message: nil, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: error.cancelTitle, style: .default))
+        
+        alert.addAction(UIAlertAction(
+            title: error.retryTitle,
+            style: .default,
+            handler: { [weak presenter] _ in
+                presenter?.retry(for: error)
+            }
+        ))
+        
         present(alert, animated: true)
     }
     

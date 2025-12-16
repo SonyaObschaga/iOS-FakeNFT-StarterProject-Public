@@ -5,7 +5,8 @@ protocol CartView: AnyObject {
     func updateTotal(nftCount: Int, totalPrice: String)
     func showDelete(at indexPath: IndexPath)
     func showSortOptions()
-    func updateCart(with nftIds: [String])
+    func showLoading()
+    func hideLoading()
 }
 
 final class CartPresenter {
@@ -13,43 +14,48 @@ final class CartPresenter {
     private weak var view: CartView?
     private let sortManager = CartSortPreferenceManager()
     
-    private let cartService: CartService
+    private let servicesAssembly = ServicesAssembly(
+        networkClient: DefaultNetworkClient(),
+        nftStorage: NftStorageImpl()
+    )
     private var nftIds: [String] = []
     
     var currentSortOption: CartSortOption {
         sortManager.load()
     }
     
-    private var nftData: [TestNFTModel] = [
-        TestNFTModel(name: "Atheen", rating: 2, price: 5.15),
-        TestNFTModel(name: "Bulbasaur", rating: 3, price: 2.22),
-        TestNFTModel(name: "Greena", rating: 1, price: 3.09)
-    ]
+    private var nftData: [Nft] = []
     
-    init(view: CartView, cartService: CartService) {
+    init(view: CartView) {
         self.view = view
-        self.cartService = cartService
+    }
+    
+    var rows: Int { nftData.count }
+    
+    var currentNftIds: [String] {
+        nftIds
+    }
+    
+    func viewWillAppear() {
         loadCart()
         applySort(option: currentSortOption)
     }
     
-    // MARK: - Public
-    
-    var rows: Int { nftData.count }
-    
-    func model(at indexPath: IndexPath) -> TestNFTModel {
+    func nft(at indexPath: IndexPath) -> Nft {
         nftData[indexPath.row]
     }
     
-    func delete(at indexPath: IndexPath) {
-        nftData.remove(at: indexPath.row)
-        view?.reload()
-        recalcTotal()
+    func delete(nftId: String) {
+        if let index = nftIds.firstIndex(where: { $0 == nftId }) {
+            nftData.remove(at: index)
+            nftIds.removeAll { $0 == nftId }
+            updateOrderAfterDelete()
+        }
     }
     
     func recalcTotal() {
         let total = nftData.reduce(0) { $0 + $1.price }
-        let totalString = String(total).replacingOccurrences(of: ".", with: ",")
+        let totalString = String(format: "%.2f", total).replacingOccurrences(of: ".", with: ",")
         view?.updateTotal(nftCount: nftData.count, totalPrice: totalString)
     }
     
@@ -59,7 +65,7 @@ final class CartPresenter {
     
     func applySort(option: CartSortOption) {
         sortManager.save(option)
-
+        
         switch option {
         case .price:
             nftData.sort { $0.price < $1.price }
@@ -68,18 +74,62 @@ final class CartPresenter {
         case .name:
             nftData.sort { $0.name.lowercased() < $1.name.lowercased() }
         }
-
+        
         view?.reload()
         recalcTotal()
     }
     
     func loadCart() {
-        cartService.loadCart() { [weak self] result in
+        view?.showLoading()
+        
+        servicesAssembly.cartGetOrderService.loadCart() { [weak self] result in
             DispatchQueue.main.async {
+                guard let self else { return }
+                
                 switch result {
                 case .success(let ids):
-                    self?.nftIds = ids
-                    self?.view?.updateCart(with: ids)
+                    self.nftIds = ids
+                    self.nftData.removeAll()
+                    self.view?.reload()
+                    self.recalcTotal()
+                    
+                    guard !ids.isEmpty else {
+                        self.view?.hideLoading()
+                        return
+                    }
+                    
+                    let group = DispatchGroup()
+                    
+                    ids.forEach { id in
+                        group.enter()
+                        self.loadNft(id: id) {
+                            group.leave()
+                        }
+                    }
+                    
+                    group.notify(queue: .main) {
+                        self.view?.hideLoading()
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    self.view?.hideLoading()
+                }
+            }
+        }
+    }
+    
+    private func loadNft(id: String, completion: (() -> Void)? = nil) {
+        servicesAssembly.nftService.loadNft(id: id) { [weak self] result in
+            DispatchQueue.main.async {
+                defer { completion?() }
+                guard let self else { return }
+                
+                switch result {
+                case .success(let nft):
+                    guard !(self.nftData.contains(where: { $0.id == nft.id })) else { return }
+                    self.nftData.append(nft)
+                    self.applySort(option: self.currentSortOption)
                 case .failure(let error):
                     print(error)
                 }
@@ -89,5 +139,27 @@ final class CartPresenter {
     
     func sortTapped() {
         view?.showSortOptions()
+    }
+    
+    func updateOrderAfterDelete() {
+        view?.showLoading()
+        
+        servicesAssembly.updateAndPayOrderService.updateOrder(nftIds: nftIds) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                
+                self.view?.hideLoading()
+                
+                switch result {
+                case .success:
+                    print("[CartPresenter/updateOrderAfterDelete]: Deleting nft success")
+                    self.view?.reload()
+                    self.recalcTotal()
+                    
+                case .failure(let error):
+                    print("[CartPresenter/updateOrderAfterDelete]: Failed to delete nft: \(error)")
+                }
+            }
+        }
     }
 }

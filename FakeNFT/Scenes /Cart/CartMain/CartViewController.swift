@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class CartViewController: UIViewController {
     
@@ -7,8 +8,7 @@ final class CartViewController: UIViewController {
     private let reuseIdentifier = "CartCell"
     private var presenter: CartPresenter?
     private var savedImageForDelete: UIImage?
-    
-    private var fetchedNftIds: [String] = []
+    private var nftIdForDelete: String?
     
     // MARK: - UI Elements
     
@@ -86,12 +86,17 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundPrimary
         
-        presenter = CartPresenter(view: self, cartService: CartOrderService(networkClient: DefaultNetworkClient()))
+        presenter = CartPresenter(view: self)
         
         setupViews()
         setupConstraints()
         presenter?.recalcTotal()
         setupTargets()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.viewWillAppear()
     }
     
     // MARK: - Setup UI Methods
@@ -117,7 +122,7 @@ final class CartViewController: UIViewController {
             cartTableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
             cartTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             cartTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            cartTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cartTableView.bottomAnchor.constraint(equalTo: totalOfCartView.topAnchor),
             
             totalOfCartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             totalOfCartView.heightAnchor.constraint(equalToConstant: 76),
@@ -156,40 +161,37 @@ final class CartViewController: UIViewController {
     
     func showSortOptions() {
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
-
+        
         let priceTitle = CartSortOption.price.displayTitle
-        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .price)
+        alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .price)
         }))
-
+        
         let ratingTitle = CartSortOption.rating.displayTitle
-        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .rating)
+        alert.addAction(UIAlertAction(title: ratingTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .rating)
         }))
-
+        
         let nameTitle = CartSortOption.name.displayTitle
         
-        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak self] _ in
-            self?.presenter?.applySort(option: .name)
+        alert.addAction(UIAlertAction(title: nameTitle, style: .default, handler: { [weak presenter] _ in
+            presenter?.applySort(option: .name)
         }))
-
+        
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
-
+        
         present(alert, animated: true)
-    }
-    
-    func updateCart(with nftIds: [String]) {
-        self.fetchedNftIds = nftIds
-        print(fetchedNftIds)
-        //cartTableView.reloadData()
     }
     
     // MARK: - Actions
     
     @objc
     private func goToPayment() {
-        let paymentViewController = PaymentViewController()
+        let paymentViewController = PaymentViewController(nftIds: presenter?.currentNftIds ?? [])
         paymentViewController.modalPresentationStyle = .overFullScreen
+        paymentViewController.onPaymentFinished = { [weak self] in
+            self?.presenter?.viewWillAppear()
+        }
         
         present(paymentViewController, animated: true)
     }
@@ -210,23 +212,25 @@ extension CartViewController: UITableViewDataSource {
         
         cell.delegate = self
         
-        guard let nft = presenter?.model(at: indexPath) else { return UITableViewCell() }
-        cell.configure(nftName: nft.name, nftImageURL: "", rating: nft.rating, price: nft.price)
+        guard let nft = presenter?.nft(at: indexPath) else { return UITableViewCell() }
+        cell.configure(nftName: nft.name, nftImageURL: nft.images.first, rating: nft.rating, price: Float(nft.price), nftId: nft.id)
         return cell
     }
 }
 
 extension CartViewController: CartCellDelegate {
-    func didTapDelete(in cell: CartTableViewCell, with image: UIImage) {
+    func didTapDelete(in cell: CartTableViewCell, with image: UIImage, nftId: String) {
         guard let indexPath = cartTableView.indexPath(for: cell) else { return }
         presenter?.handleDeleteTap(at: indexPath)
         savedImageForDelete = image
+        nftIdForDelete = nftId
     }
 }
 
 extension CartViewController: DeleteConfirmationDelegate {
-    func didConfirmDelete(at indexPath: IndexPath) {
-        presenter?.delete(at: indexPath)
+    func didConfirmDelete() {
+        guard let nftIdForDelete else { return }
+        presenter?.delete(nftId: nftIdForDelete)
     }
 }
 
@@ -243,9 +247,17 @@ extension CartViewController: CartView {
     func showDelete(at indexPath: IndexPath) {
         guard let image = savedImageForDelete else { return }
         
-        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, indexPath: indexPath)
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image)
         deleteConfirmationViewController.modalPresentationStyle = .overFullScreen
         deleteConfirmationViewController.delegate = self
         present(deleteConfirmationViewController, animated: true)
+    }
+    
+    func showLoading() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        ProgressHUD.dismiss()
     }
 }

@@ -7,11 +7,11 @@ struct CartResponse: Decodable {
 
 typealias CartCompletion = (Result<[String], Error>) -> Void
 
-protocol CartService {
+protocol GetCartService {
     func loadCart(completion: @escaping CartCompletion)
 }
 
-final class CartOrderService: CartService {
+final class CartGetOrderServiceImpl: GetCartService {
 
     private let networkClient: NetworkClient
     private var nftIds: [String] = []

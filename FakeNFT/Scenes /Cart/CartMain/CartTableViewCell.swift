@@ -1,7 +1,7 @@
 import UIKit
 
 protocol CartCellDelegate: AnyObject {
-    func didTapDelete(in cell: CartTableViewCell, with image: UIImage)
+    func didTapDelete(in cell: CartTableViewCell, with image: UIImage, nftId: String)
 }
 
 final class CartTableViewCell: UITableViewCell {
@@ -9,6 +9,7 @@ final class CartTableViewCell: UITableViewCell {
     static let reuseIdentifier = "CartCell"
     
     weak var delegate: CartCellDelegate?
+    private var nftId: String?
     
     private lazy var cellView: UIView = {
         let container = UIView()
@@ -122,10 +123,20 @@ final class CartTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(nftName: String, nftImageURL: String, rating: Int, price: Float) {
+    func configure(nftName: String, nftImageURL: URL?, rating: Int, price: Float, nftId: String) {
+        self.nftId = nftId
         nftNameLabel.text = nftName
-        nftImageView.image = UIImage(resource: .NFT) //подтянуть изображение через Kingfisher
-        let priceString = String(price).replacingOccurrences(of: ".", with: ",")
+        
+        nftImageView.kf.indicatorType = .activity
+        nftImageView.kf.setImage(
+            with: nftImageURL,
+            options: [
+                .transition(.fade(0.2)),
+                .cacheOriginalImage
+            ]
+        )
+        
+        let priceString = String(format: "%.2f", price).replacingOccurrences(of: ".", with: ",")
         costOfNftLabel.text = "\(priceString) ETH"
         setRatingStars(rating: rating)
     }
@@ -146,6 +157,7 @@ final class CartTableViewCell: UITableViewCell {
     
     @objc private func deleteTapped() {
         guard let nftImage = nftImageView.image else { return }
-        delegate?.didTapDelete(in: self, with: nftImage)
+        guard let nftId else { return }
+        delegate?.didTapDelete(in: self, with: nftImage, nftId: nftId)
     }
 }
