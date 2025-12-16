@@ -81,8 +81,7 @@ final class SuccessfullPaymentViewController: UIViewController {
     
     @objc
     private func backToCart() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
+        dismiss(animated: true) {
             self.onClose?()
         }
     }

@@ -171,9 +171,8 @@ final class PaymentViewController: UIViewController {
     // MARK: - Setup Methods
     
     private func selectFirstCell() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self,
-                  self.presenter?.count ?? 0 > 0 else { return }
+        DispatchQueue.main.async {
+            guard self.presenter?.count ?? 0 > 0 else { return }
             
             let indexPath = IndexPath(item: 0, section: 0)
             self.collectionView.selectItem(
@@ -295,8 +294,8 @@ extension PaymentViewController: PaymentView {
         alert.addAction(UIAlertAction(
             title: error.retryTitle,
             style: .default,
-            handler: { [weak self] _ in
-                self?.presenter?.retry(for: error)
+            handler: { [weak presenter] _ in
+                presenter?.retry(for: error)
             }
         ))
         
