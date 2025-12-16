@@ -179,7 +179,7 @@ final class NFTPresenter: NFTPresenterProtocol {
         // Получаем текущее состояние
         let isCurrentlyLiked = agent.profile.likes.contains(nftId)
 
-        if agent.likedNFTsCount == 1 {
+        if isFavoritesPresenter && agent.likedNFTsCount == 1 {
             let errorModel = lastLikedNFTCantBeDeletedErrorModel()
             view?.showError(errorModel)
             return 
