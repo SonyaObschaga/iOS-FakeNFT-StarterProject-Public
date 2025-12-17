@@ -22,10 +22,6 @@ final class ServicesAssembly {
             CollectionsServiceImpl(networkClient: networkClient)
         }
     
-//    var profileService: ProfileService {
-//        ProfileServiceImpl(networkClient: networkClient)
-//    }
-    
     var orderService: OrderService {
         OrderServiceImpl(networkClient: networkClient)
     }
@@ -47,4 +43,15 @@ final class ServicesAssembly {
         ProfileServiceImpl(networkClient: networkClient, storage: profileStorage)
     }
     
+    var cartGetOrderService: GetCartService {
+        CartGetOrderServiceImpl(networkClient: networkClient)
+    }
+    
+    var setCurrencyService: SetCurrencyService {
+        SetCurrencyServiceImpl(networkClient: networkClient)
+    }
+    
+    var updateAndPayOrderService: UpdateAndPayService {
+        UpdateAndPayOrderServiceImpl(networkClient: networkClient)
+    }
 }

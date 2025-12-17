@@ -20,6 +20,7 @@ final class TableCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = .backgroundPrimary
         setupUI()
         setupConstraints()
     }

@@ -23,6 +23,7 @@ final class CatalogViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .backgroundPrimary
         setupNavigationBar()
         setupTableView()
         presenter?.viewDidLoad()
@@ -59,7 +60,6 @@ final class CatalogViewController: UIViewController {
         )
 
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
     }
 
     private func setupNavigationBar() {

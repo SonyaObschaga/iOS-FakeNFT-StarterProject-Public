@@ -10,6 +10,12 @@ final class TabBarController: UITabBarController {
         }
     }
 
+    private let cartTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.Cart", comment: ""),
+        image: UIImage(resource: .cartTabBar),
+        tag: 2
+    )
+  
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
         image: UIImage(systemName: "square.stack.3d.up.fill"),
@@ -25,8 +31,8 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        tabBar.backgroundColor = .systemBackground
+        view.backgroundColor = .backgroundPrimary
+        tabBar.backgroundColor = .backgroundPrimary
         
         if servicesAssembly != nil {
             setupViewControllers()
@@ -38,6 +44,8 @@ final class TabBarController: UITabBarController {
             return
         }
         
+      // MARK: - Profile
+      
         let profilePresenter = ProfilePresenter(servicesAssembly: servicesAssembly)
         let profileViewController = ProfileViewController()
         profileViewController.configure(profilePresenter)
@@ -45,6 +53,13 @@ final class TabBarController: UITabBarController {
         profileViewController.tabBarItem = profileTabBarItem
         let profileNavigationController = UINavigationController(rootViewController: profileViewController)
 
+      // MARK: - Cart
+      
+        let cartController = CartViewController()
+        cartController.tabBarItem = cartTabBarItem
+      
+      // MARK: - Catalog
+      
         let catalogController = CatalogViewController(
             servicesAssembly: servicesAssembly
         )
@@ -62,9 +77,12 @@ final class TabBarController: UITabBarController {
         )
         navigationController.tabBarItem = catalogTabBarItem
         
+      // MARK: - Add views to tab bar
+      
         viewControllers = [
             profileNavigationController,
-            navigationController
+            navigationController,
+            cartController
         ]
         
         selectedIndex = 0

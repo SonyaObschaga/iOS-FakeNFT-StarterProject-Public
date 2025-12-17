@@ -139,6 +139,8 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
         tableView.isScrollEnabled = false
         tableView.backgroundColor = .systemGray6
         tableView.separatorStyle = .none
+        tableView.layer.masksToBounds = true
+        tableView.layer.cornerRadius = 12
         return tableView
     }()
 
@@ -146,7 +148,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
         let button = UIButton(type: .system)
         button.setTitle("Перейти на сайт продавца", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = .backgroundPrimary
         button.setTitleColor(.label, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
@@ -204,7 +206,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
         backButton.tintColor = .label
         navigationItem.leftBarButtonItem = backButton
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .backgroundPrimary
         setupUI()
         setupGestureRecognizers()
         tableView.dataSource = self

@@ -10,7 +10,7 @@ import SafariServices
 
 final class ProfileViewController: UIViewController, LoadingView, ErrorView {
 
-    var originalBackgroundColor: UIColor = .black
+    var originalBackgroundColor: UIColor = .backgroundPrimary
     
     var tableCells: [ProfileCellModel] = []
 
@@ -43,6 +43,7 @@ final class ProfileViewController: UIViewController, LoadingView, ErrorView {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.setImage(imageButton, for: .normal)
+        button.tintColor = .blackAdaptive
         button.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
         
         return button
@@ -61,7 +62,7 @@ final class ProfileViewController: UIViewController, LoadingView, ErrorView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .ypBlackDay
+        label.textColor = .textPrimary
         
         return label
     }()
@@ -70,7 +71,8 @@ final class ProfileViewController: UIViewController, LoadingView, ErrorView {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.font = .systemFont(ofSize: 13, weight: .regular)
-        textView.textColor = .ypBlackDay
+        textView.textColor = .textPrimary
+        textView.backgroundColor = originalBackgroundColor
         textView.isEditable = false
 
         return textView
@@ -80,7 +82,7 @@ final class ProfileViewController: UIViewController, LoadingView, ErrorView {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.setTitleColor(.ypBlueUniversal, for: .normal)
+        button.setTitleColor(.semanticBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -99,7 +101,7 @@ final class ProfileViewController: UIViewController, LoadingView, ErrorView {
         )
         tableView.alwaysBounceVertical = false
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .ypWhiteDay
+        tableView.backgroundColor = originalBackgroundColor
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsMultipleSelection = false
@@ -161,7 +163,7 @@ extension ProfileViewController: UITableViewDataSource {
 // private
 extension ProfileViewController {
     func setupView() {
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = originalBackgroundColor
         navigationController?.navigationBar.isHidden = true
         
         addSubViews()

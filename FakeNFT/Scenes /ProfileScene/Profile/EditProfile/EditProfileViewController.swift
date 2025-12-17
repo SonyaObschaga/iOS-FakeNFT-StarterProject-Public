@@ -31,8 +31,8 @@ final class EditProfileViewController: UIViewController, ErrorView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Сохранить", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        button.backgroundColor = .ypBlackDay
-        button.tintColor = .ypWhiteUniversal
+        button.backgroundColor = .blackAdaptive
+        button.tintColor = .textPrimary
         button.layer.cornerRadius = 16
         button.isHidden = true
         button.addTarget(self, action: #selector(saveChanges), for: .touchUpInside)
@@ -66,7 +66,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         button.layer.cornerRadius = 35
         button.layer.masksToBounds = false
         button.addTarget(self, action: #selector(changeAvatar), for: .touchUpInside)
-        button.backgroundColor = .black
+        button.tintColor = .blackAdaptive
         
         return button
     }()
@@ -74,7 +74,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .ypBlackDay
+        label.textColor = .blackAdaptive
         label.text = "Имя"
         
         return label
@@ -97,7 +97,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .ypBlackDay
+        label.textColor = .textPrimary
         label.text = "Описание"
         
         return label
@@ -109,7 +109,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         textView.autocorrectionType = UITextAutocorrectionType.no
         textView.returnKeyType = UIReturnKeyType.done
         textView.layer.cornerRadius = 12
-        textView.backgroundColor = .ypLightGreyDay
+        textView.backgroundColor = .backgroundSecondary
         textView.font = .systemFont(ofSize: 17, weight: .regular)
         textView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
         
@@ -119,7 +119,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .ypBlackDay
+        label.textColor = .textPrimary
         label.text = "Сайт"
         
         return label
@@ -133,7 +133,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.returnKeyType = UIReturnKeyType.done
         textField.layer.cornerRadius = 12
-        textField.backgroundColor = .ypLightGreyDay
+        textField.backgroundColor = .backgroundSecondary
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         
         return textField
@@ -160,7 +160,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
 //MARK: - Private functions
 private extension EditProfileViewController {
     func setupView() {
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = .backgroundPrimary
         
         addSubViews()
         configureConstraints()

@@ -1,13 +1,14 @@
 import Foundation
 
-struct NFTRequest: NetworkRequest {
-    let id: String
+struct CartOrderRequest: NetworkRequest {
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/nft/\(id)")
+        URL(string: RequestConstants.baseURL + "/api/v1/orders/1")
     }
-    
+
+    var httpMethod: HttpMethod { .get }
+
     var dto: Dto? { nil }
-    
+
     var headers: [String: String] {
         [
             "Accept": "application/json",

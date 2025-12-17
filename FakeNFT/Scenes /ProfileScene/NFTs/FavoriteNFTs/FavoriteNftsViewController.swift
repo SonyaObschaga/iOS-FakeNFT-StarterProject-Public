@@ -37,6 +37,7 @@ final class FavoriteNftsViewController: UIViewController, LoadingView, ErrorView
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.setImage(imageButton, for: .normal)
+        button.tintColor = .blackAdaptive
         button.addTarget(self, action: #selector(back), for: .touchUpInside)
         
         return button
