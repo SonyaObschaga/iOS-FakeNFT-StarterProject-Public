@@ -2,7 +2,13 @@ import UIKit
 
 final class TabBarController: UITabBarController {
 
-    var servicesAssembly: ServicesAssembly?
+    var servicesAssembly: ServicesAssembly? {
+        didSet {
+            if isViewLoaded {
+                setupViewControllers()
+            }
+        }
+    }
 
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
@@ -18,9 +24,17 @@ final class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        view.backgroundColor = .systemBackground
+        tabBar.backgroundColor = .systemBackground
+        
+        if servicesAssembly != nil {
+            setupViewControllers()
+        }
+    }
+    
+    private func setupViewControllers() {
         guard let servicesAssembly = servicesAssembly else {
-            assertionFailure("servicesAssembly must be set before viewDidLoad")
             return
         }
         
@@ -54,9 +68,5 @@ final class TabBarController: UITabBarController {
         ]
         
         selectedIndex = 0
-
-        
-        view.backgroundColor = .systemBackground
-        tabBar.backgroundColor = .systemBackground
     }
 }

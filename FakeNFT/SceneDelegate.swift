@@ -1,14 +1,14 @@
 import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
     var window: UIWindow?
-
+    
     let servicesAssembly = ServicesAssembly(
         networkClient: DefaultNetworkClient(),
         nftStorage: NftStorageImpl()
     )
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
@@ -28,11 +28,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func showMainScreen() {
         guard let window = window else { return }
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBarController = storyboard.instantiateInitialViewController() as? TabBarController else {
-            return
-        }
-        
+        let tabBarController = TabBarController()
         tabBarController.servicesAssembly = servicesAssembly
         
         UIView.transition(
