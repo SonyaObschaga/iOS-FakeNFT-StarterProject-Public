@@ -17,7 +17,7 @@ final class SuccessfullPaymentViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Успех! Оплата прошла,\nпоздравляем с покупкой!"
+        label.text = NSLocalizedString("Payment.success", comment: "")
         label.font = .titleLarge
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -30,7 +30,7 @@ final class SuccessfullPaymentViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = .blackAdaptive
         button.layer.cornerRadius = 16
-        button.setTitle("Вернуться в корзину", for: .normal)
+        button.setTitle(NSLocalizedString("Payment.backToCart", comment: ""), for: .normal)
         button.titleLabel?.font = .titleMedium
         button.setTitleColor(.whiteAdaptive, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

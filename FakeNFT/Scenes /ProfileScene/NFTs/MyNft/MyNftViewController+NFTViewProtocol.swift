@@ -21,13 +21,12 @@ extension MyNftViewController: NFTViewProtocol {
    func errorDetected(error: any Error)
    {
        print("Error detected: \(error.localizedDescription)")
-       showErrorDialog(title: "Error", message: error.localizedDescription)
+       showErrorDialog(title: NSLocalizedString("Error.title", comment: ""), message: error.localizedDescription)
    }
 
     func showErrorDialog(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            // Handle the OK button tap (optional)
+        let okAction = UIAlertAction(title: NSLocalizedString("Common.ok", comment: ""), style: .default) { _ in            // Handle the OK button tap (optional)
         }
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)

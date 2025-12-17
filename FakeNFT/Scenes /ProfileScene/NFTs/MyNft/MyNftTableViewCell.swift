@@ -62,7 +62,7 @@ final class MyNftTableViewCell: UITableViewCell {
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Цена"
+        label.text = NSLocalizedString("MyNFTs.price", comment: "")
         label.font = .systemFont(ofSize: 13)
         return label
     }()
@@ -108,8 +108,8 @@ final class MyNftTableViewCell: UITableViewCell {
         self.presenter = presenter
         self.nftId = nft.id
         nameLabel.text = nft.nftName
-        costLabel.text = "\(nft.price) ETH"
-        authorLabel.text = "От \(nft.nftAuthor)"
+        costLabel.text = String(format: NSLocalizedString("MyNFTs.priceFormat", comment: ""), "\(nft.price)")
+        authorLabel.text = String(format: NSLocalizedString("MyNFTs.authorPrefix", comment: ""), nft.nftAuthor)
 
         ratingImageView.image = UIImage(named: "Rating_\(nft.rating ?? 1)")
 

@@ -191,9 +191,9 @@ final class NFTPresenter: NFTPresenterProtocol {
     }
     
     private func lastLikedNFTCantBeDeletedErrorModel() -> ErrorModel {
-        let message: String = "Последний избранный NFT не может быть удален"
+        let message: String = NSLocalizedString("NFT.lastFavoriteCannotBeDeleted", comment: "")
         
-        let actionText = NSLocalizedString("ok", comment: "")
+        let actionText = NSLocalizedString("Common.ok", comment: "")
         return ErrorModel(message: message, actionText: actionText) {
         }
     }

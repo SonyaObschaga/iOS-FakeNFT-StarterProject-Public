@@ -29,7 +29,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Сохранить", for: .normal)
+        button.setTitle(NSLocalizedString("Common.save", comment: ""), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         button.backgroundColor = .blackAdaptive
         button.tintColor = .textPrimary
@@ -56,7 +56,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.setBackgroundImage(imageButton, for: .normal)
-        button.setTitle("Сменить \n фото", for: .normal)
+        button.setTitle(NSLocalizedString("EditProfile.changePhoto", comment: ""), for: .normal)
         button.setTitleColor(.ypWhiteUniversal, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
         button.titleLabel?.numberOfLines = 2
@@ -75,7 +75,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .blackAdaptive
-        label.text = "Имя"
+        label.text = NSLocalizedString("EditProfile.name", comment: "")
         
         return label
     }()
@@ -98,7 +98,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .textPrimary
-        label.text = "Описание"
+        label.text = NSLocalizedString("EditProfile.description", comment: "")
         
         return label
     }()
@@ -120,7 +120,7 @@ final class EditProfileViewController: UIViewController, ErrorView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .textPrimary
-        label.text = "Сайт"
+        label.text = NSLocalizedString("EditProfile.website", comment: "")
         
         return label
     }()
@@ -227,17 +227,21 @@ private extension EditProfileViewController {
     }
     
     func showChangePhotoAlert() {
-        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: NSLocalizedString("EditProfile.photoLinkTitle", comment: ""),
+            message: nil,
+            preferredStyle: .alert
+        )
 
         alert.addTextField { textField in
-            textField.placeholder = "http://example.com/avatar.png"
+            textField.placeholder = NSLocalizedString("EditProfile.photoLinkPlaceholder", comment: "")
             textField.keyboardType = .URL
             textField.text = "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
         }
 
-        let cancel = UIAlertAction(title: "Отмена", style: .default)
+        let cancel = UIAlertAction(title: NSLocalizedString("Common.cancel", comment: ""), style: .default)
 
-        let save = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+        let save = UIAlertAction(title: NSLocalizedString("Common.save", comment: ""), style: .default) { [weak self] _ in
             guard let text = alert.textFields?.first?.text,
                   let url = URL(string: text) else { return }
 
@@ -281,7 +285,7 @@ private extension EditProfileViewController {
     func removeAvatar() {
         let placeholder = UIImage(resource: .joaquin).alpha(0.6)
         editPhotoButton.setBackgroundImage(placeholder, for: .normal)
-        editPhotoButton.setTitle("Сменить \n фото", for: .normal)
+        editPhotoButton.setTitle(NSLocalizedString("EditProfile.changePhoto", comment: ""), for: .normal)
         saveButton.isHidden = false
     }
     
@@ -317,21 +321,20 @@ private extension EditProfileViewController {
     @objc
     func changeAvatar() {
         let sheet = UIAlertController(
-                title: "Фото профиля",
-                message: nil,
-                preferredStyle: .actionSheet
-            )
+            title: NSLocalizedString("EditProfile.profilePhotoTitle", comment: ""),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
 
-            let edit = UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+        let edit = UIAlertAction(title: NSLocalizedString("EditProfile.editPhoto", comment: ""), style: .default) { [weak self] _ in
                 self?.showChangePhotoAlert()
             }
 
-            let delete = UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+        let delete = UIAlertAction(title: NSLocalizedString("EditProfile.deletePhoto", comment: ""), style: .destructive) { [weak self] _ in
                 self?.removeAvatar()
             }
 
-            let cancel = UIAlertAction(title: "Отмена", style: .cancel)
-
+        let cancel = UIAlertAction(title: NSLocalizedString("Common.cancel", comment: ""), style: .cancel)
             sheet.addAction(edit)
             sheet.addAction(delete)
             sheet.addAction(cancel)

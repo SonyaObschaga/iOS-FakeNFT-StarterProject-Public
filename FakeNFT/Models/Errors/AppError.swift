@@ -1,3 +1,5 @@
+import Foundation
+
 enum AppError {
     case setCurrency
     case payment
@@ -5,17 +7,17 @@ enum AppError {
     var title: String {
         switch self {
         case .setCurrency:
-            "Не удалось выбрать валюту"
+            NSLocalizedString("Error.setCurrency", comment: "")
         case .payment:
-            "Не удалось произвести оплату"
+            NSLocalizedString("Payment.error", comment: "")
         }
     }
-    
+
     var retryTitle: String {
-        "Повторить"
+        NSLocalizedString("Error.repeat", comment: "")
     }
-    
+
     var cancelTitle: String {
-        "Отмена"
+        NSLocalizedString("Common.cancel", comment: "")
     }
 }

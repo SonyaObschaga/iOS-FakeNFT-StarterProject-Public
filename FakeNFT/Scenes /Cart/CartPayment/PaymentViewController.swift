@@ -25,7 +25,7 @@ final class PaymentViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Выберите способ оплаты"
+        label.text = NSLocalizedString("selectPayment", comment: "")
         label.font = .titleMedium
         label.textAlignment = .center
         label.textColor = .textPrimary
@@ -58,7 +58,7 @@ final class PaymentViewController: UIViewController {
     
     private lazy var privacyPolitcyTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Совершая покупку, вы соглашаетесь с условиями"
+        label.text = NSLocalizedString("Payment.termsAgreement", comment: "")
         label.font = .bodyRegular13
         label.textColor = .textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ final class PaymentViewController: UIViewController {
     
     private lazy var privacyPolitcyLinkLabel: UILabel = {
         let label = UILabel()
-        label.text = "Пользовательского соглашения"
+        label.text = NSLocalizedString("Payment.userAgreement", comment: "")
         label.font = .bodyRegular13
         label.textColor = .semanticBlue
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -78,7 +78,7 @@ final class PaymentViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = .blackAdaptive
         button.layer.cornerRadius = 16
-        button.setTitle("Оплатить", for: .normal)
+        button.setTitle(NSLocalizedString("Payment.pay", comment: ""), for: .normal)
         button.titleLabel?.font = .titleMedium
         button.setTitleColor(.whiteAdaptive, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -275,11 +275,18 @@ extension PaymentViewController: PaymentView {
     }
     
     func showPaymentError() {
-        let alert = UIAlertController(title: "Не удалось произвести оплату", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: NSLocalizedString("Payment.error", comment: ""),
+            message: nil,
+            preferredStyle: .alert
+        )
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .default))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Common.cancel", comment: ""), style: .default))
         
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Error.repeat", comment: ""),
+            style: .default,
+            handler: { [weak self] _ in
             self?.showSuccess()
         }))
         
