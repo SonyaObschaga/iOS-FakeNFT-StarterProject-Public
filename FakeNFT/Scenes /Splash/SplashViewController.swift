@@ -35,7 +35,7 @@ final class SplashViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .backgroundPrimary
         
         view.addSubview(logoImageView)
         view.addSubview(activityIndicator)
