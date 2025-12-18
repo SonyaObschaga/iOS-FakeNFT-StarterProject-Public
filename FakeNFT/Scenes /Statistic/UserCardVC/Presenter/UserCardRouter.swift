@@ -6,13 +6,21 @@ final class UserCardRouter: UserCardRouterProtocol {
     // MARK: - Property
     weak var viewController: UIViewController?
     
+    // MARK: - Private Property
+    private let collectionService: CollectionService
+    
+    // MARK: - Initialization
+    init(collectionService: CollectionService) {
+        self.collectionService = collectionService
+    }
+    
     // MARK: - Public Interface
     func dismiss() {
         viewController?.dismiss(animated: true)
     }
     
     func showUserCollection() {
-        let userCollectionConfigurator = UserCollectionConfigurator()
+        let userCollectionConfigurator = UserCollectionConfigurator(collectionService: collectionService)
         let userCollectionViewController = userCollectionConfigurator.configure()
         
         viewController?.navigationController?.pushViewController(userCollectionViewController, animated: true)

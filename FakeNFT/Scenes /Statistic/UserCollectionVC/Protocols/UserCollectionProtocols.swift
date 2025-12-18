@@ -8,9 +8,15 @@ protocol UserCollectionRouterProtocol {
 protocol UserCollectionPresenterProtocol {
     func viewDidLoad()
     func backwardButtonTapped()
+    
+    var numberOfItems: Int { get }
+    func item(at index: Int) -> UserCollectionNftItem
 }
 
 // MARK: - View Protocol
 protocol UserCollectionViewProtocol: AnyObject {
-    func displayUserCollection()
+    func displayUserCollection(_ items: [UserCollectionNftItem])
+    func showError(message: String, retryHandler: (() -> Void)?)
+    func showLoading()
+    func hideLoading()
 }

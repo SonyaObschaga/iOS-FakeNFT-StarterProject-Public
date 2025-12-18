@@ -16,7 +16,10 @@ final class StatisticRouter: StatisticRouterProtocol {
     
     // MARK: - Public Interface
     func showUserCard(_ user: User) {
-        let userCardConfigurator = UserCardConfigurator(userService: servicesAssembly.userService)
+        let userCardConfigurator = UserCardConfigurator(
+            userService: servicesAssembly.userService,
+            collectionService: servicesAssembly.collectionService
+        )
         let userCardController = userCardConfigurator.configure(with: user)
         
         let navigationController = UINavigationController(rootViewController: userCardController)

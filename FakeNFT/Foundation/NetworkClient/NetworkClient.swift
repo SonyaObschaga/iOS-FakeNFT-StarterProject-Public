@@ -100,6 +100,14 @@ struct DefaultNetworkClient: NetworkClient {
         return send(request: request, completionQueue: completionQueue) { result in
             switch result {
             case let .success(data):
+                // Log raw response before parsing
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("📦 Raw API Response:")
+                    print(jsonString)
+                    print("📦 End of response")
+                } else {
+                    print("⚠️ Could not convert response to string")
+                }
                 self.parse(data: data, type: type, onResponse: onResponse)
             case let .failure(error):
                 onResponse(.failure(error))
@@ -143,6 +151,26 @@ struct DefaultNetworkClient: NetworkClient {
             let response = try decoder.decode(T.self, from: data)
             onResponse(.success(response))
         } catch {
+            // Log raw response for debugging
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("❌ Parsing error. Raw JSON response:")
+                print(jsonString)
+            }
+            print("❌ Decoding error: \(error)")
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .keyNotFound(let key, let context):
+                    print("Key '\(key.stringValue)' not found. Path: \(context.codingPath)")
+                case .typeMismatch(let type, let context):
+                    print("Type mismatch for type \(type). Path: \(context.codingPath)")
+                case .valueNotFound(let type, let context):
+                    print("Value not found for type \(type). Path: \(context.codingPath)")
+                case .dataCorrupted(let context):
+                    print("Data corrupted. Path: \(context.codingPath)")
+                @unknown default:
+                    print("Unknown decoding error")
+                }
+            }
             onResponse(.failure(NetworkClientError.parsingError))
         }
     }

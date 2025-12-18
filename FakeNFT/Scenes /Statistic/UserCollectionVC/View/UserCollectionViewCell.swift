@@ -133,7 +133,17 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Configuration
     func configure(imageURL: String?, name: String, rating: Int, price: String, isLiked: Bool) {
         if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-            nftImageView.kf.setImage(with: url)
+            nftImageView.kf.setImage(
+                with: url,
+                placeholder: nil,
+                options: [.transition(.fade(0.2))],
+                completionHandler: { result in
+                    // Ошибки загрузки изображений обрабатываются автоматически Kingfisher
+                    // Недоступные изображения просто не загрузятся
+                }
+            )
+        } else {
+            nftImageView.image = nil
         }
         
         nameLabel.text = name
