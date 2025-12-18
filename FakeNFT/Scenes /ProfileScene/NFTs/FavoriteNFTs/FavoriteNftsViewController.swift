@@ -47,7 +47,7 @@ final class FavoriteNftsViewController: UIViewController, LoadingView, ErrorView
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlackDay
-        label.text = "Избранные NFT"
+        label.text = NSLocalizedString("Profile.favoriteNFTs", comment: "")
         
         return label
     }()
@@ -56,7 +56,7 @@ final class FavoriteNftsViewController: UIViewController, LoadingView, ErrorView
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlackDay
-        label.text = "У Вас ещё нет избранных NFT"
+        label.text = NSLocalizedString("Profile.emptyFavoriteNFTs", comment: "")
         
         return label
     }()

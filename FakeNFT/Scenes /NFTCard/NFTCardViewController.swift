@@ -109,7 +109,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = .label
-        label.text = "Цена"
+        label.text = NSLocalizedString("NFT.price", comment: "")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -124,7 +124,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
 
     private let buyButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить в корзину", for: .normal)
+        button.setTitle(NSLocalizedString("NFT.addToCart", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
@@ -146,7 +146,7 @@ final class NFTCardViewController: UIViewController, UIGestureRecognizerDelegate
 
     private let sellerWebsiteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Перейти на сайт продавца", for: .normal)
+        button.setTitle(NSLocalizedString("NFT.goToSellerWebsite", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         button.backgroundColor = .backgroundPrimary
         button.setTitleColor(.label, for: .normal)
@@ -508,7 +508,7 @@ extension NFTCardViewController: NFTCardViewProtocol {
         let firstWord =
             collectionName.components(separatedBy: " ").first ?? collectionName
         collectionLabel.text = firstWord
-        priceLabel.text = String(format: "%.2f ETH", price)
+        priceLabel.text = String(format: NSLocalizedString("NFT.priceFormat", comment: ""), price)
     }
 
     func displayImages(_ imageURLs: [URL]) {
@@ -543,10 +543,10 @@ extension NFTCardViewController: NFTCardViewProtocol {
     }
     func updateBuyButtonState(isInCart: Bool) {
         if isInCart {
-            buyButton.setTitle("Удалить из корзины", for: .normal)
+            buyButton.setTitle(NSLocalizedString("NFT.removeFromCart", comment: ""), for: .normal)
             buyButton.backgroundColor = .systemRed
         } else {
-            buyButton.setTitle("Добавить в корзину", for: .normal)
+            buyButton.setTitle(NSLocalizedString("NFT.addToCart", comment: ""), for: .normal)
             buyButton.backgroundColor = .systemBlue
         }
     }

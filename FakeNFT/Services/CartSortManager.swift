@@ -7,9 +7,9 @@ enum CartSortOption: String, CaseIterable {
     
     var displayTitle: String {
         switch self {
-        case .price: return "По цене"
-        case .rating: return "По рейтингу"
-        case .name: return "По названию"
+        case .price: return NSLocalizedString("MyNFTs.sortByPrice", comment: "")
+        case .rating: return NSLocalizedString("MyNFTs.sortByRating", comment: "")
+        case .name: return NSLocalizedString("MyNFTs.sortByName", comment: "")
         }
     }
 }

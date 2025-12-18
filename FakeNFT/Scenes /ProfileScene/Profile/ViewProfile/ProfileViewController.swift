@@ -232,7 +232,7 @@ extension ProfileViewController {
         
         tableCells.append(
             ProfileCellModel(
-                name: "Мои NFT",
+                name: NSLocalizedString("Profile.myNFTs", comment: ""),
                 count: 0,
                 action: { [weak self] in
                     guard let self = self else { return }
@@ -244,7 +244,7 @@ extension ProfileViewController {
         )
         tableCells.append(
             ProfileCellModel(
-                name: "Избранные NFT",
+                name: NSLocalizedString("Profile.favoriteNFTs", comment: ""),
                 count: 0,
                 action: { [weak self] in
                     guard let self = self else { return }
@@ -256,7 +256,7 @@ extension ProfileViewController {
         )
         tableCells.append(
             ProfileCellModel(
-                name: "О разработчике",
+                name: NSLocalizedString("aboutDeveloper", comment: ""),
                 count: nil,
                 action: { [weak self] in
                     guard let self = self else { return }

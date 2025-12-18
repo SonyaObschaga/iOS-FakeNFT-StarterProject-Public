@@ -23,7 +23,7 @@ final class TabBarController: UITabBarController {
     )
     
     private let profileTabBarItem = UITabBarItem(
-        title: "Профиль",
+        title: NSLocalizedString("Tab.profile", comment: ""),
         image: UIImage(resource: .profileTabBar),
         tag: 0
     )

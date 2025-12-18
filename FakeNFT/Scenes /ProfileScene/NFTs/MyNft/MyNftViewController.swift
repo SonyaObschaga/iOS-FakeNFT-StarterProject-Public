@@ -42,7 +42,7 @@ final class MyNftViewController: UIViewController, LoadingView, ErrorView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlackDay
-        label.text = "Мои NFT"
+        label.text = NSLocalizedString("Profile.myNFTs", comment: "")
         
         return label
     }()
@@ -80,7 +80,7 @@ final class MyNftViewController: UIViewController, LoadingView, ErrorView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlackDay
-        label.text = "У Вас ещё нет NFT"
+        label.text = NSLocalizedString("Profile.emptyMyNFTs", comment: "")
         
         return label
     }()
@@ -182,24 +182,20 @@ extension MyNftViewController{
     
     func showSortAlert() {
         let alert = UIAlertController(
-            title: "Сортировка",
+            title: NSLocalizedString("MyNFTs.sortTitle", comment: ""),
             message: nil,
             preferredStyle: .actionSheet
         )
-        alert.addAction(UIAlertAction(title: "По цене",
-                                      style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("MyNFTs.sortByPrice", comment: ""), style: .default) { [weak self] _ in
             self?.presenter.sortNFTs(by: .byPrice)
         })
-        alert.addAction(UIAlertAction(title: "По рейтингу",
-                                      style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("MyNFTs.sortByRating", comment: ""), style: .default) { [weak self] _ in
             self?.presenter.sortNFTs(by: .byRating)
         })
-        alert.addAction(UIAlertAction(title: "По названию",
-                                      style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("MyNFTs.sortByName", comment: ""), style: .default) { [weak self] _ in
             self?.presenter.sortNFTs(by: .byName)
         })
-        alert.addAction(UIAlertAction(title: "Закрыть",
-                                      style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Common.close", comment: ""), style: .cancel))
         
         self.present(alert, animated: true)
     }

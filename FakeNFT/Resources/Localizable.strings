@@ -10,3 +10,73 @@
 "sortByNFTCountTitle" = "По количеству NFT";
 "closeTitle" = "Закрыть";
 "collectionAuthor" = "Автор коллекции";
+
+"Tab.catalog" = "Каталог";
+"Tab.profile" = "Профиль";
+
+"Common.ok" = "OK";
+"Common.cancel" = "Отмена";
+"Common.save" = "Сохранить";
+"Common.close" = "Закрыть";
+
+"NFT.price" = "Цена";
+"NFT.addToCart" = "Добавить в корзину";
+"NFT.removeFromCart" = "Удалить из корзины";
+"NFT.goToSellerWebsite" = "Перейти на сайт продавца";
+"NFT.priceFormat" = "%.2f ETH";
+"NFT.priceWithAmount" = "%@ ETH";
+
+"Profile.title" = "Профиль";
+"Profile.myNFTs" = "Мои NFT";
+"Profile.favoriteNFTs" = "Избранные NFT";
+"Profile.emptyMyNFTs" = "У Вас ещё нет NFT";
+"Profile.emptyFavoriteNFTs" = "У Вас ещё нет избранных NFT";
+
+"EditProfile.name" = "Имя";
+"EditProfile.description" = "Описание";
+"EditProfile.website" = "Сайт";
+"EditProfile.changePhoto" = "Сменить \n фото";
+"EditProfile.photoLinkTitle" = "Ссылка на фото";
+"EditProfile.photoLinkPlaceholder" = "http://example.com/avatar.png";
+"EditProfile.profilePhotoTitle" = "Фото профиля";
+"EditProfile.editPhoto" = "Изменить фото";
+"EditProfile.deletePhoto" = "Удалить фото";
+
+"MyNFTs.price" = "Цена";
+"MyNFTs.priceFormat" = "%@ ETH";
+"MyNFTs.authorPrefix" = "От %@";
+"MyNFTs.sortTitle" = "Сортировка";
+"MyNFTs.sortByPrice" = "По цене";
+"MyNFTs.sortByRating" = "По рейтингу";
+"MyNFTs.sortByName" = "По названию";
+
+"Catalog.openNft" = "Открыть Nft";
+"Catalog.sortAlertTitle" = "Сортировка";
+"Catalog.sortByName" = "По названию";
+"Catalog.sortByNFTCount" = "По количеству NFT";
+"Catalog.collectionAuthor" = "Автор коллекции";
+
+"Error.title" = "Ошибка";
+"Error.network" = "Произошла ошибка сети";
+"Error.unknown" = "Произошла неизвестная ошибка";
+"Error.repeat" = "Повторить";
+
+"aboutDeveloper" = "о разработчике";
+"selectPayment" = "Выберите способ оплаты";
+
+"Payment.error" = "Не удалось произвести оплату";
+"Error.setCurrency" = "Не удалось выбрать валюту";
+
+"Cart.empty" = "Корзина пуста";
+"Cart.goToPayment" = "К оплате";
+"Cart.delete" = "Удалить";
+"Cart.back" = "Вернуться";
+"Cart.deleteConfirmation" = "Вы уверены, что хотите\nудалить объект из корзины?";
+
+"Payment.termsAgreement" = "Совершая покупку, вы соглашаетесь с условиями";
+"Payment.userAgreement" = "Пользовательского соглашения";
+"Payment.pay" = "Оплатить";
+"Payment.success" = "Успех! Оплата прошла,\nпоздравляем с покупкой!";
+"Payment.backToCart" = "Вернуться в корзину";
+
+"NFT.lastFavoriteCannotBeDeleted" = "Последний избранный NFT не может быть удален";

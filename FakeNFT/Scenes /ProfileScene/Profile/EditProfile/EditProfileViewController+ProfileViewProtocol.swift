@@ -19,7 +19,7 @@ extension EditProfileViewController: ProfileViewProtocol {
         // TODO: retrieve image by URL
         let image = UIImage(resource: .joaquin).alpha(0.6)
         editPhotoButton.setBackgroundImage(image, for: .normal)
-        editPhotoButton.setTitle("Сменить \n фото", for: .normal)
+        editPhotoButton.setTitle(NSLocalizedString("EditProfile.changePhoto", comment: ""), for: .normal)
     }
     
     func updateNftsCount(nftsCount:Int, likedNftsCount:Int) {
@@ -32,7 +32,7 @@ extension EditProfileViewController: ProfileViewProtocol {
  
     func errorDetected(error: any Error) {
         print("Error detected: \(error.localizedDescription)")
-        showErrorDialog(title: "Error", message: error.localizedDescription)
+        showErrorDialog(title: NSLocalizedString("Error.title", comment: ""), message: error.localizedDescription)
     }
     
     func hideControls() {
@@ -53,7 +53,7 @@ extension EditProfileViewController: ProfileViewProtocol {
     
     func showErrorDialog(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+        let okAction = UIAlertAction(title: NSLocalizedString("Common.ok", comment: ""), style: .default) { _ in
             // Handle the OK button tap (optional)
         }
         alertController.addAction(okAction)

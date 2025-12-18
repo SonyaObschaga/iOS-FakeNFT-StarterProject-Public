@@ -63,7 +63,7 @@ final class CartViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackAdaptive
-        button.setTitle("К оплате", for: .normal)
+        button.setTitle(NSLocalizedString("Cart.goToPayment", comment: ""), for: .normal)
         button.titleLabel?.font = .titleMedium
         button.setTitleColor(.whiteAdaptive, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,7 @@ final class CartViewController: UIViewController {
         label.font = .titleMedium
         label.textColor = .textPrimary
         label.textAlignment = .center
-        label.text = "Корзина пуста"
+        label.text = NSLocalizedString("Cart.empty", comment: "")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -160,7 +160,11 @@ final class CartViewController: UIViewController {
     
     
     func showSortOptions() {
-        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(
+            title: NSLocalizedString("MyNFTs.sortTitle", comment: ""),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
         
         let priceTitle = CartSortOption.price.displayTitle
         alert.addAction(UIAlertAction(title: priceTitle, style: .default, handler: { [weak presenter] _ in
@@ -178,7 +182,7 @@ final class CartViewController: UIViewController {
             presenter?.applySort(option: .name)
         }))
         
-        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Common.close", comment: ""), style: .cancel))
         
         present(alert, animated: true)
     }

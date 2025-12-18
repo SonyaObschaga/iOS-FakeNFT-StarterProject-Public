@@ -12,7 +12,7 @@ final class DeleteConfirmationViewController: UIViewController {
     
     private lazy var confirmDeleteButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Удалить", for: .normal)
+        button.setTitle(NSLocalizedString("Cart.delete", comment: ""), for: .normal)
         button.backgroundColor = .blackAdaptive
         button.layer.cornerRadius = 12
         button.titleLabel?.font = .bodyRegular17
@@ -23,7 +23,7 @@ final class DeleteConfirmationViewController: UIViewController {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вернуться", for: .normal)
+        button.setTitle(NSLocalizedString("Cart.back", comment: ""), for: .normal)
         button.backgroundColor = .blackAdaptive
         button.layer.cornerRadius = 12
         button.titleLabel?.font = .bodyRegular17
@@ -42,7 +42,7 @@ final class DeleteConfirmationViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Вы уверены, что хотите\nудалить объект из корзины?"
+        label.text = NSLocalizedString("Cart.deleteConfirmation", comment: "")
         label.textColor = .blackAdaptive
         label.font = .bodyRegular13
         label.textAlignment = .center
