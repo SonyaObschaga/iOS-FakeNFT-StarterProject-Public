@@ -34,8 +34,8 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyBold
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -43,7 +43,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.font = .caption3
-        label.textColor = .ypBlackLight
+        label.textColor = .primary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -51,7 +51,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "cart"), for: .normal)
-        button.tintColor = .ypBlackLight
+        button.tintColor = .primary
         return button
     }()
     
@@ -120,7 +120,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         for _ in 0..<5 {
             let starImageView = UIImageView()
             starImageView.image = UIImage(named: "star")
-            starImageView.tintColor = .ypLightGrayLight
+            starImageView.tintColor = .secondary
             starImageView.contentMode = .scaleAspectFit
             starImageView.translatesAutoresizingMaskIntoConstraints = false
             starImageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
@@ -152,7 +152,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 starImageView.tintColor = .systemYellow
             } else {
                 starImageView.image = UIImage(named: "star")
-                starImageView.tintColor = .ypLightGrayLight
+                starImageView.tintColor = .secondary
             }
         }
     }

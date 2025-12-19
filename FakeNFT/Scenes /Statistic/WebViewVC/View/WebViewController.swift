@@ -4,7 +4,7 @@ import WebKit
 // MARK: - WebViewController
 final class WebViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Property
     private let url: URL
     
     // MARK: - UI Elements
@@ -75,7 +75,7 @@ final class WebViewController: UIViewController {
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+        navigationItem.leftBarButtonItem?.tintColor = .primary
     }
     
     private func loadURL() {
@@ -120,4 +120,3 @@ extension WebViewController: WKNavigationDelegate {
         progressView.isHidden = true
     }
 }
-

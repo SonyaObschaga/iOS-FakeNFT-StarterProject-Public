@@ -9,8 +9,9 @@ final class UserCardViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        imageView.image = UIImage(systemName: UserCardConstants.avatarImageSystemName)
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
@@ -20,17 +21,17 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Joaquin Phoenix"
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.text = UserCardConstants.placeholderName
+        label.font = .titleLarge
+        label.textColor = .primary
         return label
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT,и еще больше — на моём сайте. Открыт к коллаборациям."
+        label.text = UserCardConstants.placeholderDescription
         label.font = .caption2
-        label.textColor = .ypBlackLight
+        label.textColor = .primary
         label.numberOfLines = 4
         return label
     }()
@@ -53,8 +54,8 @@ final class UserCardViewController: UIViewController {
     
     private lazy var webViewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .ypBlackLight
-        button.setTitle("Перейти на сайт пользователя", for: .normal)
+        button.tintColor = .primary
+        button.setTitle(UserCardConstants.websiteButtonTitle, for: .normal)
         button.titleLabel?.font = .caption1
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
@@ -65,7 +66,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var collectionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .ypBlackLight
+        button.tintColor = .primary
         button.backgroundColor = .systemBackground
         
         let containerView = UIView()
@@ -73,14 +74,14 @@ final class UserCardViewController: UIViewController {
         containerView.isUserInteractionEnabled = false
         
         let titleLabel = UILabel()
-        titleLabel.text = "Коллекция NFT (112)"
-        titleLabel.font = .bodyBold
-        titleLabel.textColor = .ypBlackLight
+        titleLabel.text = "\(UserCardConstants.collectionButtonTitlePrefix) (112)"
+        titleLabel.font = .titleMedium
+        titleLabel.textColor = .primary
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let iconImageView = UIImageView()
-        iconImageView.image = UIImage(named: "backward")?.withRenderingMode(.alwaysTemplate)
-        iconImageView.tintColor = .ypBlackLight
+        iconImageView.image = UIImage(named: UserCardConstants.backwardImageName)?.withRenderingMode(.alwaysTemplate)
+        iconImageView.tintColor = .primary
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +114,7 @@ final class UserCardViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-        
+    
     // MARK: - Initialization
     init(presenter: UserCardPresenterProtocol) {
         self.presenter = presenter
@@ -121,7 +122,7 @@ final class UserCardViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        assertionFailure("init(coder:) has not been implemented")
+        assertionFailure(UserCardConstants.initCoderError)
         return nil
     }
     
@@ -157,12 +158,12 @@ final class UserCardViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "backward"),
+            image: UIImage(named: UserCardConstants.backwardImageName),
             style: .plain,
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+        navigationItem.leftBarButtonItem?.tintColor = .primary
     }
     
     private func setupWebViewButton() {

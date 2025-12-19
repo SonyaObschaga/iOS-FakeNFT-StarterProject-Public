@@ -19,22 +19,33 @@ enum CellConstants {
     // MARK: - String Constants
     static let reuseIdentifier = "StatisticCell"
     static let profileImageSystemName = "person.crop.circle.fill"
+    static let sortMenuImageName = "sortMenu"
+    static let sortAlertTitle = "Сортировка"
 }
 
-// MARK: - StatisticConstants
+// MARK: - Statistic Constants
 enum StatisticConstants {
     static let topInset: CGFloat = 20
     static let leadingInset: CGFloat = 16
     static let trailingInset: CGFloat = -16
     static let bottomInset: CGFloat = -20
     
-    // MARK: - Sort Button Constants
+    // MARK: Sort Button Constants
     static let sortButtonTopInset: CGFloat = 2
     static let sortButtonTrailingInset: CGFloat = -9
     static let sortButtonSize: CGFloat = 42
     static let sortButtonTableViewSpacing: CGFloat = 20
+}
+
+// MARK: - UserCard Constants
+enum UserCardConstants {
     
-    // MARK: - String Constants
-    static let sortMenuImageName = "sortMenu"
-    static let sortAlertTitle = "Сортировка"
+    // MARK: String Constants
+    static let avatarImageSystemName = "person.crop.circle.fill"
+    static let placeholderName = "Joaquin Phoenix"
+    static let placeholderDescription = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT,и еще больше — на моём сайте. Открыт к коллаборациям."
+    static let websiteButtonTitle = "Перейти на сайт пользователя"
+    static let collectionButtonTitlePrefix = "Коллекция NFT"
+    static let backwardImageName = "backward"
+    static let initCoderError = "init(coder:) has not been implemented"
 }
