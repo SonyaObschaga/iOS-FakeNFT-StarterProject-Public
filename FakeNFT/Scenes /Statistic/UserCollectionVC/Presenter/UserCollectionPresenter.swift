@@ -50,7 +50,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         view?.showLoading()
         
         userService.fetchUserById(userId) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .success(let userResponse):
@@ -123,7 +123,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         }
         
         dispatchGroup.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.view?.hideLoading()
             self.items = loadedItems
             self.view?.displayUserCollection(self.items)
