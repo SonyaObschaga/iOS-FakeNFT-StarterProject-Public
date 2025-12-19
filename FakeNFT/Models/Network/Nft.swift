@@ -10,7 +10,6 @@ struct Nft: Decodable {
     let description: String?
     let createdAt: String?
     
-    // Handle potential typo in API response (descriprion instead of description)
     enum CodingKeys: String, CodingKey {
         case id
         case images
@@ -19,7 +18,6 @@ struct Nft: Decodable {
         case price
         case author
         case description
-        case descriprion // Handle typo if API returns it
         case createdAt
     }
     
@@ -33,10 +31,9 @@ struct Nft: Decodable {
         author = try? container.decode(String.self, forKey: .author)
         createdAt = try? container.decode(String.self, forKey: .createdAt)
         
-        // Try to decode description, fallback to descriprion if needed
         if let desc = try? container.decode(String.self, forKey: .description) {
             description = desc
-        } else if let desc = try? container.decode(String.self, forKey: .descriprion) {
+        } else if let desc = try? container.decode(String.self, forKey: .description) {
             description = desc
         } else {
             description = nil

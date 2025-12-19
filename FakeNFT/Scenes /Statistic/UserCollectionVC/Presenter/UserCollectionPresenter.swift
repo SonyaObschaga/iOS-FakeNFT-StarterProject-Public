@@ -49,7 +49,6 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     private func loadUserCollection() {
         view?.showLoading()
         
-        // Сначала получаем пользователя по ID, чтобы получить список NFT
         userService.fetchUserById(userId) { [weak self] result in
             guard let self = self else { return }
             
@@ -66,7 +65,6 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     return
                 }
                 
-                // Загружаем каждый NFT по ID
                 self.loadNfts(nftIds: nftIds)
                 
             case .failure(let error):

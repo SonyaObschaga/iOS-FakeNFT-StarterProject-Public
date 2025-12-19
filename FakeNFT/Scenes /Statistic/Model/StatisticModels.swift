@@ -7,6 +7,7 @@ struct User {
     let website: String?
     let avatar: String?
     let description: String?
+    let nfts: [String]
 }
 
 // MARK: Sort Options

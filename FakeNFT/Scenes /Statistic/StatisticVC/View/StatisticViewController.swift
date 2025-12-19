@@ -79,7 +79,7 @@ final class StatisticViewController: UIViewController {
         ])
     }
     
-    // MARK: - Private Methods
+    // MARK: - Private Method
     private func showErrorAlert(message: String, retryHandler: (() -> Void)?) {
         let alert = UIAlertController(
             title: NSLocalizedString("Tab.statistic", comment: ""),

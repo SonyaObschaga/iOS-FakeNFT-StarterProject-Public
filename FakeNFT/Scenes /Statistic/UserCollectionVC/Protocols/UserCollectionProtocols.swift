@@ -1,6 +1,5 @@
 // MARK: - Router Protocol
 protocol UserCollectionRouterProtocol {
-    func showUserCollection()
     func dismiss()
 }
 

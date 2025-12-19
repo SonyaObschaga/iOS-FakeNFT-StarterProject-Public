@@ -104,7 +104,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             cartButtonStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
             cartButtonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cartButtonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             cartButtonStackView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
@@ -138,8 +138,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 placeholder: nil,
                 options: [.transition(.fade(0.2))],
                 completionHandler: { result in
-                    // Ошибки загрузки изображений обрабатываются автоматически Kingfisher
-                    // Недоступные изображения просто не загрузятся
                 }
             )
         } else {

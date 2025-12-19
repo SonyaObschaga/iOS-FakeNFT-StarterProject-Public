@@ -4,7 +4,7 @@ import WebKit
 // MARK: - WebViewController
 final class WebViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Property
     private let url: URL
     
     // MARK: - UI Elements

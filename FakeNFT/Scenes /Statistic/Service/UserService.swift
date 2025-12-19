@@ -1,10 +1,5 @@
 import UIKit
 
-//protocol UserServiceProtocol {
-//    func fetchUsers(completion: @escaping (Result<[User], Error>) -> Void)
-//    func fetchUserById(_ id: String, completion: @escaping (Result<UserResponse, Error>) -> Void)
-//}
-
 final class UserService: UserServiceProtocol {
     private let networkClient: NetworkClient
     
@@ -25,7 +20,8 @@ final class UserService: UserServiceProtocol {
                         score: response.nfts.count,
                         website: response.website,
                         avatar: response.avatar,
-                        description: response.description
+                        description: response.description,
+                        nfts: response.nfts
                     )
                 }
                 completion(.success(users))
