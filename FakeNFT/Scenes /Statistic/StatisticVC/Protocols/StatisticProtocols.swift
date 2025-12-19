@@ -19,6 +19,7 @@ protocol StatisticPresenterProtocol {
 // MARK: - Service Protocol
 protocol UserServiceProtocol {
     func fetchUsers(completion: @escaping (Result<[User], Error>) -> Void)
+    func fetchUserById(_ id: String, completion: @escaping (Result<UserResponse, Error>) -> Void)
 }
 
 // MARK: - Router Protocol

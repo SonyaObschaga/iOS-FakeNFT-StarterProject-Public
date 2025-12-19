@@ -22,8 +22,4 @@ final class ServicesAssembly {
     var userService: UserServiceProtocol {
         return UserService(networkClient: networkClient)
     }
-    
-    var collectionService: CollectionService {
-        return CollectionServiceImpl(networkClient: networkClient)
-    }
 }

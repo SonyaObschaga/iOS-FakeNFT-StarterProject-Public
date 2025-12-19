@@ -7,11 +7,15 @@ final class UserCardRouter: UserCardRouterProtocol {
     weak var viewController: UIViewController?
     
     // MARK: - Private Property
-    private let collectionService: CollectionService
+    private let nftService: NftService
+    private let userService: UserServiceProtocol
+    private let userId: String
     
     // MARK: - Initialization
-    init(collectionService: CollectionService) {
-        self.collectionService = collectionService
+    init(nftService: NftService, userService: UserServiceProtocol, userId: String) {
+        self.nftService = nftService
+        self.userService = userService
+        self.userId = userId
     }
     
     // MARK: - Public Interface
@@ -20,8 +24,11 @@ final class UserCardRouter: UserCardRouterProtocol {
     }
     
     func showUserCollection() {
-        let userCollectionConfigurator = UserCollectionConfigurator(collectionService: collectionService)
-        let userCollectionViewController = userCollectionConfigurator.configure()
+        let userCollectionConfigurator = UserCollectionConfigurator(
+            nftService: nftService,
+            userService: userService
+        )
+        let userCollectionViewController = userCollectionConfigurator.configure(userId: userId)
         
         viewController?.navigationController?.pushViewController(userCollectionViewController, animated: true)
     }

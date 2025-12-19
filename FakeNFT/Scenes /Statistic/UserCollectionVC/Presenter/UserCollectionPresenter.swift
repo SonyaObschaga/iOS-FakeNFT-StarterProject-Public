@@ -7,12 +7,16 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     weak var view: UserCollectionViewProtocol?
     var router: UserCollectionRouterProtocol?
     
-    private let collectionService: CollectionService
+    private let nftService: NftService
+    private let userService: UserServiceProtocol
+    private let userId: String
     private var items: [UserCollectionNftItem] = []
     
     // MARK: - Initialization
-    init(collectionService: CollectionService) {
-        self.collectionService = collectionService
+    init(nftService: NftService, userService: UserServiceProtocol, userId: String) {
+        self.nftService = nftService
+        self.userService = userService
+        self.userId = userId
     }
     
     // MARK: - Public Interface
@@ -45,29 +49,29 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     private func loadUserCollection() {
         view?.showLoading()
         
-        collectionService.fetchCollections { [weak self] result in
+        // Сначала получаем пользователя по ID, чтобы получить список NFT
+        userService.fetchUserById(userId) { [weak self] result in
             guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                self.view?.hideLoading()
+            switch result {
+            case .success(let userResponse):
+                let nftIds = userResponse.nfts
                 
-                switch result {
-                case .success(let collectionItems):
-                    self.items = collectionItems.map { response in
-                        let imageURL = response.images.first
-                        let priceString = String(format: "%.2f ETH", response.price)
-                        
-                        return UserCollectionNftItem(
-                            imageURL: imageURL,
-                            name: response.name,
-                            rating: response.rating,
-                            price: priceString,
-                            isLiked: false
-                        )
+                guard !nftIds.isEmpty else {
+                    DispatchQueue.main.async {
+                        self.view?.hideLoading()
+                        self.items = []
+                        self.view?.displayUserCollection(self.items)
                     }
-                    self.view?.displayUserCollection(self.items)
-                    
-                case .failure(let error):
+                    return
+                }
+                
+                // Загружаем каждый NFT по ID
+                self.loadNfts(nftIds: nftIds)
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.view?.hideLoading()
                     let errorMessage = self.makeErrorMessage(from: error)
                     self.view?.showError(
                         message: errorMessage,
@@ -77,6 +81,54 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     )
                 }
             }
+        }
+    }
+    
+    private func loadNfts(nftIds: [String]) {
+        let dispatchGroup = DispatchGroup()
+        var loadedItems: [UserCollectionNftItem] = []
+        let lock = NSLock()
+        
+        for nftId in nftIds {
+            dispatchGroup.enter()
+            nftService.loadNft(id: nftId) { result in
+                defer { dispatchGroup.leave() }
+                
+                switch result {
+                case .success(let nft):
+                    let imageURL = nft.images.first?.absoluteString
+                    let name = nft.name ?? "NFT #\(nft.id)"
+                    let rating = nft.rating ?? 0
+                    let priceString: String
+                    if let price = nft.price {
+                        priceString = String(format: "%.2f ETH", price)
+                    } else {
+                        priceString = "—"
+                    }
+                    
+                    let item = UserCollectionNftItem(
+                        imageURL: imageURL,
+                        name: name,
+                        rating: rating,
+                        price: priceString,
+                        isLiked: false
+                    )
+                    
+                    lock.lock()
+                    loadedItems.append(item)
+                    lock.unlock()
+                    
+                case .failure(let error):
+                    print("⚠️ Failed to load NFT \(nftId): \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            self.view?.hideLoading()
+            self.items = loadedItems
+            self.view?.displayUserCollection(self.items)
         }
     }
     

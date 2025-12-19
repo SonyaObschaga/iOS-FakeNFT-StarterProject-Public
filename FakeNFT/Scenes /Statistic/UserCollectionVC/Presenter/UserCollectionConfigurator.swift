@@ -3,15 +3,21 @@ import UIKit
 // MARK: - UserCollectionConfigurator
 final class UserCollectionConfigurator {
     
-    private let collectionService: CollectionService
+    private let nftService: NftService
+    private let userService: UserServiceProtocol
     
-    init(collectionService: CollectionService) {
-        self.collectionService = collectionService
+    init(nftService: NftService, userService: UserServiceProtocol) {
+        self.nftService = nftService
+        self.userService = userService
     }
     
     // MARK: - Configure
-    func configure() -> UIViewController {
-        let presenter = UserCollectionPresenter(collectionService: collectionService)
+    func configure(userId: String) -> UIViewController {
+        let presenter = UserCollectionPresenter(
+            nftService: nftService,
+            userService: userService,
+            userId: userId
+        )
         let router = UserCollectionRouter(userCollectionPresenter: presenter)
         
         let viewController = UserCollectionViewController(presenter: presenter)

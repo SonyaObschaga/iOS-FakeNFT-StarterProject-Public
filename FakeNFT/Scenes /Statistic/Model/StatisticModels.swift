@@ -1,6 +1,7 @@
 // MARK: - Models
 // MARK: User
 struct User {
+    let id: String
     let name: String
     let score: Int
     let website: String?
