@@ -3,6 +3,8 @@ protocol StatisticViewProtocol: AnyObject {
     func displayUsers(_ users: [User])
     func showError(message: String, retryHandler: (() -> Void)?)
     func showSortOptions()
+    func showLoading()
+    func hideLoading()
 }
 
 // MARK: - Presenter Protocol

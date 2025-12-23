@@ -27,6 +27,13 @@ final class StatisticViewController: UIViewController {
         return button
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     // MARK: - Initialization
     init(presenter: StatisticPresenterProtocol) {
         self.presenter = presenter
@@ -55,6 +62,7 @@ final class StatisticViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupSortButton()
         setupTableView()
+        setupLoadingIndicator()
     }
     
     private func setupSortButton() {
@@ -79,6 +87,15 @@ final class StatisticViewController: UIViewController {
         ])
     }
     
+    private func setupLoadingIndicator() {
+        view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+    }
+    
     // MARK: - Private Method
     private func showErrorAlert(message: String, retryHandler: (() -> Void)?) {
         let alert = UIAlertController(
@@ -98,7 +115,7 @@ final class StatisticViewController: UIViewController {
     }
 }
 
-// MARK: - StatisticProtocol
+// MARK: - StatisticViewProtocol
 extension StatisticViewController: StatisticViewProtocol {
     func displayUsers(_ users: [User]) {
         tableView.reloadData()
@@ -128,6 +145,14 @@ extension StatisticViewController: StatisticViewProtocol {
             alertController.addAction(action)
         }
         present(alertController, animated: true)
+    }
+    
+    func showLoading() {
+        activityIndicator.startAnimating()
+    }
+    
+    func hideLoading() {
+        activityIndicator.stopAnimating()
     }
 }
 

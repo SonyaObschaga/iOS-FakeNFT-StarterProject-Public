@@ -6,7 +6,7 @@ final class UserCollectionViewController: UIViewController {
     // MARK: - Properties
     private var presenter: UserCollectionPresenterProtocol
     
-    // MARK: - UI Element
+    // MARK: - UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -23,7 +23,7 @@ final class UserCollectionViewController: UIViewController {
         return collectionView
     }()
     
-    lazy var activityIndicator: UIActivityIndicatorView = {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true

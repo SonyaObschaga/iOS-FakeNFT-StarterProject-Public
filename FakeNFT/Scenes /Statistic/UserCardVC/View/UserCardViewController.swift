@@ -215,6 +215,12 @@ extension UserCardViewController: UserCardViewProtocol {
         nameLabel.text = user.name
         descriptionLabel.text = user.description
         nftsCountLabel.text = "Коллекция NFT (\(user.nfts.count))"
+        
         let placeholderImage = UIImage(systemName: "person.crop.circle.fill")
+        if let avatarURLString = user.avatar, let avatarURL = URL(string: avatarURLString) {
+            avatarImageView.kf.setImage(with: avatarURL, placeholder: placeholderImage)
+        } else {
+            avatarImageView.image = placeholderImage
+        }
     }
 }
