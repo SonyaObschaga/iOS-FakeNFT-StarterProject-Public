@@ -120,13 +120,3 @@ extension WebViewController: WKNavigationDelegate {
         progressView.isHidden = true
     }
 }
-
-
-
-
-
-
-
-
-
-

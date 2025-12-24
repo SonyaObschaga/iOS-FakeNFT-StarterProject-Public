@@ -9,7 +9,7 @@ struct Nft: Decodable {
     let author: String?
     let description: String?
     let createdAt: String?
-    let isLiked: Bool?
+    var isLiked: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -20,7 +20,7 @@ struct Nft: Decodable {
         case author
         case description
         case createdAt
-        case isLiked
+        case isLiked = "likes"
     }
     
     init(from decoder: Decoder) throws {

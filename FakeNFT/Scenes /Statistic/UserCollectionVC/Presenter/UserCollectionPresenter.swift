@@ -49,6 +49,28 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     func updateLikeStatus(at index: Int, isLiked: Bool) {
         guard index < items.count else { return }
         items[index].isLiked = isLiked
+        
+        let nftId = items[index].id
+        nftService.updateLikeStatus(for: nftId, isLiked: isLiked) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("✅ Like status updated for NFT \(nftId)")
+                case .failure(let error):
+                    print("❌ Failed to update like status: \(error)")
+                    self?.items[index].isLiked = !isLiked
+                }
+            }
+        }
+    }
+    
+    func toggleLikeStatus(at index: Int) {
+        guard index < items.count else { return }
+        
+        let currentStatus = items[index].isLiked
+        let newStatus = !(currentStatus)
+        
+        updateLikeStatus(at: index, isLiked: newStatus)
     }
     
     // MARK: - Private Methods
