@@ -39,7 +39,8 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 name: "",
                 rating: 0,
                 price: "",
-                isLiked: false
+                isLiked: false,
+                id: ""
             )
         }
         return items[index]
@@ -98,6 +99,8 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     let name = nft.name ?? "NFT #\(nft.id)"
                     let rating = nft.rating ?? 0
                     let priceString: String
+                    let id = nft.id
+                    let isLiked = nft.isLiked ?? false
                     if let price = nft.price {
                         priceString = String(format: "%.2f ETH", price)
                     } else {
@@ -109,7 +112,8 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                         name: name,
                         rating: rating,
                         price: priceString,
-                        isLiked: false
+                        isLiked: isLiked,
+                        id: id
                     )
                     
                     lock.lock()

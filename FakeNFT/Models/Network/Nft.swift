@@ -9,6 +9,7 @@ struct Nft: Decodable {
     let author: String?
     let description: String?
     let createdAt: String?
+    let isLiked: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -19,6 +20,7 @@ struct Nft: Decodable {
         case author
         case description
         case createdAt
+        case isLiked
     }
     
     init(from decoder: Decoder) throws {
@@ -30,6 +32,7 @@ struct Nft: Decodable {
         price = try? container.decode(Double.self, forKey: .price)
         author = try? container.decode(String.self, forKey: .author)
         createdAt = try? container.decode(String.self, forKey: .createdAt)
+        isLiked = try? container.decode(Bool.self, forKey: .isLiked)
         
         if let desc = try? container.decode(String.self, forKey: .description) {
             description = desc

@@ -21,6 +21,8 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         button.tintColor = .white
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         return button
     }()
     
@@ -77,6 +79,18 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     required init?(coder: NSCoder) {
         assertionFailure("init(coder:) has not been implemented")
         return nil
+    }
+    
+    // MARK: - Action
+    
+    private var likeButtonIsSelected: Bool = false {
+        didSet {
+            updateLikeButton(likeButtonIsSelected)
+        }
+    }
+    
+    @objc private func didTapLikeButton() {
+        likeButtonIsSelected.toggle()
     }
     
     // MARK: - SetupUI
