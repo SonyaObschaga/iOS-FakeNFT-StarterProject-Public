@@ -146,7 +146,10 @@ extension UserCollectionViewController: UICollectionViewDataSource {
             name: item.name,
             rating: item.rating,
             price: item.price,
-            isLiked: item.isLiked
+            isLiked: item.isLiked,
+            id: item.id,
+            indexPath: indexPath,
+            presenter: presenter
         )
         
         return cell

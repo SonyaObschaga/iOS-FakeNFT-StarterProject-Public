@@ -46,6 +46,11 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         return items[index]
     }
     
+    func updateLikeStatus(at index: Int, isLiked: Bool) {
+        guard index < items.count else { return }
+        items[index].isLiked = isLiked
+    }
+    
     // MARK: - Private Methods
     private func loadUserCollection() {
         view?.showLoading()

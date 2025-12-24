@@ -10,6 +10,7 @@ protocol UserCollectionPresenterProtocol {
     
     var numberOfItems: Int { get }
     func item(at index: Int) -> UserCollectionNftItem
+    func updateLikeStatus(at index: Int, isLiked: Bool)
 }
 
 // MARK: - View Protocol
@@ -18,4 +19,5 @@ protocol UserCollectionViewProtocol: AnyObject {
     func showError(message: String, retryHandler: (() -> Void)?)
     func showLoading()
     func hideLoading()
+    
 }

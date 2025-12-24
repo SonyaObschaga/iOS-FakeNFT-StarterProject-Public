@@ -27,6 +27,6 @@ struct UserCollectionNftItem {
     let name: String
     let rating: Int
     let price: String
-    let isLiked: Bool
+    var isLiked: Bool
     let id: String
 }
