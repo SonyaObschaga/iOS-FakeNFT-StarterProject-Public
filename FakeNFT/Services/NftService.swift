@@ -35,25 +35,32 @@ final class NftServiceImpl: NftService {
         }
     }
     
-    func updateLikeStatus(for nftId: String, isLiked: Bool, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func updateLikeStatus(for nftId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        print("🌐 Sending like request for NFT \(nftId), isLiked: \(isLiked)")
+        
         let request = UpdateLikeRequest(nftId: nftId, isLiked: isLiked)
         
-        networkClient.send(request: request, type: EmptyResponse.self) { [weak self] result in
+        networkClient.send(request: request, type: EmptyResponse.self) { result in
             switch result {
             case .success:
-                if var nft = self?.storage.getNft(with: nftId) {
+                print("✅ Server response: Like status updated successfully")
+                
+                if var nft = self.storage.getNft(with: nftId) {
                     nft.isLiked = isLiked
-                    self?.storage.saveNft(nft)
+                    self.storage.saveNft(nft)
+                    print("💾 Storage updated for NFT \(nftId)")
                 }
+                
                 completion(.success(()))
                 
             case .failure(let error):
+                print("❌ Server error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
     }
     
-    func toggleLikeStatus(for nftId: String, completion: @escaping (Result<Bool, any Error>) -> Void) {
+    func toggleLikeStatus(for nftId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         if let nft = storage.getNft(with: nftId) {
             let newLikeStatus = !(nft.isLiked ?? false)
             

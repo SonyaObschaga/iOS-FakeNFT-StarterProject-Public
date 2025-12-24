@@ -94,8 +94,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Action
     @objc private func didTapLikeButton() {
         guard let indexPath = indexPath, let presenter = presenter else { return }
-        likeButtonIsSelected.toggle()
-        presenter.updateLikeStatus(at: indexPath.row, isLiked: likeButtonIsSelected)
+        presenter.toggleLikeStatus(at: indexPath.row)
     }
     
     // MARK: - SetupUI

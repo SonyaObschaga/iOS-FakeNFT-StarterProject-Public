@@ -124,6 +124,25 @@ extension UserCollectionViewController: UserCollectionViewProtocol {
     func hideLoading() {
         activityIndicator.stopAnimating()
     }
+    
+    func updateItem(at index: Int, with item: UserCollectionNftItem) {
+        let indexPath = IndexPath(item: index, section: 0)
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? UserCollectionViewCell {
+            cell.configure(
+                imageURL: item.imageURL,
+                name: item.name,
+                rating: item.rating,
+                price: item.price,
+                isLiked: item.isLiked,
+                id: item.id,
+                indexPath: indexPath,
+                presenter: presenter
+            )
+        } else {
+            collectionView.reloadItems(at: [indexPath])
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate

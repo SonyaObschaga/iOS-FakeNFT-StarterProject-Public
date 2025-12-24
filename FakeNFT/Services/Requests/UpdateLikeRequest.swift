@@ -1,7 +1,7 @@
 import Foundation
 
 struct UpdateLikeRequest: NetworkRequest {
-
+    
     let nftId: String
     let isLiked: Bool
     
@@ -10,16 +10,12 @@ struct UpdateLikeRequest: NetworkRequest {
     }
     
     var httpMethod: HttpMethod {
-        if isLiked {
-            return .put
-        } else {
-            return .delete
-        }
+        isLiked ? .put : .delete
     }
     
-    var dto: (any Dto)?
+    var dto: (any Dto)? { nil }
     
-    init(nftId: String, isLiked: Bool, dto: Encodable? = nil) {
+    init(nftId: String, isLiked: Bool) {
         self.nftId = nftId
         self.isLiked = isLiked
     }

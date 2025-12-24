@@ -46,31 +46,27 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         return items[index]
     }
     
-    func updateLikeStatus(at index: Int, isLiked: Bool) {
-        guard index < items.count else { return }
-        items[index].isLiked = isLiked
-        
+    func toggleLikeStatus(at index: Int) {
         let nftId = items[index].id
-        nftService.updateLikeStatus(for: nftId, isLiked: isLiked) { [weak self] result in
+        let previousState = items[index].isLiked
+        let newState = !previousState
+        
+        items[index].isLiked = newState
+        view?.updateItem(at: index, with: items[index])
+        
+        nftService.updateLikeStatus(for: nftId, isLiked: newState) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print("✅ Like status updated for NFT \(nftId)")
+                    print("✅ Like updated")
+                    
                 case .failure(let error):
-                    print("❌ Failed to update like status: \(error)")
-                    self?.items[index].isLiked = !isLiked
+                    self.items[index].isLiked = previousState
+                    self.view?.updateItem(at: index, with: self.items[index])
+                    self.view?.showError(message: "Не удалось обновить лайк - \(error)", retryHandler: nil)
                 }
             }
         }
-    }
-    
-    func toggleLikeStatus(at index: Int) {
-        guard index < items.count else { return }
-        
-        let currentStatus = items[index].isLiked
-        let newStatus = !(currentStatus)
-        
-        updateLikeStatus(at: index, isLiked: newStatus)
     }
     
     // MARK: - Private Methods
@@ -78,7 +74,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         view?.showLoading()
         
         userService.fetchUserById(userId) { [weak self] result in
-            guard let self else { return }
+            guard let self = self else { return }
             
             switch result {
             case .success(let userResponse):
@@ -128,6 +124,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     let priceString: String
                     let id = nft.id
                     let isLiked = nft.isLiked ?? false
+                    
                     if let price = nft.price {
                         priceString = String(format: "%.2f ETH", price)
                     } else {
@@ -154,7 +151,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         }
         
         dispatchGroup.notify(queue: .main) { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             self.view?.hideLoading()
             self.items = loadedItems
             self.view?.displayUserCollection(self.items)
