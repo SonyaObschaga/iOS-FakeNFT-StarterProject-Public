@@ -36,11 +36,12 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     
     // MARK: - Public Interface
     func viewDidLoad() {
+        loadSavedSortOption()
         loadUsers()
     }
     
     func didSelectUser(at index: Int) {
-        guard index < users.count else { return }
+        guard users.indices.contains(index) else { return }
         let user = users[index]
         router.showUserCard(user)
     }

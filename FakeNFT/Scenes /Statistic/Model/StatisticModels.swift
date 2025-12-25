@@ -30,3 +30,8 @@ struct UserCollectionNftItem {
     var isLiked: Bool
     let id: String
 }
+
+// MARK: - UserDefaults Keys
+enum UserDefaultsKeys {
+    static let sortOption = "StatisticSortOption"
+}

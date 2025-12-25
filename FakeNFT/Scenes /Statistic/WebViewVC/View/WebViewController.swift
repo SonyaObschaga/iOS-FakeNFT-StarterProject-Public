@@ -75,7 +75,7 @@ final class WebViewController: UIViewController {
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+        navigationItem.leftBarButtonItem?.tintColor = .primary
     }
     
     private func loadURL() {

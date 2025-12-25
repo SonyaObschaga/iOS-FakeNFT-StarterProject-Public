@@ -12,7 +12,7 @@ final class StatisticTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .caption1
         label.textAlignment = .center
-        label.textColor = .ypBlackLight
+        label.textColor = .primary
         return label
     }()
     
@@ -65,7 +65,7 @@ final class StatisticTableViewCell: UITableViewCell {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypLightGrayLight
+        view.backgroundColor = .secondary
         view.layer.cornerRadius = CellConstants.containerCornerRadius
         return view
     }()

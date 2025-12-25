@@ -70,7 +70,7 @@ final class UserCollectionViewController: UIViewController {
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlackLight
+        navigationItem.leftBarButtonItem?.tintColor = .primary
     }
     
     private func setupCollectionView() {
