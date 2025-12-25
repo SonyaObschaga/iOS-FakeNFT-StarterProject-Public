@@ -42,4 +42,16 @@ final class UserService: UserServiceProtocol {
             }
         }
     }
+    
+    func fetchProfile(userId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+        let request = ProfileRequest(userId: userId)
+        networkClient.send(request: request, type: ProfileResponse.self) { result in
+            switch result {
+            case .success(let profileResponse):
+                completion(.success(profileResponse))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

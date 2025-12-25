@@ -11,10 +11,12 @@ protocol NftService {
 final class NftServiceImpl: NftService {
     private let networkClient: NetworkClient
     private let storage: NftStorage
+    private let userId: String
     
-    init(networkClient: NetworkClient, storage: NftStorage) {
+    init(networkClient: NetworkClient, storage: NftStorage, userId: String) {
         self.storage = storage
         self.networkClient = networkClient
+        self.userId = userId
     }
     
     func loadNft(id: String, completion: @escaping NftCompletion) {
@@ -36,25 +38,42 @@ final class NftServiceImpl: NftService {
     }
     
     func updateLikeStatus(for nftId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        print("🌐 Sending like request for NFT \(nftId), isLiked: \(isLiked)")
-        
-        let request = UpdateLikeRequest(nftId: nftId, isLiked: isLiked)
-        
-        networkClient.send(request: request, type: EmptyResponse.self) { result in
+        let profileRequest = ProfileRequest(userId: userId)
+        networkClient.send(request: profileRequest, type: ProfileResponse.self) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
-            case .success:
-                print("✅ Server response: Like status updated successfully")
+            case .success(let profile):
+                var updatedLikes = profile.likes
                 
-                if var nft = self.storage.getNft(with: nftId) {
-                    nft.isLiked = isLiked
-                    self.storage.saveNft(nft)
-                    print("💾 Storage updated for NFT \(nftId)")
+                if isLiked {
+                    if !updatedLikes.contains(nftId) {
+                        updatedLikes.append(nftId)
+                    }
+                } else {
+                    updatedLikes.removeAll { $0 == nftId }
                 }
                 
-                completion(.success(()))
+                let updateRequest = UpdateProfileRequest(
+                    userId: self.userId,
+                    likes: updatedLikes
+                )
+                
+                self.networkClient.send(request: updateRequest, type: ProfileResponse.self) { result in
+                    switch result {
+                    case .success:
+                        if var nft = self.storage.getNft(with: nftId) {
+                            nft.isLiked = isLiked
+                            self.storage.saveNft(nft)
+                        }
+                        completion(.success(()))
+                        
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
                 
             case .failure(let error):
-                print("❌ Server error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -96,3 +115,48 @@ final class NftServiceImpl: NftService {
 }
 
 struct EmptyResponse: Decodable {}
+
+struct ProfileRequest: NetworkRequest {
+    let userId: String
+    
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(userId)")
+    }
+    
+    var httpMethod: HttpMethod { .get }
+    var dto: (any Dto)? { nil }
+}
+
+struct UpdateProfileRequest: NetworkRequest {
+    let userId: String
+    let likes: [String]
+    
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/\(userId)")
+    }
+    
+    var httpMethod: HttpMethod { .put }
+    
+    var dto: (any Dto)? {
+        UpdateProfileDto(likes: likes)
+    }
+}
+
+struct UpdateProfileDto: Dto {
+    let likes: [String]
+    
+    func asDictionary() -> [String: String] {
+        if likes.isEmpty {
+            return ["likes": "[]"]
+        }
+        
+        let likesString = likes.joined(separator: ",")
+        return ["likes": likesString]
+    }
+}
+
+// Модель ответа профиля
+struct ProfileResponse: Decodable {
+    let id: String
+    let likes: [String]
+}

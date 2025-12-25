@@ -130,10 +130,8 @@ struct DefaultNetworkClient: NetworkClient {
             }
             urlComponents.queryItems = queryItems
             urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         }
-        
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         return urlRequest
     }

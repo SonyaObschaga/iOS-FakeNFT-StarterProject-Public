@@ -21,8 +21,29 @@ struct UserResponse: Decodable {
     let avatar: String?
     let website: String?
     let nfts: [String]
-    let rating: String
     let id: String
     let description: String?
+    let likes: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case avatar
+        case website
+        case nfts
+        case id
+        case description
+        case likes
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        avatar = try? container.decode(String.self, forKey: .avatar)
+        website = try? container.decode(String.self, forKey: .website)
+        nfts = try container.decode([String].self, forKey: .nfts)
+        id = try container.decode(String.self, forKey: .id)
+        description = try? container.decode(String.self, forKey: .description)
+        likes = try container.decodeIfPresent([String].self, forKey: .likes) ?? []
+    }
 }
 

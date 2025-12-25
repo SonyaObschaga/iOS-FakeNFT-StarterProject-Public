@@ -73,40 +73,62 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     private func loadUserCollection() {
         view?.showLoading()
         
-        userService.fetchUserById(userId) { [weak self] result in
+        let dispatchGroup = DispatchGroup()
+        var userResponse: UserResponse?
+        var profileResponse: ProfileResponse?
+        var userError: Error?
+        
+        dispatchGroup.enter()
+        userService.fetchUserById(userId) { result in
+            switch result {
+            case .success(let response):
+                userResponse = response
+            case .failure(let error):
+                userError = error
+            }
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        userService.fetchProfile(userId: "1") { result in
+            switch result {
+            case .success(let response):
+                profileResponse = response
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
             guard let self = self else { return }
             
-            switch result {
-            case .success(let userResponse):
+            if let userResponse = userResponse {
                 let nftIds = userResponse.nfts
+                let likedNftIds = Set(profileResponse?.likes ?? [])
                 
                 guard !nftIds.isEmpty else {
-                    DispatchQueue.main.async {
-                        self.view?.hideLoading()
-                        self.items = []
-                        self.view?.displayUserCollection(self.items)
-                    }
+                    self.view?.hideLoading()
+                    self.items = []
+                    self.view?.displayUserCollection(self.items)
                     return
                 }
                 
-                self.loadNfts(nftIds: nftIds)
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.view?.hideLoading()
-                    let errorMessage = self.makeErrorMessage(from: error)
-                    self.view?.showError(
-                        message: errorMessage,
-                        retryHandler: { [weak self] in
-                            self?.loadUserCollection()
-                        }
-                    )
-                }
+                self.loadNfts(nftIds: nftIds, likedNftIds: likedNftIds)
+            } else if let error = userError {
+                self.view?.hideLoading()
+                let errorMessage = self.makeErrorMessage(from: error)
+                self.view?.showError(
+                    message: errorMessage,
+                    retryHandler: { [weak self] in
+                        self?.loadUserCollection()
+                    }
+                )
             }
         }
     }
     
-    private func loadNfts(nftIds: [String]) {
+    private func loadNfts(nftIds: [String], likedNftIds: Set<String>) {
         let dispatchGroup = DispatchGroup()
         var loadedItems: [UserCollectionNftItem] = []
         let lock = NSLock()
@@ -123,7 +145,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     let rating = nft.rating ?? 0
                     let priceString: String
                     let id = nft.id
-                    let isLiked = nft.isLiked ?? false
+                    let isLiked = likedNftIds.contains(id)
                     
                     if let price = nft.price {
                         priceString = String(format: "%.2f ETH", price)
@@ -145,7 +167,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     lock.unlock()
                     
                 case .failure(let error):
-                    print("⚠️ Failed to load NFT \(nftId): \(error.localizedDescription)")
+                   assertionFailure(error.localizedDescription)
                 }
             }
         }
