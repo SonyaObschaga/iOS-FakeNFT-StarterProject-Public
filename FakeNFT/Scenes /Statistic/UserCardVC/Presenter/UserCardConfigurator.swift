@@ -3,7 +3,7 @@ import UIKit
 // MARK: - UserCardConfigurator
 final class UserCardConfigurator {
     
-    // MARK: - Private Property
+    // MARK: - Private Properties
     private let userService: UserServiceProtocol
     private let nftService: NftService
     
