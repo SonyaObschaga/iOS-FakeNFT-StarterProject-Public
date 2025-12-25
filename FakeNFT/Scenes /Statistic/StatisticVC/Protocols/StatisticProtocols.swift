@@ -3,6 +3,8 @@ protocol StatisticViewProtocol: AnyObject {
     func displayUsers(_ users: [User])
     func showError(message: String, retryHandler: (() -> Void)?)
     func showSortOptions()
+    func showLoading()
+    func hideLoading()
 }
 
 // MARK: - Presenter Protocol
@@ -19,6 +21,8 @@ protocol StatisticPresenterProtocol {
 // MARK: - Service Protocol
 protocol UserServiceProtocol {
     func fetchUsers(completion: @escaping (Result<[User], Error>) -> Void)
+    func fetchUserById(_ id: String, completion: @escaping (Result<UserResponse, Error>) -> Void)
+    func fetchProfile(userId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
 }
 
 // MARK: - Router Protocol

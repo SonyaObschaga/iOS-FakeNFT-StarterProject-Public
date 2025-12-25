@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 // MARK: - UserCardViewController
 final class UserCardViewController: UIViewController {
@@ -9,10 +10,10 @@ final class UserCardViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: UserCardConstants.avatarImageSystemName)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 35
+        imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 35
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
@@ -64,6 +65,15 @@ final class UserCardViewController: UIViewController {
         return button
     }()
     
+    private lazy var nftsCountLabel: UILabel = {
+      let label = UILabel()
+        label.font = .bodyBold
+        label.textColor = .ypBlackLight
+        label.text = "Коллекция NFT 0"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private lazy var collectionButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .primary
@@ -73,12 +83,6 @@ final class UserCardViewController: UIViewController {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.isUserInteractionEnabled = false
         
-        let titleLabel = UILabel()
-        titleLabel.text = "\(UserCardConstants.collectionButtonTitlePrefix) (112)"
-        titleLabel.font = .titleMedium
-        titleLabel.textColor = .primary
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         let iconImageView = UIImageView()
         iconImageView.image = UIImage(named: UserCardConstants.backwardImageName)?.withRenderingMode(.alwaysTemplate)
         iconImageView.tintColor = .primary
@@ -86,19 +90,19 @@ final class UserCardViewController: UIViewController {
         iconImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        containerView.addSubview(titleLabel)
+        containerView.addSubview(nftsCountLabel)
         containerView.addSubview(iconImageView)
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            nftsCountLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            nftsCountLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             
             iconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             iconImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: 24),
             iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: iconImageView.leadingAnchor, constant: -8)
+            nftsCountLabel.trailingAnchor.constraint(lessThanOrEqualTo: iconImageView.leadingAnchor, constant: -8)
         ])
         
         button.addSubview(containerView)
@@ -209,6 +213,14 @@ final class UserCardViewController: UIViewController {
 extension UserCardViewController: UserCardViewProtocol {
     func displayUser(_ user: User) {
         nameLabel.text = user.name
-        descriptionLabel.text = "\(user.score)"
+        descriptionLabel.text = user.description
+        nftsCountLabel.text = "Коллекция NFT (\(user.nfts.count))"
+        
+        let placeholderImage = UIImage(systemName: "person.crop.circle.fill")
+        if let avatarURLString = user.avatar, let avatarURL = URL(string: avatarURLString) {
+            avatarImageView.kf.setImage(with: avatarURL, placeholder: placeholderImage)
+        } else {
+            avatarImageView.image = placeholderImage
+        }
     }
 }

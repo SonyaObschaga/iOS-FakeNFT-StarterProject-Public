@@ -1,9 +1,13 @@
 // MARK: - Models
 // MARK: User
 struct User {
+    let id: String
     let name: String
     let score: Int
     let website: String?
+    let avatar: String?
+    let description: String?
+    let nfts: [String]
 }
 
 // MARK: Sort Options
@@ -23,7 +27,8 @@ struct UserCollectionNftItem {
     let name: String
     let rating: Int
     let price: String
-    let isLiked: Bool
+    var isLiked: Bool
+    let id: String
 }
 
 // MARK: - UserDefaults Keys

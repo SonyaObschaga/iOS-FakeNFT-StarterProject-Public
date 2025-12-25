@@ -28,7 +28,7 @@ enum StatisticConstants {
     static let topInset: CGFloat = 20
     static let leadingInset: CGFloat = 16
     static let trailingInset: CGFloat = -16
-    static let bottomInset: CGFloat = -20
+    static let bottomInset: CGFloat = 0
     
     // MARK: Sort Button Constants
     static let sortButtonTopInset: CGFloat = 2

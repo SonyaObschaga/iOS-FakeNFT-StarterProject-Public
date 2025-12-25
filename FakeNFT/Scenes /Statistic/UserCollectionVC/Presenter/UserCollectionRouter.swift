@@ -15,10 +15,6 @@ final class UserCollectionRouter: UserCollectionRouterProtocol {
     }
     
     // MARK: - Piblic Interface
-    func showUserCollection() {
-        //
-    }
-    
     func dismiss() {
         viewController?.navigationController?.popViewController(animated: true)
     }

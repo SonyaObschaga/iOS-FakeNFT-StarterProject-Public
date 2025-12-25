@@ -4,6 +4,16 @@ import Kingfisher
 // MARK: - UserCollectionViewCell
 final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
+    // MARK: - Properties
+    private var likeButtonIsSelected: Bool = false {
+        didSet {
+            updateLikeButton(likeButtonIsSelected)
+        }
+    }
+    private var indexPath: IndexPath?
+    private var presenter: UserCollectionPresenterProtocol?
+    private var nftId: String?
+    
     // MARK: - UI Elements
     private var starImageViews: [UIImageView] = []
     
@@ -21,6 +31,8 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         button.tintColor = .white
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         return button
     }()
     
@@ -79,6 +91,12 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return nil
     }
     
+    // MARK: - Action
+    @objc private func didTapLikeButton() {
+        guard let indexPath = indexPath, let presenter = presenter else { return }
+        presenter.toggleLikeStatus(at: indexPath.row)
+    }
+    
     // MARK: - SetupUI
     private func setupUI() {
         addSubviews()
@@ -104,7 +122,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             cartButtonStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
             cartButtonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cartButtonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             cartButtonStackView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
@@ -131,14 +149,35 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     // MARK: - Configuration
-    func configure(imageURL: String?, name: String, rating: Int, price: String, isLiked: Bool) {
+    func configure(
+        imageURL: String?,
+        name: String
+        , rating: Int,
+        price: String,
+        isLiked: Bool,
+        id: String,
+        indexPath: IndexPath,
+        presenter: UserCollectionPresenterProtocol
+    ) {
+        self.indexPath = indexPath
+        self.presenter = presenter
+        self.nftId = id
+        self.likeButtonIsSelected = isLiked
+        
         if let imageURLString = imageURL, let url = URL(string: imageURLString) {
-            nftImageView.kf.setImage(with: url)
+            nftImageView.kf.setImage(
+                with: url,
+                placeholder: nil,
+                options: [.transition(.fade(0.2))],
+                completionHandler: { result in
+                }
+            )
+        } else {
+            nftImageView.image = nil
         }
         
         nameLabel.text = name
         priceLabel.text = price
-        
         updateRating(rating)
         updateLikeButton(isLiked)
     }

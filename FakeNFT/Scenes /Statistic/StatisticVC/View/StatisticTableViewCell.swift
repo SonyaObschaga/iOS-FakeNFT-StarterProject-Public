@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 // MARK: - StatisticTableViewCell
 final class StatisticTableViewCell: UITableViewCell {
@@ -17,26 +18,30 @@ final class StatisticTableViewCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .titleLarge
-        label.textColor = .primary
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.font = .headline3
+        label.textColor = .ypBlackLight
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
     private let scoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = .titleLarge
-        label.textColor = .primary
+        label.font = .headline3
+        label.textColor = .ypBlackLight
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = CellConstants.profileImageCornerRadius
-        imageView.tintColor = .primary
+        imageView.clipsToBounds = true
+        imageView.tintColor = .ypBlackLight
         imageView.image = UIImage(systemName: CellConstants.profileImageSystemName)
+        imageView.contentMode = .scaleAspectFill
         imageView.heightAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true
         return imageView
@@ -123,5 +128,11 @@ final class StatisticTableViewCell: UITableViewCell {
         nameLabel.text = user.name
         scoreLabel.text = "\(user.score)"
         positionLabel.text = "\(position)"
+        
+        if let avatarURLString = user.avatar, let avatarURL = URL(string: avatarURLString) {
+            profileImage.kf.setImage(with: avatarURL, placeholder: UIImage(systemName: CellConstants.profileImageSystemName))
+        } else {
+            profileImage.image = UIImage(systemName: CellConstants.profileImageSystemName)
+        }
     }
 }

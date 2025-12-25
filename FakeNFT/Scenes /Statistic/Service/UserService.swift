@@ -8,15 +8,50 @@ final class UserService: UserServiceProtocol {
     }
     
     func fetchUsers(completion: @escaping (Result<[User], Error>) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
-            let users = [
-                User(name: "Иван", score: 100, website: "https://www.figma.com/design/owAO4CAPTJdpM1BZU5JHv7/Tracker?node-id=37878-26606&p=f&t=7u9lvsHqta8BlH61-0"),
-                User(name: "Мария", score: 85, website: "https://translate.yandex.ru/"),
-                User(name: "Петр", score: 92, website: "https://kick.com/"),
-                User(name: "Анна", score: 78, website: "https://rostics.ru/"),
-                User(name: "Сергей", score: 95, website: "https://dzen.ru/a/aAKspcEuQSTbBuMj")
-            ]
-            completion(.success(users))
+        let request = UsersRequest(page: 0, size: 100)
+        
+        networkClient.send(request: request, type: [UserResponse].self) { result in
+            switch result {
+            case .success(let userResponses):
+                let users = userResponses.map { response in
+                    User(
+                        id: response.id,
+                        name: response.name,
+                        score: response.nfts.count,
+                        website: response.website,
+                        avatar: response.avatar,
+                        description: response.description,
+                        nfts: response.nfts
+                    )
+                }
+                completion(.success(users))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchUserById(_ id: String, completion: @escaping (Result<UserResponse, Error>) -> Void) {
+        let request = UserByIdRequest(id: id)
+        networkClient.send(request: request, type: UserResponse.self) { result in
+            switch result {
+            case .success(let userResponse):
+                completion(.success(userResponse))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchProfile(userId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+        let request = ProfileRequest(userId: userId)
+        networkClient.send(request: request, type: ProfileResponse.self) { result in
+            switch result {
+            case .success(let profileResponse):
+                completion(.success(profileResponse))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
 }
