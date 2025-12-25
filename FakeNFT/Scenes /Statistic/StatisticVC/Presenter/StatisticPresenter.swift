@@ -36,7 +36,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     
     // MARK: - Public Interface
     func viewDidLoad() {
-        loadSavedSortOption()
+        applySavedSorting()
         loadUsers()
     }
     

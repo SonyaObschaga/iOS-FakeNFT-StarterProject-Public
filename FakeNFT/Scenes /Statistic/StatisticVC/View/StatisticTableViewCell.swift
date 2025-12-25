@@ -18,8 +18,8 @@ final class StatisticTableViewCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
@@ -28,8 +28,8 @@ final class StatisticTableViewCell: UITableViewCell {
     private let scoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = .headline3
-        label.textColor = .ypBlackLight
+        label.font = .titleLarge
+        label.textColor = .primary
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
@@ -39,7 +39,7 @@ final class StatisticTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = CellConstants.profileImageCornerRadius
         imageView.clipsToBounds = true
-        imageView.tintColor = .ypBlackLight
+        imageView.tintColor = .primary
         imageView.image = UIImage(systemName: CellConstants.profileImageSystemName)
         imageView.contentMode = .scaleAspectFill
         imageView.heightAnchor.constraint(equalToConstant: CellConstants.profileImageSize).isActive = true

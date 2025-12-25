@@ -67,8 +67,8 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nftsCountLabel: UILabel = {
       let label = UILabel()
-        label.font = .bodyBold
-        label.textColor = .ypBlackLight
+        label.font = .titleMedium
+        label.textColor = .primary
         label.text = "Коллекция NFT 0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
