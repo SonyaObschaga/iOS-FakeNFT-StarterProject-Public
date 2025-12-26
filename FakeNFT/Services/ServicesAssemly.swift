@@ -14,7 +14,8 @@ final class ServicesAssembly {
     var nftService: NftService {
         NftServiceImpl(
             networkClient: networkClient,
-            storage: nftStorage
+            storage: nftStorage,
+            userId: "1"
         )
     }
     

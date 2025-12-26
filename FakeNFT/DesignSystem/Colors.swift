@@ -1,7 +1,6 @@
 import UIKit
 
 extension UIColor {
-   
     // Primary Colors
     static let primary = UIColor(resource: .blackAdaptive)
 
