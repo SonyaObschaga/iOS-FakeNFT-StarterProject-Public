@@ -4,24 +4,28 @@ typealias NftCompletion = (Result<Nft, Error>) -> Void
 
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
+    func updateLikeStatus(for nftId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+    func toggleLikeStatus(for nftId: String, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 final class NftServiceImpl: NftService {
-
+    
     private let networkClient: NetworkClient
     private let storage: NftStorage
-
-    init(networkClient: NetworkClient, storage: NftStorage) {
+    private let userId: String
+    
+    init(networkClient: NetworkClient, storage: NftStorage, userId: String = "1") {
         self.storage = storage
         self.networkClient = networkClient
+        self.userId = userId
     }
-
+    
     func loadNft(id: String, completion: @escaping NftCompletion) {
         if let nft = storage.getNft(with: id) {
             completion(.success(nft))
             return
         }
-
+        
         let request = NFTRequest(id: id)
         networkClient.send(request: request, type: Nft.self) { [weak storage] result in
             switch result {

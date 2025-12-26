@@ -15,8 +15,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private var nftId: String?
     
     // MARK: - UI Elements
-    private var starImageViews: [UIImageView] = []
-    
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -36,12 +34,11 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return button
     }()
     
-    private lazy var ratingStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 2
-        stackView.distribution = .fillEqually
-        return stackView
+    private lazy var ratingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private lazy var nameLabel: UILabel = {
@@ -82,7 +79,6 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupStars()
         setupUI()
     }
     
@@ -117,14 +113,14 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             likeButton.widthAnchor.constraint(equalToConstant: 40),
             likeButton.heightAnchor.constraint(equalToConstant: 40),
             
-            ratingStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
-            ratingStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
-            ratingStackView.widthAnchor.constraint(equalToConstant: 68),
+            ratingImageView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
+            ratingImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 12),
+            ratingImageView.widthAnchor.constraint(equalToConstant: 68),
             
             cartButton.widthAnchor.constraint(equalToConstant: 40),
             
-            cartButtonStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
+            cartButtonStackView.topAnchor.constraint(equalTo: ratingImageView.bottomAnchor, constant: 5),
             cartButtonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cartButtonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cartButtonStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
@@ -133,23 +129,9 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     private func addSubviews() {
-        [nftImageView, likeButton, ratingStackView, cartButtonStackView].forEach {
+        [nftImageView, likeButton, ratingImageView, cartButtonStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
-        }
-    }
-    
-    private func setupStars() {
-        for _ in 0..<5 {
-            let starImageView = UIImageView()
-            starImageView.image = UIImage(named: "star")
-            starImageView.tintColor = .secondary
-            starImageView.contentMode = .scaleAspectFit
-            starImageView.translatesAutoresizingMaskIntoConstraints = false
-            starImageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
-            starImageView.heightAnchor.constraint(equalToConstant: 12).isActive = true
-            starImageViews.append(starImageView)
-            ratingStackView.addArrangedSubview(starImageView)
         }
     }
     
@@ -191,16 +173,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private func updateRating(_ rating: Int) {
         let normalizedRating = min(5, max(0, rating))
-        
-        for (index, starImageView) in starImageViews.enumerated() {
-            if index < normalizedRating {
-                starImageView.image = UIImage(named: "star")
-                starImageView.tintColor = .systemYellow
-            } else {
-                starImageView.image = UIImage(named: "star")
-                starImageView.tintColor = .secondary
-            }
-        }
+        ratingImageView.image = UIImage.ratingImage(for: normalizedRating)
     }
     
     private func updateLikeButton(_ isLiked: Bool) {

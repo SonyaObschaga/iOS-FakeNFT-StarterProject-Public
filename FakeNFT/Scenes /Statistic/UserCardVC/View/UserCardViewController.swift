@@ -84,7 +84,7 @@ final class UserCardViewController: UIViewController {
         containerView.isUserInteractionEnabled = false
         
         let iconImageView = UIImageView()
-        iconImageView.image = UIImage(named: UserCardConstants.backwardImageName)?.withRenderingMode(.alwaysTemplate)
+        iconImageView.image = UIImage(resource: .backChevron).withRenderingMode(.alwaysTemplate)
         iconImageView.tintColor = .primary
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
@@ -134,6 +134,7 @@ final class UserCardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.setNavigationBarHidden(false, animated: false)
         setupUI()
         presenter.viewDidLoad()
     }
@@ -161,6 +162,7 @@ final class UserCardViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(resource: .backChevron),
             style: .plain,

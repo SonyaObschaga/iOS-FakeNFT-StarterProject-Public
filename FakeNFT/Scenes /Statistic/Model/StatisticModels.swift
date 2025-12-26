@@ -28,12 +28,6 @@ struct UserCollectionNftItem {
     let rating: Int
     let price: String
     var isLiked: Bool
-    let id: String
-}
-
-// MARK: - UserDefaults Keys
-enum UserDefaultsKeys {
-    static let sortOption = "StatisticSortOption"
     var isInCart: Bool
     let id: String
 }

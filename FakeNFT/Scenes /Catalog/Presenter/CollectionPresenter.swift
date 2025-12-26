@@ -72,7 +72,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 self.currentLikesArray = profile.likes
                 self.loadCollection()
 
-            case .failure(let error):
+            case .failure:
                 self.loadCollection()
             }
         }
@@ -101,7 +101,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                 }
                 self.loadNFTs(ids: nftIds)
 
-            case .failure(let error):
+            case .failure:
                 DispatchQueue.main.async { [weak self] in
                     self?.view?.hideLoading()
                 }
@@ -233,7 +233,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                     self?.view?.reloadNFT(at: index)
                 }
 
-            case .failure(let error):
+            case .failure:
                 self.nftItems[index].isInCart = self.cartNFTIds.contains(
                     self.nftItems[index].id
                 )
@@ -265,7 +265,7 @@ final class CollectionPresenter: CollectionPresenterProtocol {
                     self?.view?.reloadNFT(at: index)
                 }
 
-            case .failure(let error):
+            case .failure:
                 self.nftItems[index].isFavorite = self.favoriteNFTIds.contains(
                     self.nftItems[index].id
                 )
