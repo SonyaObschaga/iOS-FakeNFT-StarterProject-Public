@@ -55,4 +55,8 @@ final class ServicesAssembly {
     var updateAndPayOrderService: UpdateAndPayService {
         UpdateAndPayOrderServiceImpl(networkClient: networkClient)
     }
+    
+    var userService: UserServiceProtocol {
+        return UserService(networkClient: networkClient)
+    }
 }

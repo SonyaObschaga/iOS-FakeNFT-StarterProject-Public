@@ -1,6 +1,7 @@
 import Foundation
 
 struct Nft: Decodable {
+<<<<<<< HEAD
         let id: String
         let name: String
         let images: [URL]
@@ -9,4 +10,27 @@ struct Nft: Decodable {
         let description: String?
         let author: String?
         let createdAt: String?
+=======
+    let id: String
+    let name: String
+    let images: [URL]
+    let rating: Int
+    let price: Double
+    let description: String?
+    let author: String?
+    let createdAt: String?
+    var isLiked: Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case images
+        case name
+        case rating
+        case price
+        case author
+        case description
+        case createdAt
+        case isLiked = "likes"
+    }
+>>>>>>> merge-fresh-start
 }

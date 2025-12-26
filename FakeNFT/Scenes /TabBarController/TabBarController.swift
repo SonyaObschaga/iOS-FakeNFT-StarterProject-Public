@@ -9,6 +9,8 @@ final class TabBarController: UITabBarController {
             }
         }
     }
+    
+    private lazy var statisticAssembly = StatisticAssembly(servicesAssembly: servicesAssembly!)
 
     private let cartTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.Cart", comment: ""),
@@ -27,7 +29,13 @@ final class TabBarController: UITabBarController {
         image: UIImage(resource: .profileTabBar),
         tag: 0
     )
-
+    
+    private let statisticTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.statistic", comment: ""),
+        image: UIImage(systemName: "flag.2.crossed.fill"),
+        tag: 3
+    )
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,12 +85,17 @@ final class TabBarController: UITabBarController {
         )
         navigationController.tabBarItem = catalogTabBarItem
         
-      // MARK: - Add views to tab bar
-      
+        // MARK: - Statistic
+        let statisticController = statisticAssembly.makeStatisticViewController()
+        statisticController.tabBarItem = statisticTabBarItem
+        
+        // MARK: - Add views to tab bar
+        
         viewControllers = [
             profileNavigationController,
             navigationController,
-            cartController
+            cartController,
+            statisticController
         ]
         
         selectedIndex = 0

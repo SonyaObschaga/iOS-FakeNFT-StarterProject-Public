@@ -11,6 +11,7 @@ protocol UserCollectionPresenterProtocol {
     var numberOfItems: Int { get }
     func item(at index: Int) -> UserCollectionNftItem
     func toggleLikeStatus(at index: Int)
+    func toggleCartStatus(at index: Int)
 }
 
 // MARK: - View Protocol

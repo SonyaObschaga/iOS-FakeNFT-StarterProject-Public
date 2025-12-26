@@ -12,7 +12,7 @@ protocol StatisticPresenterProtocol {
     func viewDidLoad()
     func didSelectUser(at index: Int)
     func didTapSortButton()
-    func didSelectSortOption(_ option: SortOption)
+    func didSelectSortOption(_ option: SortStatisticOption)
     
     var numberOfUsers: Int { get }
     func user(at index: Int) -> User

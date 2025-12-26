@@ -6,11 +6,14 @@ final class UserCardConfigurator {
     // MARK: - Private Properties
     private let userService: UserServiceProtocol
     private let nftService: NftService
+
+    private let orderService: OrderService
     
     // MARK: - Initialization
-    init(userService: UserServiceProtocol, nftService: NftService) {
+    init(userService: UserServiceProtocol, nftService: NftService, orderService: OrderService) {
         self.userService = userService
         self.nftService = nftService
+        self.orderService = orderService
     }
     
     // MARK: - Configure
@@ -20,6 +23,7 @@ final class UserCardConfigurator {
         let router = UserCardRouter(
             nftService: nftService,
             userService: userService,
+            orderService: orderService,
             userId: user.id
         )
         

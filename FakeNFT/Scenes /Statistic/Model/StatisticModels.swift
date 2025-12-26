@@ -11,7 +11,7 @@ struct User {
 }
 
 // MARK: Sort Options
-enum SortOption: String, CaseIterable {
+enum SortStatisticOption: String, CaseIterable {
     case name = "По имени"
     case rating = "По рейтингу"
     case cancel = "Закрыть"
@@ -34,4 +34,6 @@ struct UserCollectionNftItem {
 // MARK: - UserDefaults Keys
 enum UserDefaultsKeys {
     static let sortOption = "StatisticSortOption"
+    var isInCart: Bool
+    let id: String
 }

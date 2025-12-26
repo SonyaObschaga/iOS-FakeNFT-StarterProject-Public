@@ -10,7 +10,8 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     private let userService: UserServiceProtocol
     private var users: [User] = []
     private let router: StatisticRouterProtocol
-    private var currentSortOption: SortOption = .rating {
+
+    private var currentSortOption: SortStatisticOption = .rating {
         didSet {
             saveSortingPreference(currentSortOption)
         }
@@ -58,7 +59,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
         view?.showSortOptions()
     }
     
-    func didSelectSortOption(_ option: SortOption) {
+    func didSelectSortOption(_ option: SortStatisticOption) {
         guard !option.isCancel else { return }
         saveSortingPreference(option)
         applySorting(option)
@@ -88,13 +89,13 @@ final class StatisticPresenter: StatisticPresenterProtocol {
         }
     }
     
-    private func saveSortingPreference(_ option: SortOption) {
+    private func saveSortingPreference(_ option: SortStatisticOption) {
         UserDefaults.standard.set(option.rawValue, forKey: UserDefaultsKeys.selectedSortOption)
     }
     
     private func restoreSortingPreference() {
         if let savedOption = UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedSortOption),
-           let option = SortOption(rawValue: savedOption) {
+           let option = SortStatisticOption(rawValue: savedOption) {
             currentSortOption = option
         } else {
             currentSortOption = .rating
@@ -104,7 +105,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
     
     private func applySavedSorting() {
         guard let savedOption = UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedSortOption),
-              let option = SortOption(rawValue: savedOption) else {
+              let option = SortStatisticOption(rawValue: savedOption) else {
             view?.displayUsers(users)
             return
         }
@@ -112,7 +113,7 @@ final class StatisticPresenter: StatisticPresenterProtocol {
         applySorting(option)
     }
     
-    private func applySorting(_ option: SortOption) {
+    private func applySorting(_ option: SortStatisticOption) {
         switch option {
         case .name:
             sortByName()

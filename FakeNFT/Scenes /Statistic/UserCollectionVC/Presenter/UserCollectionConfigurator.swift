@@ -5,10 +5,12 @@ final class UserCollectionConfigurator {
     
     private let nftService: NftService
     private let userService: UserServiceProtocol
+    private let orderService: OrderService
     
-    init(nftService: NftService, userService: UserServiceProtocol) {
+    init(nftService: NftService, userService: UserServiceProtocol, orderService: OrderService) {
         self.nftService = nftService
         self.userService = userService
+        self.orderService = orderService
     }
     
     // MARK: - Configure
@@ -16,6 +18,7 @@ final class UserCollectionConfigurator {
         let presenter = UserCollectionPresenter(
             nftService: nftService,
             userService: userService,
+            orderService: orderService,
             userId: userId
         )
         let router = UserCollectionRouter(userCollectionPresenter: presenter)

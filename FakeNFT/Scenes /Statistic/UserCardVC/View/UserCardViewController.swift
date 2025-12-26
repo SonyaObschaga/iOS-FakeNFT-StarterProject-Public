@@ -31,7 +31,7 @@ final class UserCardViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = UserCardConstants.placeholderDescription
-        label.font = .caption2
+        label.font = .bodyRegular13
         label.textColor = .primary
         label.numberOfLines = 4
         return label
@@ -162,12 +162,12 @@ final class UserCardViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: UserCardConstants.backwardImageName),
+            image: UIImage(resource: .backChevron),
             style: .plain,
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .primary
+        navigationItem.leftBarButtonItem?.tintColor = .label
     }
     
     private func setupWebViewButton() {
