@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 //
 //  ProfileRequest.swift
 //  FakeNFT
@@ -23,10 +22,10 @@ struct ProfileRequest: NetworkRequest {
         nil
     }
 }
-=======
+
 import Foundation
 
-struct ProfileRequest: NetworkRequest {
+struct UserProfileRequest: NetworkRequest {
     let userId: String
     
     var endpoint: URL? {
@@ -37,7 +36,7 @@ struct ProfileRequest: NetworkRequest {
     var dto: (any Dto)? { nil }
 }
 
-struct UpdateProfileRequest: NetworkRequest {
+struct UpdateUserProfileRequest: NetworkRequest {
     let userId: String
     let likes: [String]
     
@@ -52,7 +51,7 @@ struct UpdateProfileRequest: NetworkRequest {
     }
 }
 
-struct UpdateProfileDto: Dto {
+struct UpdateUserProfileDto: Dto {
     let likes: [String]
     
     func asDictionary() -> [String: String] {
@@ -65,8 +64,7 @@ struct UpdateProfileDto: Dto {
     }
 }
 
-struct ProfileResponse: Decodable {
+struct UserProfileResponse: Decodable {
     let id: String
     let likes: [String]
 }
->>>>>>> fresh-start-statistic

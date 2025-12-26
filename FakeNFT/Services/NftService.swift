@@ -38,8 +38,8 @@ final class NftServiceImpl: NftService {
     }
     
     func updateLikeStatus(for nftId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        let profileRequest = ProfileRequest(userId: userId)
-        networkClient.send(request: profileRequest, type: ProfileResponse.self) { [weak self] result in
+        let profileRequest = UserProfileRequest(userId: userId)
+        networkClient.send(request: profileRequest, type: UserProfileResponse.self) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -54,12 +54,12 @@ final class NftServiceImpl: NftService {
                     updatedLikes.removeAll { $0 == nftId }
                 }
                 
-                let updateRequest = UpdateProfileRequest(
+                let updateRequest = UpdateUserProfileRequest(
                     userId: self.userId,
                     likes: updatedLikes
                 )
                 
-                self.networkClient.send(request: updateRequest, type: ProfileResponse.self) { result in
+                self.networkClient.send(request: updateRequest, type: UserProfileResponse.self) { result in
                     switch result {
                     case .success:
                         if var nft = self.storage.getNft(with: nftId) {
@@ -113,5 +113,3 @@ final class NftServiceImpl: NftService {
         }
     }
 }
-
-struct EmptyResponse: Decodable {}

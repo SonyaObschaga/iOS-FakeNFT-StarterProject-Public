@@ -132,7 +132,7 @@ extension StatisticViewController: StatisticViewProtocol {
             preferredStyle: .actionSheet
         )
         
-        for option in SortOption.allCases {
+        for option in SortStatisticOption.allCases {
             let action = UIAlertAction(
                 title: option.rawValue,
                 style: option.isCancel ? .cancel : .default

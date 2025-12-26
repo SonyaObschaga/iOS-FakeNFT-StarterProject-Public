@@ -54,7 +54,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption3
+        label.font = .caption1
         label.textColor = .primary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

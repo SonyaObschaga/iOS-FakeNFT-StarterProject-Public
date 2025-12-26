@@ -141,23 +141,18 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 switch result {
                 case .success(let nft):
                     let imageURL = nft.images.first?.absoluteString
-                    let name = nft.name ?? "NFT #\(nft.id)"
-                    let rating = nft.rating ?? 0
+                    let name = nft.name /*?? "NFT #\(nft.id)"*/
+                    let rating = nft.rating /*?? 0*/
                     let priceString: String
                     let id = nft.id
                     let isLiked = likedNftIds.contains(id)
-                    
-                    if let price = nft.price {
-                        priceString = String(format: "%.2f ETH", price)
-                    } else {
-                        priceString = "—"
-                    }
+                    let price = String(format: "%.2f ETH", nft.price)
                     
                     let item = UserCollectionNftItem(
                         imageURL: imageURL,
                         name: name,
                         rating: rating,
-                        price: priceString,
+                        price: price,
                         isLiked: isLiked,
                         id: id
                     )

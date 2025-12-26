@@ -31,7 +31,7 @@ final class UserCardViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = UserCardConstants.placeholderDescription
-        label.font = .caption2
+        label.font = .bodyRegular13
         label.textColor = .primary
         label.numberOfLines = 4
         return label
