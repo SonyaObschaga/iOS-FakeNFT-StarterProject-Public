@@ -20,9 +20,9 @@ final class StatisticViewController: UIViewController {
     
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: CellConstants.sortMenuImageName), for: .normal)
+        button.setImage(UIImage(resource: .sort), for: .normal)
         button.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
-        button.tintColor = .primary
+        button.tintColor = .blackAdaptive
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
