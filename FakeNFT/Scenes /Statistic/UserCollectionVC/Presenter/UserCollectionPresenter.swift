@@ -9,13 +9,18 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     
     private let nftService: NftService
     private let userService: UserServiceProtocol
+    private let orderService: OrderService
     private let userId: String
     private var items: [UserCollectionNftItem] = []
+    private var cartNFTIds: Set<String> = []
+    private var currentCartArray: [String] = []
+    private let orderId = "1"
     
     // MARK: - Initialization
-    init(nftService: NftService, userService: UserServiceProtocol, userId: String) {
+    init(nftService: NftService, userService: UserServiceProtocol, orderService: OrderService, userId: String) {
         self.nftService = nftService
         self.userService = userService
+        self.orderService = orderService
         self.userId = userId
     }
     
@@ -40,6 +45,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 rating: 0,
                 price: "",
                 isLiked: false,
+                isInCart: false,
                 id: ""
             )
         }
@@ -69,66 +75,140 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         }
     }
     
-    // MARK: - Private Methods
-    private func loadUserCollection() {
-        view?.showLoading()
+    func toggleCartStatus(at index: Int) {
+        guard index < items.count else { return }
         
-        let dispatchGroup = DispatchGroup()
-        var userResponse: UserResponse?
-        var profileResponse: ProfileResponse?
-        var userError: Error?
+        let nftId = items[index].id
         
-        dispatchGroup.enter()
-        userService.fetchUserById(userId) { result in
-            switch result {
-            case .success(let response):
-                userResponse = response
-            case .failure(let error):
-                userError = error
-            }
-            dispatchGroup.leave()
+        if cartNFTIds.contains(nftId) {
+            cartNFTIds.remove(nftId)
+            currentCartArray.removeAll { $0 == nftId }
+        } else {
+            cartNFTIds.insert(nftId)
+            currentCartArray.append(nftId)
         }
         
-        dispatchGroup.enter()
-        userService.fetchProfile(userId: "1") { result in
-            switch result {
-            case .success(let response):
-                profileResponse = response
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
-            
-            if let userResponse = userResponse {
-                let nftIds = userResponse.nfts
-                let likedNftIds = Set(profileResponse?.likes ?? [])
+        items[index].isInCart = cartNFTIds.contains(nftId)
+        view?.updateItem(at: index, with: items[index])
+        updateOrder(for: index)
+    }
+    
+    private func updateOrder(for index: Int) {
+        orderService.updateOrder(orderId: orderId, nfts: currentCartArray) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
                 
-                guard !nftIds.isEmpty else {
-                    self.view?.hideLoading()
-                    self.items = []
-                    self.view?.displayUserCollection(self.items)
-                    return
-                }
-                
-                self.loadNfts(nftIds: nftIds, likedNftIds: likedNftIds)
-            } else if let error = userError {
-                self.view?.hideLoading()
-                let errorMessage = self.makeErrorMessage(from: error)
-                self.view?.showError(
-                    message: errorMessage,
-                    retryHandler: { [weak self] in
-                        self?.loadUserCollection()
+                switch result {
+                case .success(let order):
+                    self.cartNFTIds = Set(order.nfts)
+                    self.currentCartArray = order.nfts
+                    self.items[index].isInCart = self.cartNFTIds.contains(self.items[index].id)
+                    self.view?.updateItem(at: index, with: self.items[index])
+                    
+                case .failure:
+                    if self.cartNFTIds.contains(self.items[index].id) {
+                        self.cartNFTIds.remove(self.items[index].id)
+                        self.currentCartArray.removeAll { $0 == self.items[index].id }
+                    } else {
+                        self.cartNFTIds.insert(self.items[index].id)
+                        self.currentCartArray.append(self.items[index].id)
                     }
-                )
+                    self.items[index].isInCart = self.cartNFTIds.contains(self.items[index].id)
+                    self.view?.updateItem(at: index, with: self.items[index])
+                    self.loadOrder()
+                }
             }
         }
     }
     
-    private func loadNfts(nftIds: [String], likedNftIds: Set<String>) {
+    private func loadOrder(completion: (() -> Void)? = nil) {
+        orderService.loadOrder(orderId: orderId) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let order):
+                    self.cartNFTIds = Set(order.nfts)
+                    self.currentCartArray = order.nfts
+                    
+                    for i in 0..<self.items.count {
+                        self.items[i].isInCart = self.cartNFTIds.contains(self.items[i].id)
+                        self.view?.updateItem(at: i, with: self.items[i])
+                    }
+                    completion?()
+                    
+                case .failure(let error):
+                    print("Failed to load order: \(error)")
+                    completion?()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func loadUserCollection() {
+        view?.showLoading()
+        
+        loadOrder { [weak self] in
+            guard let self = self else { return }
+            
+            let dispatchGroup = DispatchGroup()
+            var userResponse: UserResponse?
+            var profileResponse: ProfileResponse?
+            var userError: Error?
+            
+            dispatchGroup.enter()
+            self.userService.fetchUserById(self.userId) { result in
+                switch result {
+                case .success(let response):
+                    userResponse = response
+                case .failure(let error):
+                    userError = error
+                }
+                dispatchGroup.leave()
+            }
+            
+            dispatchGroup.enter()
+            self.userService.fetchProfile(userId: "1") { result in
+                switch result {
+                case .success(let response):
+                    profileResponse = response
+                case .failure(let error):
+                    assertionFailure(error.localizedDescription)
+                }
+                dispatchGroup.leave()
+            }
+            
+            dispatchGroup.notify(queue: .main) { [weak self] in
+                guard let self = self else { return }
+                
+                if let userResponse = userResponse {
+                    let nftIds = userResponse.nfts
+                    let likedNftIds = Set(profileResponse?.likes ?? [])
+                    
+                    guard !nftIds.isEmpty else {
+                        self.view?.hideLoading()
+                        self.items = []
+                        self.view?.displayUserCollection(self.items)
+                        return
+                    }
+                    
+                    self.loadNfts(nftIds: nftIds, likedNftIds: likedNftIds, cartNftIds: self.cartNFTIds)
+                } else if let error = userError {
+                    self.view?.hideLoading()
+                    let errorMessage = self.makeErrorMessage(from: error)
+                    self.view?.showError(
+                        message: errorMessage,
+                        retryHandler: { [weak self] in
+                            self?.loadUserCollection()
+                        }
+                    )
+                }
+            }
+        }
+    }
+    
+    private func loadNfts(nftIds: [String], likedNftIds: Set<String>, cartNftIds: Set<String>) {
         let dispatchGroup = DispatchGroup()
         var loadedItems: [UserCollectionNftItem] = []
         let lock = NSLock()
@@ -141,11 +221,11 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 switch result {
                 case .success(let nft):
                     let imageURL = nft.images.first?.absoluteString
-                    let name = nft.name /*?? "NFT #\(nft.id)"*/
-                    let rating = nft.rating /*?? 0*/
-                    let priceString: String
+                    let name = nft.name
+                    let rating = nft.rating
                     let id = nft.id
                     let isLiked = likedNftIds.contains(id)
+                    let isInCart = cartNftIds.contains(id)
                     let price = String(format: "%.2f ETH", nft.price)
                     
                     let item = UserCollectionNftItem(
@@ -154,6 +234,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                         rating: rating,
                         price: price,
                         isLiked: isLiked,
+                        isInCart: isInCart,
                         id: id
                     )
                     
@@ -162,7 +243,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                     lock.unlock()
                     
                 case .failure(let error):
-                   assertionFailure(error.localizedDescription)
+                    assertionFailure(error.localizedDescription)
                 }
             }
         }

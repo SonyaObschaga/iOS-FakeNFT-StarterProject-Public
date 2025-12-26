@@ -62,8 +62,8 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "cart"), for: .normal)
         button.tintColor = .primary
+        button.addTarget(self, action: #selector(didTapCartButton), for: .touchUpInside)
         return button
     }()
     
@@ -95,6 +95,11 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     @objc private func didTapLikeButton() {
         guard let indexPath = indexPath, let presenter = presenter else { return }
         presenter.toggleLikeStatus(at: indexPath.row)
+    }
+    
+    @objc private func didTapCartButton() {
+        guard let indexPath = indexPath, let presenter = presenter else { return }
+        presenter.toggleCartStatus(at: indexPath.row)
     }
     
     // MARK: - SetupUI
@@ -155,6 +160,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         , rating: Int,
         price: String,
         isLiked: Bool,
+        isInCart: Bool,
         id: String,
         indexPath: IndexPath,
         presenter: UserCollectionPresenterProtocol
@@ -180,6 +186,7 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         priceLabel.text = price
         updateRating(rating)
         updateLikeButton(isLiked)
+        updateCartButton(isInCart)
     }
     
     private func updateRating(_ rating: Int) {
@@ -203,6 +210,14 @@ final class UserCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         } else {
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             likeButton.tintColor = .white
+        }
+    }
+    
+    private func updateCartButton(_ isInCart: Bool) {
+        if isInCart {
+            cartButton.setImage(UIImage(resource: .deleteFromCart), for: .normal)
+        } else {
+            cartButton.setImage(UIImage(resource: .addToCart), for: .normal)
         }
     }
 }

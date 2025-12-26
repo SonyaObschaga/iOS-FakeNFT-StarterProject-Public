@@ -65,12 +65,12 @@ final class UserCollectionViewController: UIViewController {
         navigationItem.title = "Коллекция NFT"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "backward"),
+            image: UIImage(resource: .backChevron),
             style: .plain,
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .primary
+        navigationItem.leftBarButtonItem?.tintColor = .label
     }
     
     private func setupCollectionView() {
@@ -135,6 +135,7 @@ extension UserCollectionViewController: UserCollectionViewProtocol {
                 rating: item.rating,
                 price: item.price,
                 isLiked: item.isLiked,
+                isInCart: item.isInCart,
                 id: item.id,
                 indexPath: indexPath,
                 presenter: presenter
@@ -166,6 +167,7 @@ extension UserCollectionViewController: UICollectionViewDataSource {
             rating: item.rating,
             price: item.price,
             isLiked: item.isLiked,
+            isInCart: item.isInCart,
             id: item.id,
             indexPath: indexPath,
             presenter: presenter

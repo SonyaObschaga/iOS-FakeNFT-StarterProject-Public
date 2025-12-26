@@ -18,7 +18,8 @@ final class StatisticRouter: StatisticRouterProtocol {
     func showUserCard(_ user: User) {
         let userCardConfigurator = UserCardConfigurator(
             userService: servicesAssembly.userService,
-            nftService: servicesAssembly.nftService
+            nftService: servicesAssembly.nftService,
+            orderService: servicesAssembly.orderService
         )
         let userCardController = userCardConfigurator.configure(with: user)
         

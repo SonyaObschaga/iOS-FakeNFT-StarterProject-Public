@@ -70,12 +70,12 @@ final class WebViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "backward"),
+            image: UIImage(resource: .backChevron),
             style: .plain,
             target: self,
             action: #selector(backwardButtonTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .primary
+        navigationItem.leftBarButtonItem?.tintColor = .label
     }
     
     private func loadURL() {

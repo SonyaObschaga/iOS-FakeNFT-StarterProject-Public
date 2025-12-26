@@ -13,6 +13,7 @@
 
 "Tab.catalog" = "Каталог";
 "Tab.profile" = "Профиль";
+"Tab.statistic" = "Статистика";
 
 "Common.ok" = "OK";
 "Common.cancel" = "Отмена";
