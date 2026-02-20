@@ -26,14 +26,14 @@ final class NftDetailViewController: UIViewController {
 
     private lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .closeButton
-        button.setImage(UIImage(named: "close"), for: .normal)
+        button.tintColor = .blackAdaptive
+        button.setImage(UIImage(resource: .close), for: .normal)
         button.addTarget(self, action: #selector(close), for: .touchUpInside)
         return button
     }()
 
     private lazy var pageControl = LinePageControl()
-    internal lazy var activityIndicator = UIActivityIndicatorView()
+   lazy var activityIndicator = UIActivityIndicatorView()
 
     private var cellModels: [NftDetailCellModel] = []
 
